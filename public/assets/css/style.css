@@ -1,0 +1,280 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+body {
+    font-family: 'Barlow', sans-serif;
+    margin: 0;
+    box-sizing: border-box;
+    padding: 0;
+}
+
+/* ---------------------------------------------------
+    NAVBAR & SIDEBAR
+----------------------------------------------------- */
+
+    #logo-asa {
+        width: 20%;
+        height: auto;
+        margin: 10px;
+    }
+
+    .logo span {
+        font-size: 20px;
+        font-weight: bold;
+        color: #BE920F;
+    }
+
+    .icon-menu {
+        font-size: 25px;
+    }
+
+    .acesso .bi {
+        font-size: 20px;
+    }
+
+    .list-group-item {
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .list-group-item.active {
+        z-index: 2;
+        color: #fff;
+        background-color: #1E3C32;
+        border-color: #007bff;
+    }
+
+    a:hover {
+        text-decoration: none;
+    }
+
+    .border-left {
+        border-left: 2px solid #1E3C32 !important;
+    }
+
+    .sidebar {
+        top: 0;
+        left: 0;
+        z-index: 100;
+        overflow-y: auto;
+    }
+
+    .overlay {
+        background-color: rgb(0 0 0 / 45%);
+        z-index: 99;
+    }
+
+
+/* ---------------------------------------------------
+    DSASHBOARD MAIN
+----------------------------------------------------- */
+.events img{
+    width: 80%;
+    height: auto;
+    padding: 10px;
+}
+
+.events h5 {
+    margin-right: 5px;
+}
+
+.events i {
+    margin-right: 5px;
+}
+
+.table-events td{
+    padding-bottom: 0;
+}
+
+.table-events thead th{ 
+    border: 1px solid #ccc;
+}
+
+/* Modals Settings */
+.modal_bg {
+    background-color: #313234e3!important;
+}
+
+/* ---------------------------------------------------
+    HOME (LOGIN)
+----------------------------------------------------- */
+
+.content{
+    margin: 10%;
+    background-color: #fff;
+    padding: 3rem 1rem 3rem 1rem;
+    box-shadow: 0 0 5px 5px rgba(0,0,0, .05);
+}
+.signin-text{
+    font-style: normal;
+    font-weight: 600 !important;
+
+}
+.login .form-control{
+    display: block;
+    width:100%;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height:1.5;
+    border-color: #00ac96 !important;
+    border-style: solid !important;
+    border-width: 0 0 1px 0 !important;
+    padding: 0px !important;
+    color:#495057;
+    height: auto;
+    border-radius: 0;
+    background-color: #fff;
+    background-clip: padding-box;
+}
+
+
+.login .form-control:focus{
+
+    color: #495057;
+    background-color: #fff;
+    border-color: #fff;
+    outline: 0;
+    box-shadow: none;
+}
+.birthday-section{
+    padding: 15px;
+}
+.btn-class{
+    border-color: #00ac96;
+    color: #00ac96;
+}
+.btn-class:hover{
+    background-color:  #00ac96;
+    color: #fff;
+}
+
+
+/* ---------------------------------------------------
+    TABLES
+----------------------------------------------------- */
+.content-table  {
+    width: 100%;
+}
+
+.content-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    min-width: 400px;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.content-table thead tr {
+    background-color: #1E3C32;
+    color: #ffffff;
+    text-align: left;
+    font-weight: bold;
+}
+
+.content-table th,
+.content-table td {
+    padding: 12px 15px;
+}
+
+.content-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.content-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.content-table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+
+.content-table tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}
+
+.content i {
+    font-size: 25px;
+}
+
+.content-table .fa-pen-to-square {
+    color: #F99417;
+}
+
+.content-table .fa-trash { 
+    color: #C70039;
+}
+
+.content .fa-plus { 
+    color: #0dcf68;
+}
+
+
+
+/* ---------------------------------------------------
+    MEDIA QUERIES
+----------------------------------------------------- */
+
+/* sidebar for small screens */
+@media screen and (max-width: 767px) {
+
+    .sidebar {
+        max-width: 18rem;
+        transform: translateX(-100%);
+        transition: transform 0.4s ease-out;
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .modal-content {
+        width: 60%;
+        margin: 25% auto;
+    }
+
+    table {
+        border: 0;
+    }
+
+    table caption {
+        font-size: 1.3em;
+    }
+    
+    table thead {
+        border: none;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+    
+    table tr {
+        border-bottom: 3px solid #ddd;
+        display: block;
+        margin-bottom: .625em;
+    }
+
+    table td {
+        border-bottom: 1px solid #ddd;
+        display: block;
+        font-size: .8em;
+        text-align: center;
+    }
+    
+    table td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    
+    table td:last-child {
+        border-bottom: 0;
+    }
+}
+
