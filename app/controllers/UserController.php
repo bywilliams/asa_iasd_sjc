@@ -5,6 +5,7 @@ session_start();
 use app\models\UserModel;
 use app\models\FoodModel;
 use app\models\FoodStockModel;
+use app\models\TransactionModel;
 use app\traits\GlobalControllerTrait;
 use app\traits\SessionMessageTrait;
 use Slim\Http\Response;
@@ -52,6 +53,11 @@ class UserController
         // dados do usuário logado
         $userLogged = $this->getUserName();
 
+        // Traz as categorias (receitas|despesas) financeiras para o modal de transação
+        $transactionModel = new TransactionModel();
+        $revenueCategories = $transactionModel->getRevenueCategories();
+        $expenseCategories = $transactionModel->getExpenseCategories();
+
         // traz os produtos disponíveis para cadastro de estoque
         $foodModel = new FoodModel();
         $allFoods = $foodModel->findAllFoods();
@@ -61,12 +67,15 @@ class UserController
 
         // Total de cestas disponíveis
         $totalBaskets = $foodStockModel->calculateBasicBaskets();
+        
         // mantêm dados dos inputs caso erro nas validações dos forms 
         $old = $_SESSION['old'] ?? null;
 
         view('dashboard_main', [
             'title' => 'Bem vindo a ASA da IASD de SJC!',
             'user' => $userLogged,
+            'revenueCategories' => $revenueCategories,
+            'expenseCategories' => $expenseCategories,
             'allFoods' => $allFoods,
             'latestStockFoods' => $latestStockFoods,
             'totalBaskets' => $totalBaskets,

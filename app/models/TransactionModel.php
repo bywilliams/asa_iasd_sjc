@@ -24,6 +24,54 @@ class TransactionModel extends Connect
     }
 
     /**
+     * Método getRevenueCategories()
+     * 
+     * Este Método traz as categorias de transação para receitas
+     *
+     * @return object $resultCategories objetos de dados das categorias 
+     */
+    public function getRevenueCategories(): array 
+    {
+        $categoriesQuery = ("SELECT id, name FROM categories WHERE type = '1' ORDER BY id ASC");
+        $stmt = $this->connection->query($categoriesQuery);
+
+        try {
+            $stmt->execute();
+            $resultCategories = $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (PDOException $e) {
+            echo "Erro ao trazer categorias";
+            error_log('Erro ao trazer categorias '. $e->getMessage());
+        }
+
+        return $resultCategories;
+
+    }
+
+     /**
+     * Método getExpenseCategories()
+     * 
+     * Este Método traz as categorias de transação para despesas
+     *
+     * @return object $resultCategories objetos de dados das categorias 
+     */
+    public function getExpenseCategories() 
+    {
+        $categoriesQuery = ("SELECT id, name FROM categories WHERE type = '2' ORDER BY id ASC");
+        $stmt = $this->connection->query($categoriesQuery);
+
+        try {
+            $stmt->execute();
+            $resultCategories = $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (PDOException $e) {
+            echo "Erro ao trazer categorias";
+            error_log('Erro ao trazer categorias '. $e->getMessage());
+        }
+
+        return $resultCategories;
+
+    }
+
+    /**
      * Método store()
      * 
      * Este método é responsável por inserir registros de transações (Receita ou Despesa)
@@ -34,7 +82,6 @@ class TransactionModel extends Connect
     public function store(object $request): bool
     {
 
-        // var_dump($request); die;
         $insertTransaction = ("INSERT INTO {$this->table}
             (title, description, value, type, category_id, user_id, created_at)
         VALUES (
@@ -54,7 +101,7 @@ class TransactionModel extends Connect
             return $stmt->execute();
             
         } catch(PDOException $e) {
-            echo $e->getMessage();
+            echo "Erro ao inserir transação";;
             // error_log($e->getMessage());
             return false;
         }

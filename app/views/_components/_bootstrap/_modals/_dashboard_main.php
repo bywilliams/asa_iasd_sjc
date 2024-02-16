@@ -34,18 +34,18 @@
                             <label for="categories_revenue">Categoria: *</label>
                             <select name="category_id" id="categories_revenue" class="form-control" required>
                                 <option value="">Selecione</option>
-                                <option value="1">Venda de produto</option>
-                                <option value="2">Doação</option>
-                                <option value="3">Oferta</option>
+                                <?php foreach ($revenueCategories as $category): ?>
+                                    <option value="<?= $category->id ?>"><?= $category->name ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                         <div class="form-group d-none" id="expense">
                             <label for="categories_expense">Categoria: *</label>
                             <select name="category_id" id="categories_expense" class="form-control" required>
                                 <option value="">Selecione</option>
-                                <option value="4">Compra de produto/alimento</option>
-                                <option value="6">Aluguel</option>
-                                <option value="7">Alimentação</option>
+                                <?php foreach ($expenseCategories as $category): ?>
+                                    <option value="<?= $category->id ?> "><?= $category->name ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                     </div>
