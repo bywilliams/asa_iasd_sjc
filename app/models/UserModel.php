@@ -37,9 +37,9 @@ class UserModel extends Connect
      * @param mixed $email Email vindo do form para checar usuário no BD
      * @return array $userData retorna um array com email e senha do usuário encontrado 
      */
-    function checkUserExist($email) : object
+    function checkUserExist($email)
     {
-        $sqlUser = $this->connection->prepare("SELECT id, name, lastname, email, password, access_level_id FROM users WHERE email = :email");
+        $sqlUser = $this->connection->prepare("SELECT * FROM users WHERE email = :email");
         try {
             $sqlUser->execute([
                 'email' => $email
@@ -49,7 +49,8 @@ class UserModel extends Connect
             echo $e->getMessage();
             die;
         }
-        
+
         return $userData;
+
     }
 }

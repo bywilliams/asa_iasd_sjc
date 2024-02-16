@@ -17,6 +17,6 @@ $routes = require'../app/routes/routes.php';
 
 $routes($app);
 
-$app->addErrorMiddleware(true, true, true);
+$app->addErrorMiddleware(false, true, true);
 
 $app->run();

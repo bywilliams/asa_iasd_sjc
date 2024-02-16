@@ -56,31 +56,32 @@ class FamilyModel extends Connect
     public function store($request): bool 
     {
 
-        $insertFamily = ("INSERT INTO familias
-        (full_name, address, qtde_childs, gender, contact, job, sits_family_id, age, obs, criterion, user_id, created_at)
+        $insertFamily = ("INSERT INTO {$this->table}
+        (full_name, address, qtde_childs, gender, contact, job, sits_family_id, age, obs, criteria_id, user_id, created_at)
         VALUES(
-            :full_name, :address, :qtde_childs, :gender, :contact, :job, 1, :age, :obs, :criterion, :user_id, NOW()
+            :full_name, :address, :qtde_childs, :gender, :contact, :job, 1, :age, :obs, :criteria_id, :user_id, NOW()
         )");
 
         $stmt = $this->connection->prepare($insertFamily);
 
         try {
             $stmt->execute([
-                'full_name' => $request->fullname,
-                'address' => $request->end,
-                'qtde_childs' => $request->qtde_childs,
-                'gender' => $request->gender,
-                'contact' => $request->contact,
-                'job' => $request->job,
-                'age' => $request->age,
-                'obs' => $request->schedule,
-                'criterion' => $request->criterion,
-                'user_id' => $request->user_id
-            ]);
+            ":full_name" => $request->fullname,
+            ":address" => $request->address,
+            ":qtde_childs" => $request->qtde_childs,
+            ":gender" => $request->gender,
+            ":contact" => $request->contact,
+            ":job" => $request->job,
+            ":age" => $request->age,
+            ":obs" => $request->schedule,
+            ":criteria_id" => $request->criteria_id,
+            ":user_id" => $request->user_id,
+        ]);
+            
             return true;
 
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            error_log('Erro ao inserir na tabela familias: ' . $e->getMessage());
             return false;
         }
     }

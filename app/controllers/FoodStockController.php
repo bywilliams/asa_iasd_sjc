@@ -28,7 +28,7 @@ class FoodStockController
     public function index(Request $request, Response $response) 
     {
 
-        if(!$this->validateToken($response)) {
+        if(!$this->validateToken()) {
             $this->setMessage('error', 'O token de autenticação é inválido ou expirou. Por favor, faça login novamente!');
             return $response->withRedirect('/');
         }
@@ -56,9 +56,13 @@ class FoodStockController
         $formData = (object) $this->sanitizeData($data);
 
         if (empty($formData->food_id) || empty($formData->qtde) || empty($formData->created_at)) {
+            $_SESSION['old'] = $_POST;
             $this->setMessage('error', 'Preencha os campos obrigatórios!');
             return $response->withRedirect('/usuario/dashboard');
         }
+
+        // Limpa a sessão old
+        unset($_SESSION['old']);
 
         // Salva registro no banco de dados
         //TODO: criar model e método para inserção de alimentos no Stock

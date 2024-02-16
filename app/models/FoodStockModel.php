@@ -57,7 +57,7 @@ class FoodStockModel extends Connect
     }
 
     /**
-     * Método totalBaicBaskets()
+     * Método calculateBasicBaskets()
      */
     public function calculateBasicBaskets()
     {

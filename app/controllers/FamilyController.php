@@ -8,7 +8,6 @@ use app\traits\SessionMessageTrait;
 use Slim\Http\Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-
 /**
  * Classe FamilyController
  * 
@@ -35,7 +34,6 @@ class FamilyController
     public function index(Request $request, Response $response)
     {   
         if(!$this->validateToken()) {
-            echo "entrou"; die;
             $this->setMessage('error', 'O token de autenticação é inválido ou expirou. Por favor, faça login novamente!');
             return $response->withRedirect('/');
         }
@@ -79,14 +77,18 @@ class FamilyController
         $formData = (object) $this->sanitizeData($data);
         
         // Checa se os campos do form estão válidos
-        $fieldsToCheck = ['fullname', 'gender', 'end', 'contact', 'qtde_childs', 'criterion'];
+        $fieldsToCheck = ['fullname', 'gender', 'address', 'qtde_childs', 'teste', 'contact', 'criteria_id'];
 
         foreach($fieldsToCheck as $field) {
-            if (empty($formData->$field)) {
+            if ($formData->$field == null) {
+                $_SESSION['old'] = $_POST;
                 $this->setMessage('error', 'Preencha os campos obrigatórios!');
                 return $response->withRedirect('/usuario/dashboard');
             }
         }
+
+        // Limpa a sessão old
+        unset($_SESSION['old']);
 
         // checka se a familia já foi cadastrada
         if ($this->model->checkFamilyExist($formData->contact)) {

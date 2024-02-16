@@ -5,7 +5,6 @@ session_start();
 use app\models\UserModel;
 use app\models\FoodModel;
 use app\models\FoodStockModel;
-use app\models\FoodStockosModel;
 use app\traits\GlobalControllerTrait;
 use app\traits\SessionMessageTrait;
 use Slim\Http\Response;
@@ -42,7 +41,7 @@ class UserController
      */
     public function dashboard(Request $request, Response $response)
     {
-        if(!$this->validateToken($response)) {
+        if(!$this->validateToken()) {
             $this->setMessage('error', 'O token de autenticação é inválido ou expirou. Por favor, faça login novamente!');
             return $response->withRedirect('/');
         }
@@ -50,22 +49,28 @@ class UserController
         // Gera CSRF Token
         generateCsrfToken();
 
+        // dados do usuário logado
         $userLogged = $this->getUserName();
 
-        // traz os produtos disponíveis para cadastro de estoque e lista os alimentos (estoque) cadastrados para a dashboard
+        // traz os produtos disponíveis para cadastro de estoque
         $foodModel = new FoodModel();
-        $foodStockModel = new FoodStockModel();
         $allFoods = $foodModel->findAllFoods();
+        // Lista os alimentos (estoque) cadastrados para a dashboard
+        $foodStockModel = new FoodStockModel();
         $latestStockFoods = $foodStockModel->latestStockFoods();
 
+        // Total de cestas disponíveis
         $totalBaskets = $foodStockModel->calculateBasicBaskets();
+        // mantêm dados dos inputs caso erro nas validações dos forms 
+        $old = $_SESSION['old'] ?? null;
 
         view('dashboard_main', [
             'title' => 'Bem vindo a ASA da IASD de SJC!',
             'user' => $userLogged,
             'allFoods' => $allFoods,
             'latestStockFoods' => $latestStockFoods,
-            'totalBaskets' => $totalBaskets
+            'totalBaskets' => $totalBaskets,
+            'old' => $old
         ]);
         return $response;
     }
@@ -99,7 +104,7 @@ class UserController
         $userFound = (object) $this->model->checkUserExist($data['email']);
 
         // Checa se a variável do usuário possui valor
-        if (empty($userFound->name)) {
+        if (empty($userFound)) {
             $this->setMessage('error', 'Usuário não encontrado.');
             return $response->withRedirect('/');
         } 
