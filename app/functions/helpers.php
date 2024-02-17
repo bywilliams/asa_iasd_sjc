@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Função view()
+ * 
+ * Está função é usada para rendereizar uma view
+ *
+ * @param string $view O nome da view
+ * @param array $data O conjunto de arrays associativos desejado
+ * @return void
+ */
 function view(string $view, array $data = [])
 {
     $path = dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'views';

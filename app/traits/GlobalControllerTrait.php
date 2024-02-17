@@ -18,7 +18,7 @@ trait GlobalControllerTrait
     {
         return isset($_POST['csrf_token']) && $_POST['csrf_token'] == $_SESSION['csrf_token'];
     }
-
+    
     private function sanitizeData($formData)
     {
         foreach ($formData as $key => $value) {
@@ -102,11 +102,9 @@ trait GlobalControllerTrait
             if ($dadosToken->exp > time()) {
                 return true;
             } else {
-                //echo "tempo expirou aqui"; die;
                 return false;
             }
         } else {
-            //echo "assinaturas diferentes"; die;
             return false;
         }
     }
@@ -134,7 +132,6 @@ trait GlobalControllerTrait
             setcookie('token', '');
             $this->setMessage('success', "Loggof efetuado com sucesso!");
             return $response->withRedirect('/');
-            exit;
         }
     }
 }

@@ -131,7 +131,7 @@ class FoodStockModel extends Connect
             return $stmt->execute();    
 
         } catch (PDOException $e) {
-            error_log($e->getMessage());
+            error_log('Erro ao inserir estoque '. $e->getMessage());
             return false;
         }
     }

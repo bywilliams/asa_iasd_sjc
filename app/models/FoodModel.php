@@ -30,7 +30,14 @@ class FoodModel extends Connect
         $this->table = 'foods';
     }
 
-    public function findAllFoods() : array
+    /**
+     * Método findAllFoods()
+     * 
+     * Este método traz uma lista de alimentos para cadastro em estoque posteriormente
+     *
+     * @return array $listFood O array de alimentos vindos do banco de dados 
+     */
+    public function findAllFoods(): array
     {
         $findLatestFood = ("SELECT f.id, f.name, f.unit, f.created_at, usr.name as 'author'
         FROM $this->table f

@@ -28,7 +28,7 @@ class TransactionModel extends Connect
      * 
      * Este Método traz as categorias de transação para receitas
      *
-     * @return object $resultCategories objetos de dados das categorias 
+     * @return array $resultCategories objetos de dados das categorias 
      */
     public function getRevenueCategories(): array 
     {
@@ -40,7 +40,7 @@ class TransactionModel extends Connect
             $resultCategories = $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (PDOException $e) {
             echo "Erro ao trazer categorias";
-            error_log('Erro ao trazer categorias '. $e->getMessage());
+            //error_log('Erro ao trazer categorias '. $e->getMessage());
         }
 
         return $resultCategories;
@@ -52,9 +52,9 @@ class TransactionModel extends Connect
      * 
      * Este Método traz as categorias de transação para despesas
      *
-     * @return object $resultCategories objetos de dados das categorias 
+     * @return array $resultCategories objetos de dados das categorias 
      */
-    public function getExpenseCategories() 
+    public function getExpenseCategories(): array 
     {
         $categoriesQuery = ("SELECT id, name FROM categories WHERE type = '2' ORDER BY id ASC");
         $stmt = $this->connection->query($categoriesQuery);
@@ -64,7 +64,7 @@ class TransactionModel extends Connect
             $resultCategories = $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (PDOException $e) {
             echo "Erro ao trazer categorias";
-            error_log('Erro ao trazer categorias '. $e->getMessage());
+            //error_log('Erro ao trazer categorias '. $e->getMessage());
         }
 
         return $resultCategories;

@@ -12,9 +12,10 @@
                 <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                 <input type="hidden" name="user_id" value="<?= $this->e($user->id) ?>">
                 <div class="modal-body">
+                    <p>Obrigatório *</p>
                     <div class="form-group">
-                        <label for="title">Titulo</label>
-                        <input type="text" name="title" id="title" class="form-control" value="<?= isset($old['title']) ? $old['title'] : '' ?>" required>
+                        <label for="title">Titulo: *</label>
+                        <input type="text" name="title" id="title" class="form-control" value="<?= isset($old['title']) ? $old['title'] : '' ?>" required placeholder="ex: compra de sofa | venda de roupas bazar">
                     </div>
                     <div class="form-group">
                         <h6>Tipo (Receita/Despesa): *</h6>
@@ -51,7 +52,7 @@
                     </div>
                     <div class="form-group">
                         <label for="value">Valor: *</label>
-                        <input type="text" name="value" id="value" class="form-control money" required>
+                        <input type="text" name="value" id="value" class="form-control money" required placeholder="ex: 600,00">
                     </div>
                     <div class="form-group">
                         <label for="date">Data: *</label>
@@ -59,7 +60,7 @@
                     </div>
                     <div class="form-group">
                         <label for="description">Descrição:</label>
-                        <textarea name="description" id="description" class="form-control"></textarea>
+                        <textarea name="description" id="description" class="form-control" placeholder="ex: sala das crianças"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -83,7 +84,14 @@
                 </button>
             </div>
             <div class="modal-body">
-                ...
+                <div class="form-group">
+                    <label for="title_event">Nome: *</label>
+                    <input type="text" name="title" id="title_event" class="form-control" placeholder="ex: Campanha do agasalho">
+                </div>
+                <div class="form-group">
+                    <label for="date_event">Data: *</label>
+                    <input type="date" name="date_event" id="" class="form-control">
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
@@ -135,7 +143,7 @@
                         <div class="row">
                             <div class="col">
                                 <label for="qtde">Quantidade: *</label>
-                                <input type="number" name="qtde" id="qtde" class="form-control" value="<?= isset($old['qtde']) ? $old['qtde'] : '' ?>" required>
+                                <input type="number" name="qtde" id="qtde" class="form-control" value="<?= isset($old['qtde']) ? $old['qtde'] : '' ?>" required placeholder="ex: 5">
                             </div>
                             <div class="col">
                                 <label for="created_at">Data: *</label>
@@ -171,7 +179,7 @@
                     <p>Obrigatório *</p>
                     <div class="form-group">
                         <label for="familyName">Nome completo: *</label>
-                        <input type="text" name="fullname" id="familyName" class="form-control" value="<?= isset($old['fullname']) ? $old['fullname'] : '' ?>" required>
+                        <input type="text" name="fullname" id="familyName" class="form-control" value="<?= isset($old['fullname']) ? $old['fullname'] : '' ?>" required placeholder="ex: João da silva">
                     </div>
                     <div class="form-group">
                         <h6>Sexo: *</h6>
@@ -191,17 +199,17 @@
                     </div>
                     <div class="form-group">
                         <label for="endereco">Endereço: *</label>
-                        <input type="text" name="address" id="endereco" class="form-control" value="<?= isset($old['address']) ? $old['address'] : ''  ?>" required>
+                        <input type="text" name="address" id="endereco" class="form-control" value="<?= isset($old['address']) ? $old['address'] : ''  ?>" required placeholder="ex: rua da esmeralda, 22 bairro centro São Paulo - SP">
                     </div>
                     <div class="form-group">
                         <div class="row">
                             <div class="col">
                                 <label for="cel">Celular/Whatsapp: *</label>
-                                <input type="text" name="contact" id="cel" class="form-control phone_with_ddd" value="<?= isset($old['contact']) ? $old['contact'] : ''  ?>" required>
+                                <input type="text" name="contact" id="cel" class="form-control phone_with_ddd" value="<?= isset($old['contact']) ? $old['contact'] : ''  ?>" required placeholder="ex: 111234-5678">
                             </div>
                             <div class="col">
                                 <label for="profissao">Profissão:</label>
-                                <input type="text" name="job" id="profissao" class="form-control" value="<?= isset($old['job']) ? $old['job'] : '' ?>">
+                                <input type="text" name="job" id="profissao" class="form-control" value="<?= isset($old['job']) ? $old['job'] : '' ?>" placeholder="Cabelereiro">
                             </div>
                         </div>
                     </div>
@@ -209,17 +217,17 @@
                         <div class="row">
                             <div class="col">
                                 <label for="filhos">Quantidade de filhos: *</label>
-                                <input type="number" name="qtde_childs" id="filhos" class="form-control" value="<?= isset($old['qtde_childs']) ? $old['qtde_childs'] : '' ?>" required>
+                                <input type="number" name="qtde_childs" id="filhos" class="form-control" value="<?= isset($old['qtde_childs']) ? $old['qtde_childs'] : '' ?>" required placeholder="3">
                             </div>
                             <div class="col">
                                 <label for="idade">Idade dos filhos:</label>
-                                <input type="text" name="age" id="idade" class="form-control" value="<?= isset($old['age']) ? $old['age'] : '' ?>">
+                                <input type="text" name="age" id="idade" class="form-control" value="<?= isset($old['age']) ? $old['age'] : '' ?>" placeholder="2, 4, 5">
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="data_visita">Dias e horários para visitas:</label>
-                        <textarea class="form-control" name="schedule" id="data_visita"><?= isset($old['schedule']) ? $old['schedule'] : ''  ?></textarea>
+                        <textarea class="form-control" name="schedule" id="data_visita" placeholder="ex: domingo as 11h"><?= isset($old['schedule']) ? $old['schedule'] : ''  ?></textarea>
                     </div>
                     <div class="form-group">
                         <h6>Critérios: *</h6>
