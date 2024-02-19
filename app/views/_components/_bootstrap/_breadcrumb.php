@@ -1,7 +1,13 @@
 <?php 
 
+
 function generate_breadcrumb() {
     $url = $_SERVER["REQUEST_URI"];
+    
+    // Divide a URL na primeira ocorrência de '?'
+    $urlParts = explode('?', $url);
+    $url = $urlParts[0];
+    
     $parts = explode('/', $url);
     $breadcrumb = '<nav aria-label="breadcrumb"><ol class="breadcrumb py-1 bg-transparent">';
 
@@ -16,4 +22,5 @@ function generate_breadcrumb() {
 }
 
 echo generate_breadcrumb();
-?>
+
+

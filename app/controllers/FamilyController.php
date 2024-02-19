@@ -1,7 +1,9 @@
 <?php
 
 namespace app\controllers;
+
 session_start();
+
 use app\traits\GlobalControllerTrait;
 use app\models\FamilyModel;
 use app\traits\SessionMessageTrait;
@@ -32,8 +34,8 @@ class FamilyController
      * Este método irá apresentar a página com a listagem das famílias cadastradas
      */
     public function index(Request $request, Response $response)
-    {   
-        if(!$this->validateToken()) {
+    {
+        if (!$this->validateToken()) {
             $this->setMessage('error', 'Por favor, faça login novamente!');
             return $response->withRedirect('/');
         }
@@ -41,7 +43,39 @@ class FamilyController
         // dados do usuário logado
         $userLogged = $this->getUserName();
 
-        view('familias', ['title' => 'Listagem de familias.', 'user' => $userLogged]);
+        // Ler o parâmetro da página da url
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $itenPerPage = 10;
+
+        // calcula o indice de início de fim dos dados para a página atual
+        $inicio = ($page - 1) * $itenPerPage;
+
+        $params = ['full_name', 'gender', 'id', 'qtde_childs'];
+        $sql = '';
+        $bindParams = [];
+
+        foreach ($params as $param) {
+            if (isset($_GET[$param]) && !empty(trim($_GET[$param]))) {
+                $sql .= " AND $param = $_GET[$param]";
+            }
+        }
+
+        $familyModel = new FamilyModel();
+        $families = $familyModel->index($inicio, $itenPerPage, $sql);
+
+        // Total de registros na tela
+        $totalRegistros = $families['totalRegistros'];
+
+        // Calcular o número total de páginas
+        $totalPaginas = ceil($totalRegistros / $itenPerPage);
+
+        view('familias', [
+            'title' => 'Listagem de familias.',
+            'user' => $userLogged,
+            'families' => $families['data'],
+            'page' => $page,
+            'totalPaginas' => $totalPaginas
+        ]);
         return $response;
     }
 
@@ -52,7 +86,6 @@ class FamilyController
      */
     public function show()
     {
-
     }
 
     /**
@@ -60,7 +93,7 @@ class FamilyController
      * 
      * Este método irá salvar um novo registro(família) na tabela
      */
-    public function store(Request $request, Response $response) 
+    public function store(Request $request, Response $response)
     {
         // Pega o corpo da requisição com Slim
         $data = $request->getParsedBody();
@@ -78,11 +111,11 @@ class FamilyController
 
         // Converte em objeto
         $formData = (object) $this->sanitizeData($data);
-        
+
         // Checa se os campos do form estão válidos
         $fieldsToCheck = ['fullname', 'gender', 'address', 'qtde_childs', 'contact', 'criteria_id'];
 
-        foreach($fieldsToCheck as $field) {
+        foreach ($fieldsToCheck as $field) {
             if ($formData->$field == null) {
                 $_SESSION['old'] = $_POST;
                 $this->setMessage('error', 'Preencha os campos obrigatórios!');
@@ -98,7 +131,7 @@ class FamilyController
             $this->setMessage('error', 'Familia já existente!');
             return $response->withRedirect('/usuario/dashboard');
         }
-        
+
         // Salva registro no banco de dados
         $this->model->store($formData);
 
@@ -114,14 +147,16 @@ class FamilyController
      * 
      * Este método irá atualizar um registro(família) na tabela
      */
-    public function update() {} 
+    public function update()
+    {
+    }
 
     /**
      *  Método destroy()
      * 
      * Este método irá deletar um registro(família) especifíco na tabela
      */
-    public function destroy(){}
-
-
+    public function destroy()
+    {
+    }
 }

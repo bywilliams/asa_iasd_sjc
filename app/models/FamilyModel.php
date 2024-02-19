@@ -2,6 +2,7 @@
 namespace app\models;
 use app\database\Connect;
 use PDOException;
+use PDO;
 
 /**
  * Classe FamilyModel 
@@ -28,23 +29,36 @@ class FamilyModel extends Connect
         $this->table = 'families';
     }
 
-    public function checkFamilyExist($contact): bool
+    /**
+     * Método index()
+     * 
+     * Este método traz todas as famílias cadastradas no sistema
+     *
+     * @return array|null Retorno pode ser um array ou null
+     */
+    public function index($inicio, $itensPorPagina, $sql): ?array
     {
-        $familyExist = ("SELECT id FROM $this->table WHERE contact = :contact");
-        $stmt = $this->connection->prepare($familyExist);
-        $stmt->bindParam(":contact", $contact);
-
+        $selectFamilies = ("SELECT id, full_name, address, qtde_childs, contact, created_at, updated_at 
+        FROM {$this->table}
+        WHERE id > 0 $sql
+        ORDER BY id LIMIT $inicio, $itensPorPagina");
+        
         try {
-            $stmt->execute();
-            if($stmt->fetchColumn()) {
-                return true;
-            } else {
-                return false;
-            }
+            $stmt = $this->connection->query($selectFamilies);
+            $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+            $countFamilies = $this->connection->query("SELECT COUNT(*) as total FROM {$this->table}");
+            $totalRegistros = $countFamilies->fetch(PDO::FETCH_ASSOC)['total'];
+
         } catch (PDOException $e) {
-            echo $e->getMessage();
-            return false;
+            error_log('Erro ao buscar famílias '. $e->getMessage());
+            $result = [];
         }
+
+        return array(
+            'data'=> $result,
+            'totalRegistros' => $totalRegistros
+        );
     }
 
     /**
@@ -82,6 +96,25 @@ class FamilyModel extends Connect
 
         } catch (PDOException $e) {
             error_log('Erro ao inserir na tabela familias: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function checkFamilyExist($contact): bool
+    {
+        $familyExist = ("SELECT id FROM $this->table WHERE contact = :contact");
+        $stmt = $this->connection->prepare($familyExist);
+        $stmt->bindParam(":contact", $contact);
+
+        try {
+            $stmt->execute();
+            if($stmt->fetchColumn()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
             return false;
         }
     }
