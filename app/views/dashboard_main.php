@@ -129,20 +129,21 @@
 
 <!-- Food Products Section  -->
 <section class="row">
-    <h3 class="text-secondary text-center mx-auto mb-2">Últimos 10 produtos cadastrados</h3>
+    <h3 class="text-secondary text-center mx-auto mb-2">Últimos produtos da cesta cadastrados</h3>
     <table class="content-table mx-1 ">
         <thead>
             <tr>
                 <th>id</th>
                 <th>Name</th>
                 <th>Qtde</th>
-                <th>Cesta básica</th>
                 <th>Usuário</th>
                 <th>Cadastrado em</th>
+                <th>Atualizado em</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
+            <?php $totalFoods = 0; ?>
             <?php foreach ($latestStockFoods as $food) : ?>
                 <tr>
                     <td>
@@ -154,12 +155,14 @@
                     <td>
                         <?= $food->qtde ?>
                     </td>
-                    <td><?= $food->basic_basket ?></td>
                     <td>
                         <?= $food->author ?>
                     </td>
                     <td>
                         <?= date("d-m-Y", strtotime($food->created_at)) ?>
+                    </td>
+                    <td>
+                        <?= isset($food->updated_at) ? date("d-m-Y", strtotime($food->updated_at)) : '' ?>
                     </td>
                     <td>
                         <div style="display: flex; justify-content: space-evenly">
@@ -172,12 +175,13 @@
                         </div>
                     </td>
                 </tr>
+                <?php $totalFoods += $food->qtde ?>
             <?php endforeach; ?>
         </tbody>
         <tfoot>
             <tr class="text-center">
-                <td colspan="7"> <strong> Total de cestas: </strong>
-                    <?= $totalBaskets ?></td>
+                <td colspan="7"> <strong class="mr-2"> Total de alimentos: <?= $totalFoods ?> </strong>  <strong> Total de cestas: <?= $totalBaskets ?></strong>
+                    </td>
             </tr>
         </tfoot>
     </table>

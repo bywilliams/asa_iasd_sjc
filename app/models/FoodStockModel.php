@@ -135,11 +135,12 @@ class FoodStockModel extends Connect
      */
     public function latestStockFoods(): array
     {
-        $findLatestFood = ("SELECT fs.id, f.name, fs.qtde, fs.basic_basket, fs.created_at, usr.name as 'author'
+        $findLatestFood = ("SELECT fs.id, f.name, fs.qtde, fs.basic_basket, fs.created_at, fs.updated_at, usr.name as 'author'
         FROM $this->table fs
         INNER JOIN users usr ON fs.user_id = usr.id
         INNER JOIN foods f ON fs.food_id = f.id
-        ORDER BY id ASC LIMIT 12
+        WHERE fs.basic_basket = 'S'
+        ORDER BY id ASC LIMIT 19
         ");
 
         try {
