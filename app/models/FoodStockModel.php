@@ -31,6 +31,105 @@ class FoodStockModel extends Connect
     }
 
     /**
+     * Método findFoodById
+     * 
+     * Este método busca se um determinado alimento já existe na tabela 'foods_stock' através do id
+     *
+     * @param object $request Os dados do request que inclui junto o food_id
+     * @return object $food o objeto alimento em si
+     */
+    public function findFoodById(object $request): ?object
+    {
+        $selectFood = ("SELECT * FROM {$this->table} WHERE food_id = :food_id");
+        $stmt = $this->connection->prepare($selectFood);
+        $stmt->bindParam(":food_id", $request->food_id, PDO::PARAM_INT);
+
+        try {
+            $stmt->execute();
+            $food = $stmt->fetch(PDO::FETCH_OBJ);
+        } catch (PDOException $e) {
+            error_log('Erro ao encontrar alimento: ' . $e->getMessage());
+            return null;
+        }
+
+        return $food ?: null;
+    }
+
+
+    /**
+     * Método store(): Insere uma quantidade de um determinado alimento no estoque
+     * 
+     * @param object $request objeto contendo os dados para inserir
+     * @return bool True em caso de sucesso, false em caso de erro 
+     */
+    public function store(object $request): bool
+    {
+        $insertFoodStock = ("INSERT INTO {$this->table}
+        (qtde, basic_basket, user_id, food_id, created_at)
+        VALUES(
+            :qtde, :basic_basket, :user_id, :food_id, :created_at
+        )");
+
+        $stmt = $this->connection->prepare($insertFoodStock);
+        
+        try {
+            $stmt->bindParam(':qtde', $request->qtde, PDO::PARAM_INT);
+            $stmt->bindParam(':basic_basket', $request->basic_basket, PDO::PARAM_STR_CHAR);
+            $stmt->bindParam(':user_id', $request->user_id, PDO::PARAM_INT);
+            $stmt->bindParam(':food_id', $request->food_id, PDO::PARAM_INT);
+            $stmt->bindParam(':created_at', $request->created_at, PDO::PARAM_STR);
+            
+            return $stmt->execute();    
+
+        } catch (PDOException $e) {
+            error_log('Erro ao inserir estoque '. $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Método udpateFoodStock()
+     * 
+     * Este método atuializa a quandidade de um alimento na tabela 'foods_stock'
+     *
+     * @param object $request O request de dados vindos do Form
+     * @return boolean|null retorna um boolean de true or false para sucesso ou erro ou null
+     */
+    public function updateFoodStock(object $request): ?bool
+    {
+        
+        // Pega a quantidade atual do alimento no estoque
+        $qtdeFood = ("SELECT qtde FROM {$this->table} WHERE food_id = :food_id");
+        $stmt = $this->connection->prepare($qtdeFood);
+        $stmt->bindParam(":food_id", $request->food_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $resultQtde = $stmt->fetch();
+       
+        $currentQty = $resultQtde->qtde;
+        $aditionalQty = $request->qtde;
+        $finalQty = $currentQty + $aditionalQty;
+        
+        if ($resultQtde) { 
+
+            $updateFoodStock = ("UPDATE {$this->table} SET
+            qtde = :qtde, updated_at = NOW() WHERE food_id = :food_id");
+            $stmt = $this->connection->prepare($updateFoodStock);
+    
+            try {
+                $stmt->bindParam(":qtde", $finalQty, PDO::PARAM_INT);
+                $stmt->bindParam(":food_id", $request->food_id, PDO::PARAM_INT);
+                $stmt->execute();
+                return true;
+            } catch (PDOException $e) {
+                error_log("Erro ao atualizar quantidade do alimento". $e->getMessage());
+                return false;
+            }
+        }
+
+
+    }
+
+    /**
      * Método latestStockFoods(): traz um últimos alimentos cadastrados em estoque
      * @return array o array com os registros encontrados no BD
      */
@@ -42,14 +141,14 @@ class FoodStockModel extends Connect
         INNER JOIN foods f ON fs.food_id = f.id
         ORDER BY id ASC LIMIT 12
         ");
-        $stmt = $this->connection->query($findLatestFood);
 
         try {
+            $stmt = $this->connection->query($findLatestFood);
             $stmt->execute();
             $listFood = $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (PDOException $e) {
-            echo $e->getMessage();
-            die;
+            error_log('Erro ao buscar os útlimos alimentos '. $e->getMessage());
+            $listFood= [];
         }
 
         return $listFood;
@@ -59,7 +158,7 @@ class FoodStockModel extends Connect
     /**
      * Método calculateBasicBaskets()
      */
-    public function calculateBasicBaskets()
+    public function calculateBasicBaskets(): int
     {
         $basicBasketRequirements = [
             'Arroz' => ['id' => 1, 'minQtde' => 1],
@@ -103,37 +202,6 @@ class FoodStockModel extends Connect
         // Se o número de cestas disponíveis é infinito (o que significa que não há alimentos suficientes), retorna  0
         return $availableBaskets == PHP_INT_MAX ?  0 : $availableBaskets;
         
-    }
-
-    /**
-     * Método store(): Insere uma quantidade de um determinado alimento no estoque
-     * 
-     * @param object $request objeto contendo os dados para inserir
-     * @return bool True em caso de sucesso, false em caso de erro 
-     */
-    public function store(object $request): bool
-    {
-        $insertFoodStock = ("INSERT INTO {$this->table}
-        (qtde, basic_basket, user_id, food_id, created_at)
-        VALUES(
-            :qtde, :basic_basket, :user_id, :food_id, :created_at
-        )");
-
-        $stmt = $this->connection->prepare($insertFoodStock);
-        
-        try {
-            $stmt->bindParam(':qtde', $request->qtde, PDO::PARAM_INT);
-            $stmt->bindParam(':basic_basket', $request->basic_basket, PDO::PARAM_STR_CHAR);
-            $stmt->bindParam(':user_id', $request->user_id, PDO::PARAM_INT);
-            $stmt->bindParam(':food_id', $request->food_id, PDO::PARAM_INT);
-            $stmt->bindParam(':created_at', $request->created_at, PDO::PARAM_STR);
-            
-            return $stmt->execute();    
-
-        } catch (PDOException $e) {
-            error_log('Erro ao inserir estoque '. $e->getMessage());
-            return false;
-        }
     }
 
 

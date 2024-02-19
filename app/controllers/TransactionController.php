@@ -51,7 +51,7 @@ class TransactionController
             }
         }
 
-        // TODO: Salvar transação no banco de dados, criar query no model
+        // Salva transação no banco de dados
         $this->model->store($formData);
 
         $this->setMessage('success', 'Transação inserida com sucesso!');

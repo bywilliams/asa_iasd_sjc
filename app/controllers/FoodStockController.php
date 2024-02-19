@@ -29,7 +29,7 @@ class FoodStockController
     {
 
         if(!$this->validateToken()) {
-            $this->setMessage('error', 'O token de autenticação é inválido ou expirou. Por favor, faça login novamente!');
+            $this->setMessage('error', 'Por favor, faça login novamente!');
             return $response->withRedirect('/');
         }
 
@@ -52,7 +52,7 @@ class FoodStockController
             return $response->withRedirect('/');
         }
         
-        // Converte em objeto
+        // Converte os dados em objeto
         $formData = (object) $this->sanitizeData($data);
 
         if (empty($formData->food_id) || empty($formData->qtde) || empty($formData->created_at)) {
@@ -64,11 +64,19 @@ class FoodStockController
         // Limpa a sessão old
         unset($_SESSION['old']);
 
-        // Salva registro no banco de dados
-        //TODO: criar model e método para inserção de alimentos no Stock
-        $this->model->store($formData);
+        //TODO: 1 checar se alimento já existe no estoque
+        $foodStockExists = $this->model->findFoodById($formData);
+
+        // TODO: 2 fluxo condicional para decidir se o alimento será inserido (novo) ou atualizado de acordo com a etapa 1
+        if (!$foodStockExists) { 
+            // Salva registro no banco de dados
+            $this->model->store($formData);
+            $this->setMessage('success', 'Alimento cadastrado no estoque com sucesso!');
+        } else {
+            $this->model->updateFoodStock($formData);
+            $this->setMessage('success', 'Alimento atualizado no estoque com sucesso!');
+        }
         
-        $this->setMessage('success', 'Alimento cadastrado no estoque com sucesso!');
 
         return $response->withRedirect('/usuario/dashboard');
     }

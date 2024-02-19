@@ -43,7 +43,7 @@ class UserController
     public function dashboard(Request $request, Response $response)
     {
         if(!$this->validateToken()) {
-            $this->setMessage('error', 'O token de autenticação é inválido ou expirou. Por favor, faça login novamente!');
+            $this->setMessage('error', 'Por favor, faça login novamente!');
             return $response->withRedirect('/');
         }
 

@@ -129,7 +129,7 @@
 
 <!-- Food Products Section  -->
 <section class="row">
-    <h3 class="text-secondary text-center mx-auto mb-3">Últimos 10 produtos cadastrados</h3>
+    <h3 class="text-secondary text-center mx-auto mb-2">Últimos 10 produtos cadastrados</h3>
     <table class="content-table mx-1 ">
         <thead>
             <tr>

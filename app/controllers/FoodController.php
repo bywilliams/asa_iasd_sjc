@@ -29,8 +29,8 @@ class FoodController
     public function index(Request $request, Response $response) 
     {
 
-        if(!$this->validateToken($response)) {
-            $this->setMessage('error', 'O token de autenticação é inválido ou expirou. Por favor, faça login novamente!');
+        if(!$this->validateToken()) {
+            $this->setMessage('error', 'Por favor, faça login novamente!');
             return $response->withRedirect('/');
         }
 
@@ -42,8 +42,6 @@ class FoodController
     {
         // Pega o corpo da requisição com Slim
         $data = $request->getParsedBody();
-
-        var_dump($data); die;
 
         // Válida checa a válidade do CSRF Token
         if (!$this->validateCsrfToken($data)) {
@@ -65,7 +63,6 @@ class FoodController
         }
 
         // Salva registro no banco de dados
-        //TODO:: criar model e método para inserção de alimentos no Stock
         $this->model->store($formData);
 
         $this->setMessage('success', 'Alimento cadastrado com sucesso!');

@@ -34,11 +34,14 @@ class FamilyController
     public function index(Request $request, Response $response)
     {   
         if(!$this->validateToken()) {
-            $this->setMessage('error', 'O token de autenticação é inválido ou expirou. Por favor, faça login novamente!');
+            $this->setMessage('error', 'Por favor, faça login novamente!');
             return $response->withRedirect('/');
         }
 
-        view('familias', ['title' => 'Listagem de familias.']);
+        // dados do usuário logado
+        $userLogged = $this->getUserName();
+
+        view('familias', ['title' => 'Listagem de familias.', 'user' => $userLogged]);
         return $response;
     }
 
@@ -77,7 +80,7 @@ class FamilyController
         $formData = (object) $this->sanitizeData($data);
         
         // Checa se os campos do form estão válidos
-        $fieldsToCheck = ['fullname', 'gender', 'address', 'qtde_childs', 'teste', 'contact', 'criteria_id'];
+        $fieldsToCheck = ['fullname', 'gender', 'address', 'qtde_childs', 'contact', 'criteria_id'];
 
         foreach($fieldsToCheck as $field) {
             if ($formData->$field == null) {

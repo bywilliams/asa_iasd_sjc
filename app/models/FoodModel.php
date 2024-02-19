@@ -58,29 +58,29 @@ class FoodModel extends Connect
 
     }
 
-    // public function store($request)
-    // {
-    //     $insertFood = ("INSERT INTO alimentos
-    //     (name, qtde, user_id, created_at)
-    //     VALUES(
-    //         :name, :qtde, :user_id, :created_at
-    //     )");
+    public function store($request)
+    {
+        $insertFood = ("INSERT INTO alimentos
+        (name, qtde, user_id, created_at)
+        VALUES(
+            :name, :qtde, :user_id, :created_at
+        )");
 
-    //     $stmt = $this->connection->prepare($insertFood);
+        $stmt = $this->connection->prepare($insertFood);
         
-    //     try {
-    //         $stmt->execute([
-    //             'name' => $request->name,
-    //             'qtde' => $request->qtde,
-    //             'user_id' => $request->user_id,
-    //             'created_at' => $request->created_at
-    //         ]);
-    //         return true;        
-    //     } catch (PDOException $e) {
-    //         echo $e->getMessage();
-    //         return false;
-    //     }
-    // }
+        try {
+            $stmt->execute([
+                'name' => $request->name,
+                'qtde' => $request->qtde,
+                'user_id' => $request->user_id,
+                'created_at' => $request->created_at
+            ]);
+            return true;        
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
 
 
 }
