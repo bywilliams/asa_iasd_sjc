@@ -18,7 +18,7 @@ trait GlobalControllerTrait
     {
         return isset($_POST['csrf_token']) && $_POST['csrf_token'] == $_SESSION['csrf_token'];
     }
-    
+
     private function sanitizeData($formData)
     {
         foreach ($formData as $key => $value) {
@@ -98,7 +98,7 @@ trait GlobalControllerTrait
             // Verifica tempo de expiração do token
             $dadosToken = base64_decode($payload);
             $dadosToken = json_decode($dadosToken);
-            
+
             if ($dadosToken->exp > time()) {
                 return true;
             } else {
@@ -125,6 +125,33 @@ trait GlobalControllerTrait
             return '';
         }
     }
+    
+    /**
+     * Função createSqlCOnditions()
+     * 
+     * Esta função cria SQL conditions personalziado
+     *
+     * @param [type] $params Nomes dos campos 
+     * @param [type] $getParams Valores do input form
+     * @return string $sql a(s) condição(ões) personalizadas para o WHERE 
+     */
+    function createSqlConditions($params, $getParams): string
+    {
+        $sql = '';
+
+        foreach ($params as $field) {
+            if (isset($getParams[$field]) && !empty($getParams[$field])) {
+                if ($field == 'full_name') {
+                    $sql .= " AND {$field} LIKE '%{$getParams[$field]}%'";
+                } else {
+                    $sql .= " AND {$field} = '{$getParams[$field]}'";
+                }
+            }
+        }
+
+        return $sql;
+    }
+
 
     public function logout(Request $request, Response $response)
     {

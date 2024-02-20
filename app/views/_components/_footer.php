@@ -33,11 +33,8 @@
 
         // Sidebar lateral
         $('#open-sidebar').click(() => {
-            alert('clicado');
-
             // add class active on #sidebar
             $('#sidebar').addClass('active');
-
             // show sidebar overlay
             $('#sidebar-overlay').removeClass('d-none');
         });
@@ -45,7 +42,6 @@
         $('#sidebar-overlay').click(function() {
             // add class active on #sidebar
             $('#sidebar').removeClass('active');
-
             // show sidebar overlay
             $(this).addClass('d-none');
         });
@@ -77,7 +73,23 @@
         }
     });
 
+     // Limpa inputs dos formulário
+     document.addEventListener('DOMContentLoaded', function() {
+        const formulario = document.getElementById('meuFormulario');
+        const limparBotao = document.getElementById('limparCampos');
 
+        limparBotao.addEventListener('click', function() {
+            const inputs = formulario.querySelectorAll('input, select');
+            inputs.forEach(function(input) {
+                if (input.type !== 'submit' && input.type !== 'reset') {
+                    input.value = '';
+                }
+            });
+        });
+    });
+    // Fim limpa inputs dos formulário
+
+    // SweetAlert2: Mensagens do sistemas
     var status = "<?= $_SESSION['status_report'] ?>";
     var msg = "<?= $_SESSION['message']  ?>";
 

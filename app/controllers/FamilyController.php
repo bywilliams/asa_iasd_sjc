@@ -50,16 +50,18 @@ class FamilyController
         // calcula o indice de início de fim dos dados para a página atual
         $inicio = ($page - 1) * $itenPerPage;
 
-        $params = ['full_name', 'gender', 'id', 'qtde_childs'];
+        // Monta o SQL de pesquisa personalizada
         $sql = '';
-        $bindParams = [];
-
-        foreach ($params as $param) {
-            if (isset($_GET[$param]) && !empty(trim($_GET[$param]))) {
-                $sql .= " AND $param = $_GET[$param]";
-            }
+       
+        if ($_GET) {
+            $params = ['full_name', 'id', 'qtde_childs', 'gender'];
+            $sql = $this->createSqlConditions($params, $_GET);
+            $_SESSION['old'] = $_GET;
         }
+        // Mantêm os valores dos inputs de pesquisa
+        $old = $_SESSION['old'] ?? null;
 
+        // Cria a instância do objeto FamilyModel e realiza a query padrão ou personalizada
         $familyModel = new FamilyModel();
         $families = $familyModel->index($inicio, $itenPerPage, $sql);
 
@@ -74,7 +76,8 @@ class FamilyController
             'user' => $userLogged,
             'families' => $families['data'],
             'page' => $page,
-            'totalPaginas' => $totalPaginas
+            'totalPaginas' => $totalPaginas,
+            'old' => $old
         ]);
         return $response;
     }

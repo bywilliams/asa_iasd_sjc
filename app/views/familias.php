@@ -7,25 +7,29 @@
 <!-- Family section form -->
 <section>
     <div class="bg-light p-3 mb-4">
-        <h2 class="text-center text-secondary mb-3">Pesquisar</h2>
-        <form action="" method="get">
-        <div class="row">
+        <!-- <h2 class="text-center text-secondary">Pesquisar</h2> -->
+        
+        <div class="col-lg-12 d-flex justify-content-end">
+            <button class="btn btn-outline-secondary" id="limparCampos" title="Limpa todos os campos">Limpar</button>
+        </div>
+        <form method="get" id="meuFormulario">
+            <div class="row">
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label for="id">Por id:</label>
-                        <input type="number" name="id" id="id" class="form-control" placeholder="ex: 5">
+                        <input type="number" name="id" id="id" class="form-control" placeholder="ex: 5" value="<?= isset($old['id']) ? $old['id'] : ''  ?>">
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label for="nome">Por nome:</label>
-                        <input type="text" name="full_name" id="nome" class="form-control" placeholder="Ex: joão da silva">
+                        <input type="text" name="full_name" id="nome" class="form-control" placeholder="Ex: joão da silva" value="<?= isset($old['full_name']) ? $old['full_name'] : ''  ?>">
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label for="filhos">Qtde filhos:</label>
-                        <input type="number" name="qtde_childs" id="filhos" min="0" class="form-control" placeholder="Ex: 2">
+                        <input type="number" name="qtde_childs" id="filhos" min="0" class="form-control" placeholder="Ex: 2" value="<?= isset($old['qtde_childs']) ? $old['qtde_childs'] : ''  ?>">
                     </div>
                 </div>
                 <div class="col-lg-2">
@@ -33,9 +37,9 @@
                         <label for="sexo">Por sexo:</label>
                         <select class="form-control" name="gender" id="">
                             <option value="">Selecione</option>
-                            <option value="F">Feminino</option>
-                            <option value="M">Masculino</option>
-                            <option value="N">Não informado</option>
+                            <option value="F" <?= isset($old['gender']) && $old['gender'] == 'F' ? 'selected' : ''  ?>>Feminino</option>
+                            <option value="M" <?= isset($old['gender']) && $old['gender'] == 'M' ? 'selected' : ''  ?>>Masculino</option>
+                            <option value="N" <?= isset($old['gender']) && $old['gender'] == 'N' ? 'selected' : ''  ?>>Não informado</option>
                         </select>
                     </div>
                 </div>
@@ -52,6 +56,7 @@
 
 <!-- Family table section -->
 <section>
+    <?php if (count($families) > 0) : ?>
     <table class="table table-bordered text-center table-hover">
         <thead class="thead-dark">
             <tr>
@@ -80,6 +85,10 @@
             <?php endforeach; ?>
         </tbody>
     </table>
+    <?php else: ?>
+    <h3 class="text-center text-dark">Não há familias cadastradas</h3>
+    <?php endif; ?>
+    
     <!-- pagination -->
     <?php if ($totalPaginas > 1) : ?>
         <nav aria-label="Page navigation ">
