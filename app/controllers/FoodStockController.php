@@ -5,6 +5,8 @@ session_start();
 use app\traits\GlobalControllerTrait;
 use app\traits\SessionMessageTrait;
 use app\models\FoodStockModel;
+use app\models\FoodModel;
+use app\models\UserModel;
 use Slim\Http\Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -33,41 +35,40 @@ class FoodStockController
             return $response->withRedirect('/');
         }
 
-        // dados do usuário logado
-        $userLogged = $this->getUserName();
+        $userLogged = $this->getUserName(); // dados do usuário logado
 
-        // Ler o parâmetro da página da url
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $itenPerPage = 10;
+        $foods = new FoodModel();
+        $foodsList = $foods->findAllFoods(); // Lista de alimentos para form da view
 
-        // calcula o indice de início de fim dos dados para a página atual
-        $inicio = ($page - 1) * $itenPerPage;
+        $users = new UserModel();
+        $usersList = $users->index(); // Lista de usuários para o form da view
 
-        // Monta o SQL de pesquisa personalizada
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Ler o parâmetro da página da url
+        $itemsPerPage = 10;
+
+        $inicio = ($page - 1) * $itemsPerPage; // calcula o indice de início de fim dos dados para a página atual
+
         $sql = '';
         if ($_GET) {
-            $params = ['full_name', 'id', 'qtde_childs', 'gender', 'sits_family_id'];
-            $sql = $this->createSqlConditions($params, $_GET);
+            $params = ['id', 'food_id', 'user_id', 'created_at'];
+            $aliases = ['id' => 'fs', 'food_id' => 'fs', 'user_id' => 'fs', 'created_at' => 'fs'];
+            $sql = $this->createSqlConditions($params, $_GET, $aliases);
             $_SESSION['old'] = $_GET;
         }
+        // echo $sql; die;
+        $old = $_SESSION['old'] ?? null; // Mantêm os valores dos inputs de pesquisa
 
-        // Mantêm os valores dos inputs de pesquisa
-        $old = $_SESSION['old'] ?? null;
+        $foodsStock = $this->model->index($inicio, $itemsPerPage, $sql); // Variável que obtêm a query padrão ou personalizada 
+        //print_r($foodsStock); die;
+        $totalRegistros = $foodsStock['totalRegistros']; // Total de registros na tela
 
-        // Variável que obtêm a query padrão ou personalizada 
-        $foodsStock = $this->model->index($inicio, $itenPerPage, $sql);
-
-        // Total de registros na tela
-        $totalRegistros = $foodsStock['totalRegistros'];
-
-        // Calcular o número total de páginas
-        $totalPaginas = ceil($totalRegistros / $itenPerPage);
-
-        // print_r($userLogged); die;
+        $totalPaginas = ceil($totalRegistros / $itemsPerPage); // Calcular o número total de páginas
 
         view('alimentos', [
             'title' => 'Lista de Alimentos',
             'user' => $userLogged,
+            'usersList' => $usersList,
+            'foodsList' => $foodsList,
             'foodsStock' => $foodsStock['data'],
             'page' => $page,
             'totalPaginas' => $totalPaginas,

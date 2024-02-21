@@ -31,20 +31,45 @@ class UserModel extends Connect
     }
 
     /**
+     * Método index()
+     * 
+     * Este métodos traz todos os usuários do sistema
+     *
+     * @return array $userData retorna o array de dados
+     */
+    public function index(): array
+    {
+        $sqlUsers = ("SELECT id, CONCAT(name, ' ', lastname) as 'nome' FROM {$this->table}");
+        $stmt = $this->connection->prepare($sqlUsers);
+
+        try {
+            $stmt->execute();
+            $userData = $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (PDOException $e) {
+            error_log('Erro ao buscar usuários: ' . $e->getMessage());
+            die;
+        }
+
+        return $userData;
+
+    }
+
+    /**
      * Método checkUserExist
      * 
      * Este método busca no BD o user que está tentando efetuar login
      * @param mixed $email Email vindo do form para checar usuário no BD
-     * @return array $userData retorna um array com email e senha do usuário encontrado 
+     * @return object|null $userData retorna um objeto com email e senha do usuário encontrado ou null  
      */
-    function checkUserExist($email)
-    {
-        $sqlUser = $this->connection->prepare("SELECT * FROM users WHERE email = :email");
+    public function checkUserExist($email): ?object
+    {   
+        $sqlUser = ("SELECT * FROM users WHERE email = :email");
+        $stmt = $this->connection->prepare($sqlUser);
         try {
-            $sqlUser->execute([
+            $stmt->execute([
                 'email' => $email
             ]);
-            $userData = $sqlUser->fetch(PDO::FETCH_OBJ);
+            $userData = $stmt->fetch(PDO::FETCH_OBJ);
         } catch (PDOException $e) {
             echo $e->getMessage();
             die;

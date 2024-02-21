@@ -43,7 +43,7 @@ class FamilyController
 
         // Ler o parâmetro da página da url
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $itenPerPage = 10;
+        $itenPerPage = 12;
 
         // calcula o indice de início de fim dos dados para a página atual
         $inicio = ($page - 1) * $itenPerPage;
@@ -52,7 +52,8 @@ class FamilyController
         $sql = '';
         if ($_GET) {
             $params = ['full_name', 'id', 'qtde_childs', 'gender', 'sits_family_id'];
-            $sql = $this->createSqlConditions($params, $_GET);
+            $aliases = ['full_name' => 'f','id' => 'f','qtde_childs' => 'f', 'gender' => 'f', 'sits_family' => 'f'];
+            $sql = $this->createSqlConditions($params, $_GET, $aliases);
             $_SESSION['old'] = $_GET;
         }
         

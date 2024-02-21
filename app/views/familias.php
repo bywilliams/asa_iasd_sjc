@@ -2,7 +2,7 @@
 
 <?= $this->start('conteudo') ?>
 
-<h1>Famílias</h1>
+<h1 class="text-center">Famílias</h1>
 
 <!-- Family section form -->
 <section>
@@ -94,7 +94,16 @@
                     <td><?= $family->situacao ?></td>
                     <td><?= date("d-m-Y H:i:s", strtotime($family->created_at)) ?> </td>
                     <td><?= isset($family->updated_at) ? date("d-m-Y H:i:s", strtotime($family->updated_at)) : '' ?></td>
-                    <td><a href=""> Editar | Excluir </a></td>
+                    <td>
+                        <div style="display: flex; justify-content: space-evenly">
+                            <a href="#!" onclick="openModalEdit(<?= $family->id ?>)">
+                                <i class="fa-regular fa-pen-to-square icon-menu"></i>
+                            </a>
+                            <a href="#!" onclick="openModalDelete(<?= $family->id ?>)">
+                                <i class="fa-solid fa-trash icon-menu"></i>
+                            </a>
+                        </div>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
@@ -109,7 +118,12 @@
             <ul class="pagination justify-content-center">
                 <?php for ($i = 1; $i <= $totalPaginas; $i++) : ?>
                     <li class="page-item <?= $page == $i ? 'active' : '' ?>">
-                        <a class="page-link" href="/family/index?page=<?= $i ?>"><?= $i ?></a>
+                        <?php if($_GET): ?>
+                            <a class="page-link" href="/family/index?page=<?= $i ?>&id=<?= $old['id'] ?>&full_name=<?= $old['full_name'] ?>&qtde_childs=<?= $old['qtde_childs'] ?>&gender=<?= $old['gender'] ?>&sits_family_id=<?= $old['sits_family_id'] ?>"><?= $i ?></a>
+
+                        <?php else: ?>
+                            <a class="page-link" href="/family/index?page=<?= $i ?>"><?= $i ?></a>
+                        <?php endif; ?>
                     </li>
                 <?php endfor; ?>
             </ul>

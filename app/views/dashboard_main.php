@@ -81,7 +81,7 @@
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
-                                <h5 class="card-title font-weight-bold">Hoje: <?= date('d-M-y') ?></h5>
+                                <h5 class="card-title font-weight-bold">Hoje: <?= date('d-m-y') ?></h5>
                                 <p class="card-text">Nenhum evento marcado para este dia.</p>
                                 <p class="card-text text-info">Clique aqui para criar um evento.</p>
                             </div>

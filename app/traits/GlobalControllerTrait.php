@@ -135,20 +135,21 @@ trait GlobalControllerTrait
      * @param [type] $getParams Valores do input form
      * @return string $sql a(s) condição(ões) personalizadas para o WHERE 
      */
-    function createSqlConditions($params, $getParams): string
+    function createSqlConditions(array $params, array $getParams, array $aliases): string
     {
         $sql = '';
 
         foreach ($params as $field) {
             if (isset($getParams[$field]) && !empty($getParams[$field])) {
+                $alias = $aliases[$field] ?? $field;
                 if ($field == 'full_name') {
-                    $sql .= " AND f.{$field} LIKE '%{$getParams[$field]}%'";
+                    $sql .= " AND {$alias}.{$field} LIKE '%{$getParams[$field]}%'";
                 } else {
-                    $sql .= " AND f.{$field} = '{$getParams[$field]}'";
+                    $sql .= " AND {$alias}.{$field} = '{$getParams[$field]}'";
                 }
             }
         }
-
+        
         return $sql;
     }
 

@@ -32,31 +32,30 @@ class FoodStockModel extends Connect
 
     public function index($inicio, $itensPorPagina, $sql): ?array 
     {
+        
         $selectFamilies = ("SELECT fs.id, fs.qtde, fs.user_id, fs.created_at, fs.updated_at, f.name, CONCAT(usr.name , ' ', usr.lastname) as author   
         FROM {$this->table} fs
         INNER JOIN foods f ON fs.food_id = f.id
         INNER JOIN users usr 
         WHERE fs.id > 0 $sql
         ORDER BY id LIMIT $inicio, $itensPorPagina");
-        
+        $totalRegistros = 0;
         try {
             $stmt = $this->connection->query($selectFamilies);
             $result = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-            $countFamilies = $this->connection->query("SELECT COUNT(*) as total FROM {$this->table} $sql");
+            $countFamilies = $this->connection->query("SELECT COUNT(*) as total FROM {$this->table} fs WHERE fs.id > 0 $sql");
             $totalRegistros = $countFamilies->fetch(PDO::FETCH_ASSOC)['total'];
 
         } catch (PDOException $e) {
             error_log('Erro ao buscar famílias '. $e->getMessage());
             $result = [];
         }
-
+        
         return array(
             'data' => $result,
             'totalRegistros' => $totalRegistros
         );
-
-        //return null;
     }
 
     /**
