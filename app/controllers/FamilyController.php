@@ -1,12 +1,10 @@
 <?php
 
 namespace app\controllers;
-
 session_start();
-
 use app\traits\GlobalControllerTrait;
-use app\models\FamilyModel;
 use app\traits\SessionMessageTrait;
+use app\models\FamilyModel;
 use Slim\Http\Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -52,18 +50,17 @@ class FamilyController
 
         // Monta o SQL de pesquisa personalizada
         $sql = '';
-       
         if ($_GET) {
-            $params = ['full_name', 'id', 'qtde_childs', 'gender'];
+            $params = ['full_name', 'id', 'qtde_childs', 'gender', 'sits_family_id'];
             $sql = $this->createSqlConditions($params, $_GET);
             $_SESSION['old'] = $_GET;
         }
+        
         // Mantêm os valores dos inputs de pesquisa
         $old = $_SESSION['old'] ?? null;
-
-        // Cria a instância do objeto FamilyModel e realiza a query padrão ou personalizada
-        $familyModel = new FamilyModel();
-        $families = $familyModel->index($inicio, $itenPerPage, $sql);
+        
+        // Variável que obtêm a query padrão ou personalizada 
+        $families = $this->model->index($inicio, $itenPerPage, $sql);
 
         // Total de registros na tela
         $totalRegistros = $families['totalRegistros'];

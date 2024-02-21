@@ -38,16 +38,19 @@ class FamilyModel extends Connect
      */
     public function index($inicio, $itensPorPagina, $sql): ?array
     {
-        $selectFamilies = ("SELECT id, full_name, address, qtde_childs, contact, created_at, updated_at 
-        FROM {$this->table}
-        WHERE id > 0 $sql
-        ORDER BY id LIMIT $inicio, $itensPorPagina");
-        
+        $selectFamilies = ("SELECT f.id, f.full_name, f.address, f.qtde_childs, f.contact, f.created_at, f.updated_at, sf.name AS 'situacao'  
+        FROM {$this->table} f 
+        INNER JOIN sits_family sf ON f.sits_family_id = sf.id 
+        WHERE f.id > 0 $sql
+        ORDER BY f.id LIMIT $inicio, $itensPorPagina");
+        $totalRegistros = 0;
+
+        //echo $selectFamilies; die;
         try {
             $stmt = $this->connection->query($selectFamilies);
             $result = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-            $countFamilies = $this->connection->query("SELECT COUNT(*) as total FROM {$this->table}");
+            $countFamilies = $this->connection->query("SELECT COUNT(*) as total FROM {$this->table} f WHERE f.id > 0 $sql");
             $totalRegistros = $countFamilies->fetch(PDO::FETCH_ASSOC)['total'];
 
         } catch (PDOException $e) {

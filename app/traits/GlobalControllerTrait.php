@@ -142,9 +142,9 @@ trait GlobalControllerTrait
         foreach ($params as $field) {
             if (isset($getParams[$field]) && !empty($getParams[$field])) {
                 if ($field == 'full_name') {
-                    $sql .= " AND {$field} LIKE '%{$getParams[$field]}%'";
+                    $sql .= " AND f.{$field} LIKE '%{$getParams[$field]}%'";
                 } else {
-                    $sql .= " AND {$field} = '{$getParams[$field]}'";
+                    $sql .= " AND f.{$field} = '{$getParams[$field]}'";
                 }
             }
         }

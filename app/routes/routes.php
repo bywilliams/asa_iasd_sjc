@@ -26,7 +26,7 @@ return function (App $app)
 
     // Food routes
     $app->group('/food', function($group){
-        $group->get('/index', [FoodController::class, 'index' ]);
+        $group->get('/index', [FoodStockController::class, 'index' ]);
         $group->post('/stock-store', [FoodStockController::class, 'stockStore']);
     });
 

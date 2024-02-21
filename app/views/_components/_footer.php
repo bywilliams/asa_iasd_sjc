@@ -1,4 +1,3 @@
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script src="/assets/js/jquery.mask.js"></script>
@@ -73,20 +72,22 @@
         }
     });
 
-     // Limpa inputs dos formulário
-     document.addEventListener('DOMContentLoaded', function() {
+    // Limpa inputs dos formulário
+    document.addEventListener('DOMContentLoaded', function() {
         const formulario = document.getElementById('meuFormulario');
         const limparBotao = document.getElementById('limparCampos');
 
         limparBotao.addEventListener('click', function() {
             const inputs = formulario.querySelectorAll('input, select');
             inputs.forEach(function(input) {
-                if (input.type !== 'submit' && input.type !== 'reset') {
+                // Ignora o input do tipo hidden com id 'page'
+                if (input.id !== 'page' && input.type !== 'submit' && input.type !== 'reset') {
                     input.value = '';
                 }
             });
         });
     });
+
     // Fim limpa inputs dos formulário
 
     // SweetAlert2: Mensagens do sistemas

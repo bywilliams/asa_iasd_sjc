@@ -68,7 +68,7 @@ class UserController
         // Total de cestas disponíveis
         $totalBaskets = $foodStockModel->calculateBasicBaskets();
         
-        // mantêm dados dos inputs caso erro nas validações dos forms 
+        // Mantêm dados dos inputs caso erro nas validações dos forms 
         $old = $_SESSION['old'] ?? null;
 
         view('dashboard_main', [

@@ -33,7 +33,46 @@ class FoodStockController
             return $response->withRedirect('/');
         }
 
-        view('alimentos', ['title' => 'Lista de Alimentos']);
+        // dados do usuário logado
+        $userLogged = $this->getUserName();
+
+        // Ler o parâmetro da página da url
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $itenPerPage = 10;
+
+        // calcula o indice de início de fim dos dados para a página atual
+        $inicio = ($page - 1) * $itenPerPage;
+
+        // Monta o SQL de pesquisa personalizada
+        $sql = '';
+        if ($_GET) {
+            $params = ['full_name', 'id', 'qtde_childs', 'gender', 'sits_family_id'];
+            $sql = $this->createSqlConditions($params, $_GET);
+            $_SESSION['old'] = $_GET;
+        }
+
+        // Mantêm os valores dos inputs de pesquisa
+        $old = $_SESSION['old'] ?? null;
+
+        // Variável que obtêm a query padrão ou personalizada 
+        $foodsStock = $this->model->index($inicio, $itenPerPage, $sql);
+
+        // Total de registros na tela
+        $totalRegistros = $foodsStock['totalRegistros'];
+
+        // Calcular o número total de páginas
+        $totalPaginas = ceil($totalRegistros / $itenPerPage);
+
+        // print_r($userLogged); die;
+
+        view('alimentos', [
+            'title' => 'Lista de Alimentos',
+            'user' => $userLogged,
+            'foodsStock' => $foodsStock['data'],
+            'page' => $page,
+            'totalPaginas' => $totalPaginas,
+            'old' => $old
+        ]);
         return $response;
     }
 

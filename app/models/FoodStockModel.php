@@ -30,6 +30,35 @@ class FoodStockModel extends Connect
         $this->table = 'foods_stock';
     }
 
+    public function index($inicio, $itensPorPagina, $sql): ?array 
+    {
+        $selectFamilies = ("SELECT fs.id, fs.qtde, fs.user_id, fs.created_at, fs.updated_at, f.name, CONCAT(usr.name , ' ', usr.lastname) as author   
+        FROM {$this->table} fs
+        INNER JOIN foods f ON fs.food_id = f.id
+        INNER JOIN users usr 
+        WHERE fs.id > 0 $sql
+        ORDER BY id LIMIT $inicio, $itensPorPagina");
+        
+        try {
+            $stmt = $this->connection->query($selectFamilies);
+            $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+            $countFamilies = $this->connection->query("SELECT COUNT(*) as total FROM {$this->table} $sql");
+            $totalRegistros = $countFamilies->fetch(PDO::FETCH_ASSOC)['total'];
+
+        } catch (PDOException $e) {
+            error_log('Erro ao buscar famílias '. $e->getMessage());
+            $result = [];
+        }
+
+        return array(
+            'data' => $result,
+            'totalRegistros' => $totalRegistros
+        );
+
+        //return null;
+    }
+
     /**
      * Método findFoodById
      * 
@@ -182,7 +211,7 @@ class FoodStockModel extends Connect
             'Detergentes' => ['id' => 18, 'minQtde' => 2]
         ];
 
-        $availableBaskets = PHP_INT_MAX; // Começamos assumindo que temos um número ilimitado de cestas
+        $availableBaskets = PHP_INT_MAX; // Assumimos que temos um número ilimitado de cestas
 
         foreach ($basicBasketRequirements as $foodName => $requirement) {
             $stmt = $this->connection->prepare("SELECT SUM(qtde) AS totalQuantity FROM {$this->table} WHERE food_id = :foodId AND basic_basket = 'S'");
