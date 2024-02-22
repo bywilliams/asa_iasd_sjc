@@ -42,17 +42,7 @@
 <section class="p-2 mb-4 bg-white rounded shadow-sm border-left acesso">
     <h4 class="font-weight-normal text-center mb-2 text-secondary">Acesso rápido (cadastro)</h4>
     <div class="row">
-        <div class="container row mx-auto my-2">
-            <div class="col-lg-3 col-md-6 mb-2">
-                <button type="button" class="d-flex justify-content-center btn btn-outline-info btn-block" data-toggle="modal" data-target="#revenue_create">
-                    <span class="bi bi-cash-stack icon-menu"> Transação</span>
-                </button>
-            </div>
-            <div class="col-lg-3 col-md-6 mb-2">
-                <button type="button" class="d-flex justify-content-center btn btn-outline-secondary btn-block" data-toggle="modal" data-target="#event_create">
-                <span class="bi"><i class="fa-solid fa-map-location-dot icon-menu"></i> Evento</span>
-                </button>
-            </div>
+        <div class="container row mx-auto my-2">           
             <div class="col-lg-3 col-md-6 mb-2">
                 <button type="button" class="d-flex justify-content-center btn btn-outline-dark btn-block" data-toggle="modal" data-target="#food_create">
                     <span class="bi"><i class="fa-solid fa-utensils icon-menu"></i> Estoque</span>
@@ -61,6 +51,16 @@
             <div class="col-lg-3 col-md-6 mb-2">
                 <button type="button" class="d-flex justify-content-center btn btn-outline-primary btn-block" data-toggle="modal" data-target="#family_create">
                     <span class="bi"><i class="fa-solid fa-people-roof icon-menu"></i> Familia</span>
+                </button>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-2">
+                <button type="button" class="d-flex justify-content-center btn btn-outline-info btn-block" data-toggle="modal" data-target="#revenue_create">
+                    <span class="bi bi-cash-stack icon-menu"> Transação</span>
+                </button>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-2">
+                <button type="button" class="d-flex justify-content-center btn btn-outline-secondary btn-block" data-toggle="modal" data-target="#event_create">
+                <span class="bi"><i class="fa-solid fa-map-location-dot icon-menu"></i> Evento</span>
                 </button>
             </div>
         </div>
@@ -129,8 +129,8 @@
 
 <!-- Food Products Section  -->
 <section class="row">
-    <h3 class="text-secondary text-center mx-auto mb-2">Últimos produtos da cesta cadastrados</h3>
-    <table class="content-table mx-1 ">
+    <h3 class="text-secondary text-center mx-auto mb-2">Inventário de alimentos</h3>
+    <table class="content-table mx-2 ">
         <thead>
             <tr>
                 <th>id</th>

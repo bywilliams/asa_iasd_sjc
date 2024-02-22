@@ -195,7 +195,7 @@ class FoodStockModel extends Connect
             'Macarrão' => ['id' => 3, 'minQtde' => 2],
             'Molho tomate' => ['id' => 4, 'minQtde' => 2],
             'Óleo' => ['id' => 5, 'minQtde' => 2],
-            'Açucar' => ['id' => 6, 'minQtde' => 3],
+            'Açucar' => ['id' => 6, 'minQtde' => 2],
             'Sal' => ['id' => 7, 'minQtde' => 1],
             'Farinha de trigo' => ['id' => 8, 'minQtde' => 1],
             'Flocão' => ['id' => 9, 'minQtde' => 1],
@@ -203,11 +203,7 @@ class FoodStockModel extends Connect
             'Fuba' => ['id' => 11, 'minQtde' => 1],
             'Bolacha doce' => ['id' => 12, 'minQtde' => 1],
             'Bolacha Sal' => ['id' => 13, 'minQtde' => 1],
-            'Creme dental' => ['id' => 14, 'minQtde' => 2],
-            'Sabonete' => ['id' => 15, 'minQtde' => 3],
-            'Papel Higiênico' => ['id' => 16, 'minQtde' => 1],
             'Esponja' => ['id' => 17, 'minQtde' => 1],
-            'Detergentes' => ['id' => 18, 'minQtde' => 2]
         ];
 
         $availableBaskets = PHP_INT_MAX; // Assumimos que temos um número ilimitado de cestas

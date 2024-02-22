@@ -34,7 +34,9 @@ class FoodStockController
             $this->setMessage('error', 'Por favor, faça login novamente!');
             return $response->withRedirect('/');
         }
-
+        // Limpa a sessão old
+        unset($_SESSION['old']);
+        
         $userLogged = $this->getUserName(); // dados do usuário logado
 
         $foods = new FoodModel();
@@ -49,17 +51,19 @@ class FoodStockController
         $inicio = ($page - 1) * $itemsPerPage; // calcula o indice de início de fim dos dados para a página atual
 
         $sql = '';
-        if ($_GET) {
-            $params = ['id', 'food_id', 'user_id', 'created_at'];
-            $aliases = ['id' => 'fs', 'food_id' => 'fs', 'user_id' => 'fs', 'created_at' => 'fs'];
+        if (!empty($_GET)) {
+            $params = ['id', 'food_id', 'basic_basket',  'user_id'];
+            $aliases = ['id' => 'fs', 'food_id' => 'fs', 'user_id' => 'fs', 'basic_basket' => 'fs'];
             $sql = $this->createSqlConditions($params, $_GET, $aliases);
             $_SESSION['old'] = $_GET;
-        }
-        // echo $sql; die;
+        } 
+
+        //echo $sql; die;
+
         $old = $_SESSION['old'] ?? null; // Mantêm os valores dos inputs de pesquisa
 
         $foodsStock = $this->model->index($inicio, $itemsPerPage, $sql); // Variável que obtêm a query padrão ou personalizada 
-        //print_r($foodsStock); die;
+
         $totalRegistros = $foodsStock['totalRegistros']; // Total de registros na tela
 
         $totalPaginas = ceil($totalRegistros / $itemsPerPage); // Calcular o número total de páginas
@@ -69,7 +73,7 @@ class FoodStockController
             'user' => $userLogged,
             'usersList' => $usersList,
             'foodsList' => $foodsList,
-            'foodsStock' => $foodsStock['data'],
+            'foodsStock' => $foodsStock,
             'page' => $page,
             'totalPaginas' => $totalPaginas,
             'old' => $old
@@ -104,10 +108,10 @@ class FoodStockController
         // Limpa a sessão old
         unset($_SESSION['old']);
 
-        //TODO: 1 checar se alimento já existe no estoque
+        // checar se alimento já existe no estoque
         $foodStockExists = $this->model->findFoodById($formData);
 
-        // TODO: 2 fluxo condicional para decidir se o alimento será inserido (novo) ou atualizado de acordo com a etapa 1
+        // fluxo condicional para decidir se o alimento será inserido (novo) ou atualizado de acordo com a etapa 1
         if (!$foodStockExists) { 
             // Salva registro no banco de dados
             $this->model->store($formData);
@@ -117,7 +121,6 @@ class FoodStockController
             $this->setMessage('success', 'Alimento atualizado no estoque com sucesso!');
         }
         
-
         return $response->withRedirect('/usuario/dashboard');
     }
 

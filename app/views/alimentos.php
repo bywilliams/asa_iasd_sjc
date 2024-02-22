@@ -6,25 +6,26 @@
 
 <!-- Family section form -->
 <section>
-    <div class="bg-light p-3 mb-4">
-        <!-- <h2 class="text-center text-secondary">Pesquisar</h2> -->
-
-        <div class="col-lg-12 d-flex justify-content-end">
+    <div class="bg-light p-3 mb-4 rounded">
+        
+        <h3 class="text-secondary mb-3">Pesquisar:</h5>
+        
+        <!-- <div class="col-lg-12 d-flex justify-content-end">
             <button class="btn btn-outline-secondary" id="limparCampos" title="Limpa todos os campos">Limpar</button>
-        </div>
+        </div> -->
         <form method="get" id="meuFormulario">
             <input type="hidden" name="page" id="page" value="<?= $page ?>">
             <div class="row">
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <div class="form-group">
                         <label for="id">Por id:</label>
-                        <input type="number" name="id" id="id" class="form-control" placeholder="ex: 5" value="<?= isset($old['id']) ? $old['id'] : ''  ?>">
+                        <input type="number" name="id" id="id" class="form-control inputForm" placeholder="ex: 5" value="<?= isset($old['id']) ? $old['id'] : ''  ?>" oninput="verificarInput()">
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label for="food">Por alimento:</label>
-                        <select name="food_id" id="food" class="form-control">
+                        <select name="food_id" id="food" class="form-control inputForm" oninput="verificarInput()">
                             <option value="">Selecione</option>
                             <?php foreach ($foodsList as $food) : ?>
                                 <option value="<?= $food->id ?>" <?= isset($old['food_id']) && $old['food_id'] == $food->id ? 'selected' : ''  ?>><?= $food->name ?></option>
@@ -34,8 +35,18 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
+                        <label for="basket">Por tipo:</label>
+                        <select name="basic_basket" id="basket" class="form-control inputForm" oninput="verificarInput()">
+                            <option value="">Selecione</option>
+                            <option value="S" <?= isset($old['basic_basket']) && $old['basic_basket'] == 'S' ? 'selected' : ''  ?>>Alimentos da Cesta Básica</option>
+                            <option value="N" <?= isset($old['basic_basket']) && $old['basic_basket'] == 'N' ? 'selected' : ''  ?>>Alimentos Fora da Cesta Básica</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
                         <label for="user">Por usuário:</label>
-                        <select name="user_id" id="user" class="form-control">
+                        <select name="user_id" id="user" class="form-control inputForm" oninput="verificarInput()">
                             <option value="">Selecione</option>
                             <?php foreach ($usersList as $user) : ?>
                                 <option value="<?= $user->id ?>" <?= isset($old['user_id']) && $old['user_id'] == $user->id ? 'selected' : ''  ?>><?= $user->nome ?></option>
@@ -43,16 +54,17 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-lg-2">
+                <!-- <div class="col-lg-2">
                     <div class="form-group">
                         <label for="date">Por data:</label>
-                        <input type="date" name="created_at" id="date" class="form-control" value="<?= isset($old['created_at']) ? $old['created_at'] : '' ?>">
+                        <input type="date" name="created_at" id="date" class="form-control inputForm" value="<?= isset($old['created_at']) ? $old['created_at'] : '' ?>" oninput="verificarInput()">
                     </div>
+                </div> -->
+                <div class="col-lg-1">
+                    <button class="btn btn-lg btn-outline-secondary mt-4" id="limparCampos" title="Limpa todos os campos">Limpar</button>
                 </div>
                 <div class="col-lg-1">
-                    <div class="form-group mt-4">
-                        <input type="submit" class="btn btn-lg btn-success" value="Buscar">
-                    </div>
+                    <input type="submit" class="btn btn-lg btn-success mt-4" id="search" value="Buscar">
                 </div>
             </div>
         </form>
@@ -75,7 +87,12 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($foodsStock as $food) : ?>
+            <?php 
+            $totalFoods = 0;
+            $currentPage = $page;
+            $itemsPerPage = 10;
+            ?>
+            <?php foreach ($foodsStock['data'] as $food) : ?>
                 <tr>
                     <td><?= $food->id ?></td>
                     <td><?= $food->name ?></td>
@@ -94,8 +111,18 @@
                         </div>
                     </td>
                 </tr>
+                <?php $totalFoods += 1; ?>
             <?php endforeach; ?>
         </tbody>
+        <tfoot>
+            <tr class="text-center">
+                <td colspan="9">
+                    <strong class="mr-2">
+                        Total de alimentos: <?= min($totalFoods + (($currentPage - 1) * $itemsPerPage), $foodsStock['totalRegistros']) . ' de ' .  $foodsStock['totalRegistros'] ?>
+                    </strong>
+                </td>
+            </tr>
+        </tfoot>
     </table>
 
 
@@ -105,17 +132,14 @@
             <ul class="pagination justify-content-center">
                 <?php for ($i = 1; $i <= $totalPaginas; $i++) : ?>
                     <li class="page-item <?= $page == $i ? 'active' : '' ?>">
-                        <?php if ($_GET) : ?>
-                            <a class="page-link" href="/food/index?page=<?= $i ?>&id=<?= $old['id'] ?>&food_id=<?= $old['food_id'] ?>&user_id=<?= $old['user_id'] ?>&created_at=<?= $old['created_at'] ?>"><?= $i ?></a>
-                        <?php else : ?>
-                            <a class="page-link" href="/food/index?page=<?= $i ?>"><?= $i ?></a>
-                        <?php endif; ?>
+                        <a class="page-link" href="/food/index?page=<?= $i ?><?= isset($old['id']) && $old['id'] != null ? "&id={$old['id']}" : null ?><?= isset($old['food_id']) && $old['food_id'] != null ? "&food_id={$old['food_id']}" : null ?><?= isset($old['user_id']) && $old['user_id'] != null ? "&user_id={$old['user_id']}" : null ?><?= isset($old['created_at']) && $old['created_at'] != null ? "&created_at={$old['created_at']}" : null ?>"><?= $i ?></a>
                     </li>
                 <?php endfor; ?>
             </ul>
         </nav>
     <?php endif; ?>
     <!-- pagination -->
+
 
 </section>
 <!-- End Family table section -->

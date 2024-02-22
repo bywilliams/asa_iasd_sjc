@@ -99,7 +99,7 @@ body {
 ----------------------------------------------------- */
 
 .content{
-    margin: 10%;
+    margin: 10% 3%;
     background-color: #fff;
     padding: 3rem 1rem 3rem 1rem;
     box-shadow: 0 0 5px 5px rgba(0,0,0, .05);

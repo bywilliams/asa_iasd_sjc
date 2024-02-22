@@ -43,7 +43,7 @@ class FamilyController
 
         // Ler o parâmetro da página da url
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $itenPerPage = 12;
+        $itenPerPage = 3;
 
         // calcula o indice de início de fim dos dados para a página atual
         $inicio = ($page - 1) * $itenPerPage;
@@ -51,11 +51,13 @@ class FamilyController
         // Monta o SQL de pesquisa personalizada
         $sql = '';
         if ($_GET) {
-            $params = ['full_name', 'id', 'qtde_childs', 'gender', 'sits_family_id'];
-            $aliases = ['full_name' => 'f','id' => 'f','qtde_childs' => 'f', 'gender' => 'f', 'sits_family' => 'f'];
+            $params = ['id', 'full_name', 'gender', 'sits_family_id', 'created_at'];
+            $aliases = ['id' => 'f', 'full_name' => 'f', 'gender' => 'f', 'sits_family_id' => 'f', 'created_at' => 'f'];
             $sql = $this->createSqlConditions($params, $_GET, $aliases);
             $_SESSION['old'] = $_GET;
         }
+
+        //echo $sql; die;
         
         // Mantêm os valores dos inputs de pesquisa
         $old = $_SESSION['old'] ?? null;
@@ -72,7 +74,7 @@ class FamilyController
         view('familias', [
             'title' => 'Listagem de familias.',
             'user' => $userLogged,
-            'families' => $families['data'],
+            'families' => $families,
             'page' => $page,
             'totalPaginas' => $totalPaginas,
             'old' => $old
@@ -110,6 +112,9 @@ class FamilyController
             return $response->withRedirect('/');
         }
 
+        // Limpa a sessão old
+        unset($_SESSION['old']);
+
         // Converte em objeto
         $formData = (object) $this->sanitizeData($data);
 
@@ -123,9 +128,6 @@ class FamilyController
                 return $response->withRedirect('/usuario/dashboard');
             }
         }
-
-        // Limpa a sessão old
-        unset($_SESSION['old']);
 
         // checka se a familia já foi cadastrada
         if ($this->model->checkFamilyExist($formData->contact)) {

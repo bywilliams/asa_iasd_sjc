@@ -78,6 +78,9 @@
         const limparBotao = document.getElementById('limparCampos');
 
         limparBotao.addEventListener('click', function() {
+            // Previne a ação padrão do botão
+            event.preventDefault();
+
             const inputs = formulario.querySelectorAll('input, select');
             inputs.forEach(function(input) {
                 // Ignora o input do tipo hidden com id 'page'
@@ -88,7 +91,7 @@
         });
     });
 
-    // Fim limpa inputs dos formulário
+    // Fim limpa inputs dos formulário    
 
     // SweetAlert2: Mensagens do sistemas
     var status = "<?= $_SESSION['status_report'] ?>";

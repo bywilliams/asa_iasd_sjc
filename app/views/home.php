@@ -22,9 +22,9 @@
     <title><?= $this->e($title) ?></title>
 </head>
 
-<body class="bg-secondary">
+<body class="bg-dark">
 
-<div class="container">
+<div class="container d-flex justify-content-center align-items-center vh-100" >
     <div class="row content">
         <div class="col-md-6 text-center">
             <h2>ASA IASD</h2>
