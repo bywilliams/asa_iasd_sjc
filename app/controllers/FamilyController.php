@@ -1,7 +1,6 @@
 <?php
 
 namespace app\controllers;
-session_start();
 use app\traits\GlobalControllerTrait;
 use app\traits\SessionMessageTrait;
 use app\models\FamilyModel;
@@ -33,17 +32,17 @@ class FamilyController
      */
     public function index(Request $request, Response $response)
     {
-        if (!$this->validateToken()) {
+        if(!$this->validateJwtToken()) {
             $this->setMessage('error', 'Por favor, faça login novamente!');
             return $response->withRedirect('/');
         }
 
-        // dados do usuário logado
-        $userLogged = $this->getUserName();
+        // check e recebe dados do usuário logado
+        $userLogged = (object) $this->validateJwtToken();
 
         // Ler o parâmetro da página da url
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $itenPerPage = 3;
+        $itenPerPage = 10;
 
         // calcula o indice de início de fim dos dados para a página atual
         $inicio = ($page - 1) * $itenPerPage;
@@ -51,9 +50,10 @@ class FamilyController
         // Monta o SQL de pesquisa personalizada
         $sql = '';
         if ($_GET) {
-            $params = ['id', 'full_name', 'gender', 'sits_family_id', 'created_at'];
-            $aliases = ['id' => 'f', 'full_name' => 'f', 'gender' => 'f', 'sits_family_id' => 'f', 'created_at' => 'f'];
+            $params = ['id', 'full_name', 'gender', 'qtde_childs', 'sits_family_id', 'created_at'];
+            $aliases = ['id' => 'f', 'full_name' => 'f', 'gender' => 'f', 'qtde_childs' => 'f', 'sits_family_id' => 'f', 'created_at' => 'f'];
             $sql = $this->createSqlConditions($params, $_GET, $aliases);
+            //echo $sql; die;
             $_SESSION['old'] = $_GET;
         }
 

@@ -2,6 +2,7 @@
 
 use Slim\Factory\AppFactory;
 use Slim\Middleware\StaticFiles;
+use app\Middleware\JwtMiddleware;
 use Slim\Routing\RouteCollectorProxy;
 
 require '../vendor/autoload.php';

@@ -1,7 +1,6 @@
 <?php 
 
 namespace app\controllers;
-session_start();
 use app\traits\GlobalControllerTrait;
 use app\traits\SessionMessageTrait;
 use app\models\FoodStockModel;
@@ -29,15 +28,16 @@ class FoodStockController
 
     public function index(Request $request, Response $response) 
     {
-
-        if(!$this->validateToken()) {
+        if(!$this->validateJwtToken()) {
             $this->setMessage('error', 'Por favor, faça login novamente!');
             return $response->withRedirect('/');
         }
+
         // Limpa a sessão old
         unset($_SESSION['old']);
         
-        $userLogged = $this->getUserName(); // dados do usuário logado
+        // check e recebe dados do usuário logado
+        $userLogged = (object) $this->validateJwtToken();
 
         $foods = new FoodModel();
         $foodsList = $foods->findAllFoods(); // Lista de alimentos para form da view
@@ -57,8 +57,6 @@ class FoodStockController
             $sql = $this->createSqlConditions($params, $_GET, $aliases);
             $_SESSION['old'] = $_GET;
         } 
-
-        //echo $sql; die;
 
         $old = $_SESSION['old'] ?? null; // Mantêm os valores dos inputs de pesquisa
 

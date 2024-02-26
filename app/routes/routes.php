@@ -6,9 +6,9 @@ use app\controllers\FamilyController;
 use app\controllers\FoodController;
 use app\controllers\FoodStockController;
 use app\controllers\TransactionController;
-
 return function (App $app)
 {
+   
     $app->get('/', [HomeController::class, 'index']);
 
     // User routes
@@ -28,12 +28,12 @@ return function (App $app)
     $app->group('/food', function($group){
         $group->get('/index', [FoodStockController::class, 'index' ]);
         $group->post('/stock-store', [FoodStockController::class, 'stockStore']);
-    });
+    });;
 
     // Transaction routes
     $app->group('/transacao', function($group){
         $group->get('/index', [ TransactionController::class, 'index']);
         $group->post('/store', [TransactionController::class, 'store']);
-    });
+    });;
 
 };

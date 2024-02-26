@@ -118,8 +118,8 @@
                 <div class="modal-body">
                     <p>Obrigatório *</p>
                     <div class="form-group">
-                        <label for="name">Alimento: *</label>
-                        <select name="food_id" id="" class="form-control">
+                        <label for="alimento_id">Alimento: *</label>
+                        <select name="food_id" id="alimento_id" class="form-control">
                             <option value="">Selecione</option>
                             <?php foreach ($allFoods as $food) : ?>
                                 <option value="<?= $food->id ?>" <?= isset($old['food_id']) && $old['food_id'] == $food->id ? 'selected' : null ?>><?= $food->name ?></option>

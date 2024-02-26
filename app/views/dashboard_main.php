@@ -11,7 +11,7 @@
                 <h4 class="text-dark">Receitas</h4>
             </a>
             <div class="text-success">
-                <h2>R$ 2.000,00</h2>
+                <h2>R$ <?= $totalRevenue ?? 0 ?></h2>
             </div>
         </article>
     </div>
@@ -21,7 +21,7 @@
                 <h4 class="text-dark">Despesas</h4>
             </a>
             <div class="text-danger">
-                <h2>R$ 0,00</h2>
+                <h2>R$ <?= $totalExpense ?? 0 ?></h2>
             </div>
         </article>
     </div>
@@ -31,7 +31,7 @@
                 <h4 class="text-dark">Saldo</h4>
             </a>
             <div class="text-success">
-                <h2>R$ 2.000,00</h2>
+                <h2>R$ <?= $totalBalance ?? 0 ?></h2>
             </div>
         </article>
     </div>
@@ -77,7 +77,7 @@
                 <div class="card border-0 mb-3">
                     <div class="row no-gutters">
                         <div class="col-md-4">
-                            <img src="/assets/imgs/calendar_mini.png" alt="...">
+                            <img src="/assets/imgs/calendar.png" alt="...">
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
@@ -166,10 +166,10 @@
                     </td>
                     <td>
                         <div style="display: flex; justify-content: space-evenly">
-                            <a href="#!" onclick="openModalEdit(<?= $user->id ?>)">
+                            <a href="#!" onclick="openModalEdit()">
                                 <i class="fa-regular fa-pen-to-square icon-menu"></i>
                             </a>
-                            <a href="#!" onclick="openModalDelete(<?= $user->id ?>)">
+                            <a href="#!" onclick="openModalDelete()">
                                 <i class="fa-solid fa-trash icon-menu"></i>
                             </a>
                         </div>

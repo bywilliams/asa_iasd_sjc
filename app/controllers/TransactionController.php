@@ -41,6 +41,8 @@ class TransactionController
         // Sanitiza os dados
         $formData = (object) $this->sanitizeData($data);
 
+        //print_r($formData); die;
+
         // Checa se os campos do form estão válidos
         $fieldsToCheck = ['title', 'type', 'category_id', 'value', 'created_at'];
 

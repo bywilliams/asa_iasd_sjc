@@ -1,7 +1,6 @@
 <?php
 namespace app\controllers;
 use app\traits\GlobalControllerTrait;
-session_start();
 use Slim\Http\Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -30,6 +29,7 @@ class HomeController
         $status_message = $_SESSION['status_message'] ?? '';
         unset($_SESSION['status']);
         unset($_SESSION['status_message']);
+        //unset($_SESSION['token']);
 
         view('home', ['title' => 'Bem vindo!', 'status' => $status, 'status_message' => $status_message]);
         return $response;

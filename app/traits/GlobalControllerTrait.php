@@ -2,8 +2,12 @@
 
 namespace app\traits;
 
+session_start();
+
+use Exception;
 use Slim\Http\Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Firebase\JWT\JWT;
 
 trait GlobalControllerTrait
 {
@@ -34,98 +38,60 @@ trait GlobalControllerTrait
     private function generateJwtToken($userFound)
     {
 
-        $header = [
-            'alg' => 'HS256',
-            'type' => 'JWT'
-        ];
-
-        // duração do token 15 minutos
+        // duração do token 1 hora
         $duration = time() + (60 * 60);
 
-        $payload = [
-            'exp' => $duration,
-            'iat' => time(),
-            'id' => $userFound->id,
-            'email' => $userFound->email,
-            'username' => $userFound->name . ' ' . $userFound->lastname,
-            'nivel_acesso' => $userFound->access_level_id
-        ];
+        $token = JWT::encode(
+            array(
+                'exp' => $duration,
+                'iat' => time(),
+                'id' => $userFound->id,
+                'email' => $userFound->email,
+                'username' => $userFound->name . ' ' . $userFound->lastname,
+                'nivel_acesso' => $userFound->access_level_id
+            ),
+            $_ENV['KEY'],
+            'HS256'
+        );
 
-        function base64url_encode($data)
-        {
-            return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
-        }
-
-        // Codificar o cabeçalho e a carga útil para Base64 URL
-        $header = base64url_encode(json_encode($header));
-        $payload = base64url_encode(json_encode($payload));
-
-        //gerar assinatura
-        $signature = hash_hmac('sha256', "$header.$payload", $_ENV['KEY']);
-
-        // Sanitiza a assinatura
-        $signature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
-
-        // Monta o JWT final
-        $token = "$header.$payload.$signature";
 
         // Salva o cookie para todas as rotas do mesmo site
         setcookie('token', $token, [
             'path' => '/',
             'samesite' => 'Strict'
         ]);
+
+
+        return $token;
     }
 
-    private function validateToken()
+    private function validateJwtToken()
     {
 
-        $token = $_COOKIE['token'];
-        $tokenArray = explode('.', $token);
-
-        $header = $tokenArray[0];
-        $payload = $tokenArray[1];
-        $providedSignature = $tokenArray[2];
-
-        // Calcula a assinatura esperada
-        $expectedSignature = hash_hmac('sha256', "$header.$payload", $_ENV['KEY']);
-
-        // Codifica para base64
-        $expectedSignature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($expectedSignature));
-
-        // Verifica se a assinatura fornecida é igual do token
-        if ($providedSignature == $expectedSignature) {
-
-            // Verifica tempo de expiração do token
-            $dadosToken = base64_decode($payload);
-            $dadosToken = json_decode($dadosToken);
-
-            if ($dadosToken->exp > time()) {
-                return true;
-            } else {
+        try {
+            // Decodifica o token
+            $decoded = JWT::decode($_COOKIE['token'], $_ENV['KEY'], array('HS256'));
+            
+            // Verifica se o token expirou
+            if ($decoded->exp < time()) {
                 return false;
             }
-        } else {
+
+            // O token é válido, retorna os dados do usuário
+            return array(
+                'id' => $decoded->id,
+                'email' => $decoded->email,
+                'username' => $decoded->username,
+                'nivel_acesso' => $decoded->nivel_acesso
+            );
+
+        } catch (Exception $e) {
+            // O token não é válido
             return false;
         }
     }
 
 
-    private function getUserName()
-    {
-        if (isset($_COOKIE['token'])) {
-            $token = $_COOKIE['token'];
-            $tokenArray = explode('.', $token);
-            $payload = $tokenArray[1];
-
-            $payload = base64_decode($payload);
-            $payload = json_decode($payload);
-
-            return $payload;
-        } else {
-            return '';
-        }
-    }
-    
     /**
      * Função createSqlCOnditions()
      * 
@@ -142,14 +108,11 @@ trait GlobalControllerTrait
         foreach ($params as $field) {
             if (isset($getParams[$field]) && !empty($getParams[$field])) {
                 $alias = $aliases[$field] ?? $field;
-                if ($field == 'full_name') {
-                    $sql .= " AND {$alias}.{$field} LIKE '%{$getParams[$field]}%'";
-                } else {
-                    $sql .= " AND {$alias}.{$field} = '{$getParams[$field]}'";
-                }
+                $field == 'full_name' ? $sql .= " AND {$alias}.{$field} LIKE '%{$getParams[$field]}%'" : null;
+                $field == 'created_at' ? $sql .= " AND DATE({$alias}.{$field}) = '{$getParams[$field]}'" : null;
             }
         }
-        
+
         return $sql;
     }
 

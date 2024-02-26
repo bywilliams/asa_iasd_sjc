@@ -24,30 +24,6 @@ class TransactionModel extends Connect
     }
 
     /**
-     * Método getRevenueCategories()
-     * 
-     * Este Método traz as categorias de transação para receitas
-     *
-     * @return array $resultCategories objetos de dados das categorias 
-     */
-    public function getRevenueCategories(): array 
-    {
-        $categoriesQuery = ("SELECT id, name FROM categories WHERE type = '1' ORDER BY id ASC");
-        $stmt = $this->connection->query($categoriesQuery);
-
-        try {
-            $stmt->execute();
-            $resultCategories = $stmt->fetchAll(PDO::FETCH_OBJ);
-        } catch (PDOException $e) {
-            echo "Erro ao trazer categorias";
-            //error_log('Erro ao trazer categorias '. $e->getMessage());
-        }
-
-        return $resultCategories;
-
-    }
-
-     /**
      * Método getExpenseCategories()
      * 
      * Este Método traz as categorias de transação para despesas
@@ -72,6 +48,64 @@ class TransactionModel extends Connect
     }
 
     /**
+     * Método getRevenueCategories()
+     * 
+     * Este Método traz as categorias de transação para receitas
+     *
+     * @return array $resultCategories objetos de dados das categorias 
+     */
+    public function getRevenueCategories(): array 
+    {
+        $categoriesQuery = ("SELECT id, name FROM categories WHERE type = '1' ORDER BY id ASC");
+        $stmt = $this->connection->query($categoriesQuery);
+
+        try {
+            $stmt->execute();
+            $resultCategories = $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (PDOException $e) {
+            echo "Erro ao trazer categorias";
+            //error_log('Erro ao trazer categorias '. $e->getMessage());
+        }
+
+        return $resultCategories;
+
+    }
+
+     /**
+     * Método getTotalTransactions()
+     * 
+     * Este método traz o total de receitas ou de despesas da aplicação de acordo com o type(enum) usado
+     *
+     * @return string|null $row->total O total de receitas|despesas ou null
+     */
+    public function getTotalTransactionsByType($type) : ?string
+    {
+        $sql = ("SELECT SUM(value) as 'total' FROM {$this->table} WHERE type = :type");
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindParam(":type", $type);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_OBJ);
+        return number_format($row->total ?? 0, 2,",",".");
+    }
+
+    public function getTotalBalance(): ?string
+    {
+        $sql = ("SELECT COALESCE(
+            (SELECT SUM(value) as 'total' FROM {$this->table} 
+            WHERE type = 'receita'), 0)
+            -
+            COALESCE(
+            (SELECT SUM(value) as 'total' FROM {$this->table} 
+            WHERE type = 'despesa'), 0)
+            AS 'total_balance';
+        ");
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_OBJ);
+        return number_format($row->total_balance ?? 0,2,",",".");
+    }
+
+    /**
      * Método store()
      * 
      * Este método é responsável por inserir registros de transações (Receita ou Despesa)
@@ -89,10 +123,13 @@ class TransactionModel extends Connect
         )");
         $stmt = $this->connection->prepare($insertTransaction);
 
+        $value = $value = str_replace([".", ","], "", $request->value);
+        $finalValue = substr_replace($value, ".", -2, 0); // Insere o ponto na posição correta para as casas decimais
+
         try{
             $stmt->bindParam(':title', $request->title, PDO::PARAM_STR);
             $stmt->bindParam(':description', $request->description, PDO::PARAM_STR);
-            $stmt->bindParam(':value', $request->value, PDO::PARAM_INT);
+            $stmt->bindParam(':value', $finalValue, PDO::PARAM_INT);
             $stmt->bindParam(':type', $request->type, PDO::PARAM_INT);
             $stmt->bindParam(':category_id', $request->category_id, PDO::PARAM_INT);
             $stmt->bindParam(':user_id', $request->user_id, PDO::PARAM_INT);

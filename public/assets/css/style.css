@@ -68,7 +68,7 @@ body {
     DSASHBOARD MAIN
 ----------------------------------------------------- */
 .events img{
-    width: 80%;
+    width: 90%;
     height: auto;
     padding: 10px;
 }
@@ -211,23 +211,18 @@ body {
 }
 
 
+#meuFormulario button {
+    margin-top: 32px;
+}
+
 
 /* ---------------------------------------------------
     MEDIA QUERIES
 ----------------------------------------------------- */
 
 /* sidebar for small screens */
-@media screen and (max-width: 767px) {
 
-    .sidebar {
-        max-width: 18rem;
-        transform: translateX(-100%);
-        transition: transform 0.4s ease-out;
-    }
-
-    .sidebar.active {
-        transform: translateX(0);
-    }
+@media screen and (max-width: 768px) {
 
     .modal-content {
         width: 60%;
@@ -275,6 +270,18 @@ body {
     
     table td:last-child {
         border-bottom: 0;
+    }
+}
+
+@media screen and (max-width: 767px) { 
+    .sidebar {
+        max-width: 18rem;
+        transform: translateX(-100%);
+        transition: transform 0.4s ease-out;
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
     }
 }
 

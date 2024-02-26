@@ -108,6 +108,43 @@
         <?php $_SESSION['status'] = null ?>
         <?php $_SESSION['message'] = null ?>
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // ... restante do código ...
+
+        // Verifica se há um token na resposta
+        var token = <?= json_encode($_SESSION['token'] ?? null) ?>;
+        if (token) {
+            // Armazena o token no localStorage
+            localStorage.setItem('jwtToken', token);
+        }
+
+        // ... restante do código ...
+    });
+
+    // document.addEventListener('DOMContentLoaded', function() {
+    //     // Obtém o token do localStorage
+    //     var localStorageToken = localStorage.getItem('jwtToken');
+
+    //     // Obtém o token da $_SESSION
+    //     var sessionToken = <?= json_encode($_SESSION['token'] ?? null) ?>;
+
+    //     // Verifica se há um token no localStorage e na $_SESSION
+    //     if (localStorageToken && sessionToken) {
+    //         // Compara os tokens
+    //         if (localStorageToken !== sessionToken) {
+
+    //             // Aqui você pode redirecionar para a página de login ou realizar outras ações necessárias
+    //             <?php $_SESSION['token'] = '' ?>
+    //             localStorage.setItem('jwtToken', '');
+    //             window.location.href = '/logout';
+    //         }
+    //     }
+    // });
+
+
+    console.log(token);
+    console.log(response);
 </script>
 </body>
 

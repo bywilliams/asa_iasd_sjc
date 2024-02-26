@@ -1,7 +1,6 @@
 <?php
 
 namespace app\controllers;
-session_start();
 use app\models\UserModel;
 use app\models\FoodModel;
 use app\models\FoodStockModel;
@@ -42,45 +41,64 @@ class UserController
      */
     public function dashboard(Request $request, Response $response)
     {
-        if(!$this->validateToken()) {
+
+        if(empty($this->validateJwtToken())) {
+            //echo "entrou no if "; die;
             $this->setMessage('error', 'Por favor, faça login novamente!');
             return $response->withRedirect('/');
         }
-
+        
         // Gera CSRF Token
         generateCsrfToken();
-
-        // dados do usuário logado
-        $userLogged = $this->getUserName();
-
+        
+        // Obtenha os dados do usuário decodificados do atributo 'user' 
+        $userLogged = (object) $this->validateJwtToken();
+        
+        if ($userLogged == null) {
+            //echo "entrou aqui"; die; 
+            $this->setMessage('error', 'Acesso negado, faça login novamente!');
+            return $response->withRedirect('/');
+        }
+        
         // Traz as categorias (receitas|despesas) financeiras para o modal de transação
         $transactionModel = new TransactionModel();
         $revenueCategories = $transactionModel->getRevenueCategories();
         $expenseCategories = $transactionModel->getExpenseCategories();
-
+        
         // traz os produtos disponíveis para cadastro de estoque
         $foodModel = new FoodModel();
         $allFoods = $foodModel->findAllFoods();
+
         // Lista os alimentos (estoque) cadastrados para a dashboard
         $foodStockModel = new FoodStockModel();
         $latestStockFoods = $foodStockModel->latestStockFoods();
 
+        // traz total receitas, despesas e balance total
+        $transactionModel = new TransactionModel();
+        $totalRevenue = $transactionModel->getTotalTransactionsByType('receita');
+        $totalExpense = $transactionModel->getTotalTransactionsByType('despesa');
+        $totalBalance = $transactionModel->getTotalBalance();
+        
         // Total de cestas disponíveis
         $totalBaskets = $foodStockModel->calculateBasicBaskets();
         
         // Mantêm dados dos inputs caso erro nas validações dos forms 
         $old = $_SESSION['old'] ?? null;
-
+        
         view('dashboard_main', [
             'title' => 'Bem vindo a ASA da IASD de SJC!',
             'user' => $userLogged,
             'revenueCategories' => $revenueCategories,
+            'totalRevenue' => $totalRevenue,
             'expenseCategories' => $expenseCategories,
+            'totalExpense' => $totalExpense,
+            'totalBalance' => $totalBalance,
             'allFoods' => $allFoods,
             'latestStockFoods' => $latestStockFoods,
             'totalBaskets' => $totalBaskets,
             'old' => $old
         ]);
+        
         return $response;
     }
 
@@ -123,11 +141,11 @@ class UserController
             $this->setMessage('error', 'Usuário e/ou senha inválidos!');
             return $response->withRedirect('/');
         }
-
         // Gera o JWT Token para usuário
-        $this->generateJwtToken($userFound);        
+        
+        $this->generateJwtToken($userFound);               
 
-        // Configura uma mensagem de boas vindas
+        // Configura uma mensagem de boas vindas 
         $this->setMessage('success', "Seja bem vindo $userFound->name!");
 
         // Redireciona para a rota da dashboard
