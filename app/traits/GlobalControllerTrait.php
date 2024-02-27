@@ -8,6 +8,7 @@ use Exception;
 use Slim\Http\Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 trait GlobalControllerTrait
 {
@@ -69,9 +70,10 @@ trait GlobalControllerTrait
     {
 
         try {
+
             // Decodifica o token
-            $decoded = JWT::decode($_COOKIE['token'], $_ENV['KEY'], array('HS256'));
-            
+            $decoded = JWT::decode($_COOKIE['token'], new Key($_ENV['KEY'], 'HS256'));
+
             // Verifica se o token expirou
             if ($decoded->exp < time()) {
                 return false;
@@ -84,7 +86,6 @@ trait GlobalControllerTrait
                 'username' => $decoded->username,
                 'nivel_acesso' => $decoded->nivel_acesso
             );
-
         } catch (Exception $e) {
             // O token não é válido
             return false;
@@ -108,13 +109,19 @@ trait GlobalControllerTrait
         foreach ($params as $field) {
             if (isset($getParams[$field]) && !empty($getParams[$field])) {
                 $alias = $aliases[$field] ?? $field;
-                $field == 'full_name' ? $sql .= " AND {$alias}.{$field} LIKE '%{$getParams[$field]}%'" : null;
-                $field == 'created_at' ? $sql .= " AND DATE({$alias}.{$field}) = '{$getParams[$field]}'" : null;
+                if ($field == 'full_name') {
+                    $sql .= " AND {$alias}.{$field} LIKE '%{$getParams[$field]}%'";
+                } elseif ($field == 'created_at') {
+                    $sql .= " AND DATE({$alias}.{$field}) = '{$getParams[$field]}'";
+                } else {
+                    $sql .= " AND {$alias}.{$field} = '{$getParams[$field]}'";
+                }
             }
         }
 
         return $sql;
     }
+
 
 
     public function logout(Request $request, Response $response)

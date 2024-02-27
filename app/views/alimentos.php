@@ -6,11 +6,11 @@
 
 <!-- Family section form -->
 <section>
-    <div class="bg-light p-2 mb-4 rounded">
+    <div class="bg-light p-3 mb-4 rounded">
 
         <div class="row mx-4">
-            <h3 class="text-secondary mb-3">Pesquisar:</h5>
-            <div class="col-lg-12 d-flex justify-content-end">
+            <div class="col-lg-12 d-flex justify-content-between">
+                <h3 class="text-secondary mb-3">Pesquisar:</h5>
                 <button class="btn btn-outline-secondary mr-2" id="limparCampos" title="Limpa todos os campos">Limpar</button>
             </div>
         </div>
