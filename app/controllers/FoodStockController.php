@@ -88,9 +88,10 @@ class FoodStockController
         if (!$this->validateCsrfToken($data)) {
             // Limpa o Cookie
             setcookie('token', '');
-            
+
             // redireciona e apresenta mensagem de erro
-            $this->setMessage('error', 'Ação inválida!');
+            $_SESSION['status'] = 'error';
+            $_SESSION['status_message'] = 'Ação inválida!';
             return $response->withRedirect('/');
         }
         

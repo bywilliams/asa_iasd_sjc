@@ -1,5 +1,7 @@
 <?php
 use Slim\App;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 use app\controllers\HomeController;
 use app\controllers\UserController;
 use app\controllers\FamilyController;
@@ -22,6 +24,7 @@ return function (App $app)
     $app->group('/family', function ($group){
         $group->get('/index', [FamilyController::class, 'index']);
         $group->post('/store', [FamilyController::class, 'store']);
+        $group->put('/update/{id}', [FamilyController::class,'update']);
     });
 
     // Food routes
@@ -35,5 +38,45 @@ return function (App $app)
         $group->get('/index', [ TransactionController::class, 'index']);
         $group->post('/store', [TransactionController::class, 'store']);
     });;
+    
+    // Rota fallback exibi uma mensagem
+    $app->any('{route:.*}', function (Request $request, Response $response) {
+        $response->getBody()->write('
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height:  100vh;
+                        margin:  0;
+                        background-color: #ccc;
+                        font-family: Arial, sans-serif;
+                    }
+                    h1 {
+                        text-align: center;
+                    }
+                    p {
+                        text-align: center;
+                    }
+                </style>
+            </head>
+            <body>
+                <div>
+                <h1>A página que você tentou acessar não existe!</h1>
+                <p> Volte para página inicial clicando: <a href="/">aqui</a> </p>
+                </div>
+            </body>
+            </html>
+        ');
+        return $response;
+    });
+
+        
+    
+    
+    
 
 };

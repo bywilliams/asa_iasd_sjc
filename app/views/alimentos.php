@@ -11,7 +11,7 @@
         <div class="row mx-4">
             <div class="col-lg-12 d-flex justify-content-between">
                 <h3 class="text-secondary mb-3">Pesquisar:</h5>
-                <button class="btn btn-outline-secondary mr-2" id="limparCampos" title="Limpa todos os campos">Limpar</button>
+                    <button class="btn btn-outline-secondary mr-2" id="limparCampos" title="Limpa todos os campos">Limpar</button>
             </div>
         </div>
 
@@ -81,6 +81,7 @@
         </thead>
         <tbody>
             <?php
+            $totalItens = 0;
             $totalFoods = 0;
             $currentPage = $page;
             $itemsPerPage = 10;
@@ -104,14 +105,24 @@
                         </div>
                     </td>
                 </tr>
-                <?php $totalFoods += 1; ?>
+                <?php 
+                $totalItens += 1;
+                $totalFoods += $food->qtde; 
+                ?>
             <?php endforeach; ?>
         </tbody>
         <tfoot>
             <tr class="text-center">
                 <td colspan="9">
                     <strong class="mr-2">
-                        Total de alimentos: <?= min($totalFoods + (($currentPage - 1) * $itemsPerPage), $foodsStock['totalRegistros']) . ' de ' .  $foodsStock['totalRegistros'] ?>
+                        Total de registros: <?= min($totalItens + (($currentPage - 1) * $itemsPerPage), $foodsStock['totalRegistros']) . ' de ' .  $foodsStock['totalRegistros'] ?>
+                    </strong>
+                </td>
+            </tr>
+            <tr class="text-center">
+                <td colspan="9">
+                    <strong class="mr-2">
+                        Total de alimentos página <?= $page ?>: <?= $totalFoods ?>
                     </strong>
                 </td>
             </tr>

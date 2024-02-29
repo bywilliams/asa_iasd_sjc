@@ -31,10 +31,14 @@ class TransactionController
     {
         $data = $request->getParsedBody();
 
-        if(!$this->validateCsrfToken($data)) {
+        // Válida checa a válidade do CSRF Token
+        if (!$this->validateCsrfToken($data)) {
             // Limpa o Cookie
             setcookie('token', '');
-            $this->setMessage('error', 'Ação inválida!');
+
+            // redireciona e apresenta mensagem de erro
+            $_SESSION['status'] = 'error';
+            $_SESSION['status_message'] = 'Ação inválida!';
             return $response->withRedirect('/');
         }
 

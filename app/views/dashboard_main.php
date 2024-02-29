@@ -4,34 +4,39 @@
 
 <!-- Finance Cards Section -->
 <section class="row">
-    <div class="col-md-6 col-lg-4">
+    <div class="col-md-6 col-lg-3">
         <!-- card -->
-        <article class="p-4 rounded shadow border-left mb-4 cards">
-            <a href="#" class="d-flex align-items-center">
+        <article class="p-4 rounded shadow border-left mb-3 ">
                 <h4 class="text-dark">Receitas</h4>
-            </a>
             <div class="text-success">
                 <h2>R$ <?= $totalRevenue ?? 0 ?></h2>
             </div>
         </article>
     </div>
-    <div class="col-md-6 col-lg-4">
-        <article class="p-4 rounded shadow border-left mb-4">
-            <a href="#" class="d-flex align-items-center">
+    <div class="col-md-6 col-lg-3">
+        <article class="p-4 rounded shadow border-left mb-3">
                 <h4 class="text-dark">Despesas</h4>
-            </a>
             <div class="text-danger">
                 <h2>R$ <?= $totalExpense ?? 0 ?></h2>
             </div>
         </article>
     </div>
-    <div class="col-md-6 col-lg-4">
-        <article class="p-4 rounded shadow border-left mb-4">
-            <a href="#" class="d-flex align-items-center">
+    <div class="col-md-6 col-lg-3">
+        <article class="p-4 rounded shadow border-left mb-3">
                 <h4 class="text-dark">Saldo</h4>
-            </a>
             <div class="text-success">
                 <h2>R$ <?= $totalBalance ?? 0 ?></h2>
+            </div>
+           
+        </article>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <article class="p-3 rounded shadow border-left my-1">
+              
+            <div class="text-info">
+                <h5>Famílias atívas: <span class="text-dark"><?= $totalActiveFamilies ?? 0 ?></span></h5>
+                <h5>Total de alimentos: <span class="text-dark"><?= $totalStockFoods ?? 0 ?></span></h5>
+                <h5>Total de cestas: <span class="text-dark"><?= $totalBaskets ?? 0 ?></span></h5>
             </div>
         </article>
     </div>
@@ -39,7 +44,7 @@
 <!-- End Finance Cards Section -->
 
 <!-- Action Section -->
-<section class="p-2 mb-4 bg-white rounded shadow-sm border-left acesso">
+<section class="p-2 my-3 bg-white rounded shadow-sm border-left acesso">
     <h4 class="font-weight-normal text-center mb-2 text-secondary">Acesso rápido (cadastro)</h4>
     <div class="row">
         <div class="container row mx-auto my-2">           
@@ -69,7 +74,7 @@
 <!-- Action Section -->
 
 <!-- Events Section -->
-<section class="p-2 mb-4 bg-white rounded shadow-sm border-left events">
+<section class="p-2 my-3  bg-white rounded shadow-sm border-left events">
     <div class="container">
         <h3 class="text-secondary text-center mb-3">Calendário de eventos</h3>
         <div class="row">
@@ -91,7 +96,7 @@
             </div>
 
             <div class="col-lg-6 col-md-12 mt-2 ">
-                <table class="table table-sm  table-responsive-sm rounded table-events">
+                <table class="table table-sm rounded table-events">
                     <tbody class="text-center">
                         <tr>
                             <td>
@@ -129,7 +134,7 @@
 
 <!-- Food Products Section  -->
 <section class="row">
-    <h3 class="text-secondary text-center mx-auto mb-2">Inventário de alimentos</h3>
+    <h3 class="text-secondary text-center mx-auto ">Inventário de alimentos</h3>
     <table class="content-table mx-2 ">
         <thead>
             <tr>

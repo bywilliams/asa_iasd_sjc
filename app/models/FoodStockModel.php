@@ -2,6 +2,7 @@
 
 namespace app\models;
 use app\database\Connect;
+use Exception;
 use PDO;
 use PDOException;
 
@@ -227,6 +228,26 @@ class FoodStockModel extends Connect
         // Se o número de cestas disponíveis é infinito (o que significa que não há alimentos suficientes), retorna  0
         return $availableBaskets == PHP_INT_MAX ?  0 : $availableBaskets;
         
+    }
+
+    /**
+     * Método getTotalFoods()
+     * 
+     * Este método traz o total de alimentos em estoque
+     * 
+     * retunr int O total de alimentos no estoque
+     */
+    public function getTotalFoods(): int
+    {
+        $sql = ("SELECT SUM(qtde) as total FROM {$this->table}");
+        $stmt = $this->connection->prepare($sql);
+       
+        if($stmt->execute()) {
+            $result = $stmt->fetch(PDO::FETCH_OBJ);
+            return (int) ($result->total ?? 0);
+        } else {
+            throw new Exception('Failed to execute query: ' . implode(', ', $stmt->errorInfo()));
+        }
     }
 
 

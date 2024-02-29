@@ -127,7 +127,7 @@ trait GlobalControllerTrait
     public function logout(Request $request, Response $response)
     {
         if (isset($_COOKIE['token'])) {
-            setcookie('token', '');
+            setcookie('token', '', time() - 3600, "/");
             $this->setMessage('success', "Loggof efetuado com sucesso!");
             return $response->withRedirect('/');
         }

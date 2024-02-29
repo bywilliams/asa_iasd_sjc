@@ -29,7 +29,7 @@ class FoodController
     public function index(Request $request, Response $response) 
     {
 
-        if(!$this->validateToken()) {
+        if (!$this->validateJwtToken()) {
             $this->setMessage('error', 'Por favor, faça login novamente!');
             return $response->withRedirect('/');
         }
@@ -46,7 +46,7 @@ class FoodController
         // Válida checa a válidade do CSRF Token
         if (!$this->validateCsrfToken($data)) {
             // Limpa o Cookie
-            setcookie('token', '');
+            setcookie('token', '', time() - 3600, "/"); // Adiciona tempo no passado e o caminho do cookies
 
             // redireciona e apresenta mensagem de erro
             $_SESSION['status'] = 'error';

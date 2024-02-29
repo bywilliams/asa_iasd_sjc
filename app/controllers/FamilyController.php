@@ -1,6 +1,7 @@
 <?php
 
 namespace app\controllers;
+
 use app\traits\GlobalControllerTrait;
 use app\traits\SessionMessageTrait;
 use app\models\FamilyModel;
@@ -32,7 +33,7 @@ class FamilyController
      */
     public function index(Request $request, Response $response)
     {
-        if(!$this->validateJwtToken()) {
+        if (!$this->validateJwtToken()) {
             $this->setMessage('error', 'Por favor, faça login novamente!');
             return $response->withRedirect('/');
         }
@@ -58,10 +59,10 @@ class FamilyController
         }
 
         //echo $sql; die;
-        
+
         // Mantêm os valores dos inputs de pesquisa
         $old = $_SESSION['old'] ?? null;
-        
+
         // Variável que obtêm a query padrão ou personalizada 
         $families = $this->model->index($inicio, $itenPerPage, $sql);
 
@@ -150,8 +151,42 @@ class FamilyController
      * 
      * Este método irá atualizar um registro(família) na tabela
      */
-    public function update()
+    public function update(Request $request, Response $response, $args)
     {
+
+        $data = $request->getParsedBody();
+
+        // Válida checa a válidade do CSRF Token
+        if (!$this->validateCsrfToken($data)) {
+            // Limpa o Cookie
+            setcookie('token', '', time() - 3600, "/"); // Adiciona tempo no passado e o caminho do cookies
+
+            // redireciona e apresenta mensagem de erro
+            $_SESSION['status'] = 'error';
+            $_SESSION['status_message'] = 'Ação inválida!';
+            return $response->withRedirect('/');
+        }
+
+        // Converte em objeto
+        $formData = (object) $this->sanitizeData($data);
+
+        // Checa se os campos do form estão válidos
+        $fieldsToCheck = ['full_name', 'gender', 'address', 'qtde_childs', 'contact', 'criteria_id'];
+
+        foreach ($fieldsToCheck as $field) {
+            if ($formData->$field == null) {
+                $_SESSION['old'] = $_POST;
+                $this->setMessage('error', 'Preencha os campos obrigatórios!');
+                return $response->withRedirect('/family/index');
+            }
+        }
+
+        $this->model->update($args['id'], $formData);
+        //var_dump($formData); die;
+
+        $this->setMessage('success','Família atualizada com sucesso!');
+
+        return $response->withRedirect('/family/index');
     }
 
     /**

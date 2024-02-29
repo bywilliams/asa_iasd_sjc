@@ -5,6 +5,7 @@ use app\models\UserModel;
 use app\models\FoodModel;
 use app\models\FoodStockModel;
 use app\models\TransactionModel;
+use app\models\FamilyModel;
 use app\traits\GlobalControllerTrait;
 use app\traits\SessionMessageTrait;
 use Slim\Http\Response;
@@ -41,7 +42,6 @@ class UserController
      */
     public function dashboard(Request $request, Response $response)
     {
-
         if(empty($this->validateJwtToken())) {
             //echo "entrou no if "; die;
             $this->setMessage('error', 'Por favor, faça login novamente!');
@@ -69,15 +69,20 @@ class UserController
         $foodModel = new FoodModel();
         $allFoods = $foodModel->findAllFoods();
 
-        // Lista os alimentos (estoque) cadastrados para a dashboard
+        // Lista os últimos alimentos (estoque) cadastrados
         $foodStockModel = new FoodStockModel();
         $latestStockFoods = $foodStockModel->latestStockFoods();
+        $totalStockFoods = $foodStockModel->getTotalFoods();
 
         // traz total receitas, despesas e balance total
         $transactionModel = new TransactionModel();
         $totalRevenue = $transactionModel->getTotalTransactionsByType('receita');
         $totalExpense = $transactionModel->getTotalTransactionsByType('despesa');
         $totalBalance = $transactionModel->getTotalBalance();
+
+        // Traz a quantidade de famílias cadastradas que  estão ativas
+        $familyModel = new FamilyModel();
+        $totalActiveFamilies = $familyModel->getTotalActiveFamilies();
         
         // Total de cestas disponíveis
         $totalBaskets = $foodStockModel->calculateBasicBaskets();
@@ -93,7 +98,9 @@ class UserController
             'expenseCategories' => $expenseCategories,
             'totalExpense' => $totalExpense,
             'totalBalance' => $totalBalance,
+            'totalActiveFamilies' => $totalActiveFamilies,
             'allFoods' => $allFoods,
+            'totalStockFoods' => $totalStockFoods,
             'latestStockFoods' => $latestStockFoods,
             'totalBaskets' => $totalBaskets,
             'old' => $old
@@ -109,7 +116,7 @@ class UserController
      */
     public function validarUser(Request $request, Response $response)
     {
-
+        
         // Pega o corpo da requisição com Slim
         $formData = $request->getParsedBody();
 
