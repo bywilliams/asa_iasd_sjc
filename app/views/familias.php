@@ -119,7 +119,7 @@
                             <a data-toggle="modal" data-target="#family_edit_<?= $family->id ?>">
                                 <i class="fa-regular fa-pen-to-square icon-menu"></i>
                             </a>
-                            <a>
+                            <a data-toggle="modal" data-target="#family_delete_<?= $family->id ?>">
                                 <i class="fa-solid fa-trash icon-menu"></i>
                             </a>
                         </div>
@@ -162,114 +162,152 @@
 
 <!-- Modals section -->
 <section>
-    <!-- Family Modal -->
+    <!-- Family Modal Edit -->
     <?php foreach ($families['data'] as $family) : ?>
-    <div class="modal fade modal_bg" id="family_edit_<?= $family->id ?>" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Editar familia</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form action="/family/update/<?=$family->id?>" method="post">
-                    <input type="hidden" name="_METHOD" value="PUT">
-                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-                    <div class="modal-body">
-                        <p>Obrigatório *</p>
-                        <div class="form-group">
-                            <label for="familyName">Nome completo: *</label>
-                            <input type="text" name="full_name" id="familyName" class="form-control" value="<?= $family->full_name ?>" required >
-                        </div>
-                        <div class="form-group">
-                            <h6>Sexo: *</h6>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="gender" id="inlineRadio1" value="M" <?=  $family->gender == 'M' ? 'checked' : '' ?> required>
-                                <label class="form-check-label" for="inlineRadio1">Masculino</label>
+        <div class="modal fade modal_bg" id="family_edit_<?= $family->id ?>" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Editar familia</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="/family/update/<?= $family->id ?>" method="POST">
+                        <input type="hidden" name="_METHOD" value="PUT">
+                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                        <div class="modal-body">
+                            <p>Obrigatório *</p>
+                            <div class="form-group">
+                                <label for="familyName">Nome completo: *</label>
+                                <input type="text" name="full_name" id="familyName" class="form-control" value="<?= $family->full_name ?>" required>
                             </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="gender" id="inlineRadio2" value="F" <?= $family->gender == 'F' ? 'checked' : '' ?>>
-                                <label class="form-check-label" for="inlineRadio2">Feminino</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="gender" id="inlineRadio3" value="N" <?= $family->gender == 'N' ? 'checked' : '' ?>>
-                                <label class="form-check-label" for="inlineRadio3">Não informado</label>
-                            </div>
+                            <div class="form-group">
+                                <h6>Sexo: *</h6>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="gender" id="inlineRadio1" value="M" <?= $family->gender == 'M' ? 'checked' : '' ?> required>
+                                    <label class="form-check-label" for="inlineRadio1">Masculino</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="gender" id="inlineRadio2" value="F" <?= $family->gender == 'F' ? 'checked' : '' ?>>
+                                    <label class="form-check-label" for="inlineRadio2">Feminino</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="gender" id="inlineRadio3" value="N" <?= $family->gender == 'N' ? 'checked' : '' ?>>
+                                    <label class="form-check-label" for="inlineRadio3">Não informado</label>
+                                </div>
 
-                        </div>
-                        <div class="form-group">
-                            <label for="endereco">Endereço: *</label>
-                            <input type="text" name="address" id="endereco" class="form-control" value="<?= $family->address ?>" required>
-                        </div>
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col">
-                                    <label for="cel">Celular/Whatsapp: *</label>
-                                    <input type="text" name="contact" id="cel" class="form-control phone_with_ddd" value="<?= $family->contact ?>" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="endereco">Endereço: *</label>
+                                <input type="text" name="address" id="endereco" class="form-control" value="<?= $family->address ?>" required>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="cel">Celular/Whatsapp: *</label>
+                                        <input type="text" name="contact" id="cel" class="form-control phone_with_ddd" value="<?= $family->contact ?>" required>
+                                    </div>
+                                    <div class="col">
+                                        <label for="profissao">Profissão:</label>
+                                        <input type="text" name="job" id="profissao" class="form-control" value="<?= $family->job ?>">
+                                    </div>
                                 </div>
-                                <div class="col">
-                                    <label for="profissao">Profissão:</label>
-                                    <input type="text" name="job" id="profissao" class="form-control" value="<?= $family->job ?>">
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="filhos">Quantidade de filhos: *</label>
+                                        <input type="number" name="qtde_childs" id="filhos" class="form-control" value="<?= $family->qtde_childs ?>" required>
+                                    </div>
+                                    <div class="col">
+                                        <label for="idade">Idade dos filhos:</label>
+                                        <input type="text" name="age" id="idade" class="form-control" value="<?= $family->age ?>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="data_visita">Dias e horários para visitas:</label>
+                                <textarea class="form-control" name="obs" id="data_visita" placeholder="ex: domingo as 11h"><?= $family->obs ?></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="situação">Situação cadastral:</label>
+                                <select name="sits_family_id" id="situação" class="form-control">
+                                    <option value="">Selecione</option>
+                                    <option value="1" <?= $family->sits_family_id == '1' ? 'selected' : null ?>>Ativo</option>
+                                    <option value="2" <?= $family->sits_family_id == '2' ? 'selected' : null ?>>Inativo</option>
+                                    <option value="3" <?= $family->sits_family_id == '3' ? 'selected' : null ?>>Aguardando</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <h6>Critérios: *</h6>
+                                <div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="criteria_id" value="1" <?= $family->criteria_id  == 1 ? 'checked' : ''  ?> required>
+                                        <label class="form-check-label" for="inlineRadio1">Escola Bíblica</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="criteria_id" value="2" <?= $family->criteria_id  == 2 ? 'checked' : ''  ?>>
+                                        <label class="form-check-label" for="inlineRadio2">Cultos</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="criteria_id" value="3" <?= $family->criteria_id  == 3 ? 'checked' : ''  ?>>
+                                        <label class="form-check-label" for="inlineRadio3">Cursos</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="criteria_id" value="4" <?= $family->criteria_id  == 4 ? 'checked' : ''  ?>>
+                                        <label class="form-check-label" for="inlineRadio3">Aventureiros</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="criteria_id" value="5" <?= $family->criteria_id  == 5 ? 'checked' : ''  ?>>
+                                        <label class="form-check-label" for="inlineRadio3">Desbravadores</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="criteria_id" value="6" <?= $family->criteria_id  == 6 ? 'checked' : ''  ?>>
+                                        <label class="form-check-label" for="inlineRadio3">Escolinha infantil</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col">
-                                    <label for="filhos">Quantidade de filhos: *</label>
-                                    <input type="number" name="qtde_childs" id="filhos" class="form-control" value="<?= $family->qtde_childs ?>" required>
-                                </div>
-                                <div class="col">
-                                    <label for="idade">Idade dos filhos:</label>
-                                    <input type="text" name="age" id="idade" class="form-control" value="<?= $family->age ?>">
-                                </div>
-                            </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                            <button type="submit" class="btn btn-primary">Salvar</button>
                         </div>
-                        <div class="form-group">
-                            <label for="data_visita">Dias e horários para visitas:</label>
-                            <textarea class="form-control" name="obs" id="data_visita" placeholder="ex: domingo as 11h"><?= $family->obs ?></textarea>
-                        </div>
-                        <div class="form-group">
-                            <h6>Critérios: *</h6>
-                            <div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="criteria_id" value="1" <?= $family->criteria_id  == 1 ? 'checked' : ''  ?> required>
-                                    <label class="form-check-label" for="inlineRadio1">Escola Bíblica</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="criteria_id" value="2" <?= $family->criteria_id  == 2 ? 'checked' : ''  ?>>
-                                    <label class="form-check-label" for="inlineRadio2">Cultos</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="criteria_id" value="3" <?= $family->criteria_id  == 3 ? 'checked' : ''  ?>>
-                                    <label class="form-check-label" for="inlineRadio3">Cursos</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="criteria_id" value="4" <?= $family->criteria_id  == 4 ? 'checked' : ''  ?>>
-                                    <label class="form-check-label" for="inlineRadio3">Aventureiros</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="criteria_id" value="5" <?= $family->criteria_id  == 5 ? 'checked' : ''  ?>>
-                                    <label class="form-check-label" for="inlineRadio3">Desbravadores</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="criteria_id" value="6" <?= $family->criteria_id  == 6 ? 'checked' : ''  ?>>
-                                    <label class="form-check-label" for="inlineRadio3">Escolinha infantil</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                        <button type="submit" class="btn btn-primary">Salvar</button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
     <?php endforeach; ?>
-    <!-- End Family Modal -->
+    <!-- End Family Modal Edit -->
+
+    <!-- Family Modal Delete -->
+    <?php foreach ($families['data'] as $family) : ?>
+        <div class="modal fade modal_bg" id="family_delete_<?= $family->id ?>" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Excluir família</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <h5>Tem certeza de deseja excluir família de: <br> <?= $family->full_name ?></h5>
+                    </div>
+                    <div class="modal-footer">
+                        <form action="/family/delete/<?= $family->id ?>" method="POST">
+                            <input type="hidden" name="_METHOD" value="DELETE">
+                            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                            <button type="submit" class="btn btn-danger">Excluir</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+    <!-- End Family Modal Delete -->
+
 </section>
 
 <?= $this->end() ?>

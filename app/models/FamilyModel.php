@@ -1,7 +1,7 @@
 <?php
 
 namespace app\models;
-
+use app\traits\SessionMessageTrait;
 use app\database\Connect;
 use PDOException;
 use Exception;
@@ -16,6 +16,7 @@ use PDO;
  */
 class FamilyModel extends Connect
 {
+    use SessionMessageTrait;
 
     private $table;
 
@@ -41,7 +42,7 @@ class FamilyModel extends Connect
      */
     public function index($inicio, $itensPorPagina, $sql): ?array
     {
-        $selectFamilies = ("SELECT f.id, f.full_name, f.address,f.gender, f.age, f.criteria_id, f.obs, f.job, f.qtde_childs, f.contact, f.created_at, f.updated_at, sf.name AS 'situacao'  
+        $selectFamilies = ("SELECT f.id, f.full_name, f.address,f.gender, f.age, f.criteria_id, f.obs, f.job, f.qtde_childs, f.contact, f.sits_family_id, f.created_at, f.updated_at, sf.name AS 'situacao'  
         FROM {$this->table} f 
         INNER JOIN sits_family sf ON f.sits_family_id = sf.id 
         WHERE f.id > 0 $sql
@@ -99,7 +100,7 @@ class FamilyModel extends Connect
 
             return true;
         } catch (PDOException $e) {
-            error_log('Erro ao inserir na tabela familias: ' . $e->getMessage());
+            $this->log_error('Erro ao inserir familia: ' . $e->getMessage());
             return false;
         }
     }
@@ -138,11 +139,11 @@ class FamilyModel extends Connect
             if ($updateSuccess) {
                 return true;
             } else {
-                error_log("Falha ao atualizar família com ID $id");
+                $this->log_error("Falha ao atualizar família com ID: $id");
                 return false;
             }
         } else {
-            error_log("Não foi possível achar esta família.");
+            $this->log_error('Não foi possível achar esta família');
             return false;
         }
     }
@@ -184,14 +185,14 @@ class FamilyModel extends Connect
      */
     public function getTotalActiveFamilies(): int
     {
-        $sql = "SELECT COUNT(*) as total FROM {$this->table}";
+        $sql = "SELECT COUNT(*) as total FROM {$this->table} WHERE sits_family_id = 1";
         $stmt = $this->connection->prepare($sql);
 
         if ($stmt->execute()) {
             $result = $stmt->fetch(PDO::FETCH_OBJ);
             return (int)($result->total ?? 0);
         } else {
-            throw new Exception('Failed to execute query: ' . implode(', ', $stmt->errorInfo()));
+            throw new Exception('Falha ao executar query: ' . implode(', ', $stmt->errorInfo()));
         }
     }
 }

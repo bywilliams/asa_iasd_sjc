@@ -6,6 +6,7 @@ use app\models\FoodModel;
 use app\models\FoodStockModel;
 use app\models\TransactionModel;
 use app\models\FamilyModel;
+use app\models\EventModel;
 use app\traits\GlobalControllerTrait;
 use app\traits\SessionMessageTrait;
 use Slim\Http\Response;
@@ -19,8 +20,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class UserController
 {
-    use GlobalControllerTrait;
-    use SessionMessageTrait;
+    use GlobalControllerTrait, SessionMessageTrait;
 
     private $model;
 
@@ -83,6 +83,10 @@ class UserController
         // Traz a quantidade de famílias cadastradas que  estão ativas
         $familyModel = new FamilyModel();
         $totalActiveFamilies = $familyModel->getTotalActiveFamilies();
+
+        // Traz os últimos eventos cadastrados
+        $eventModel = new EventModel();
+        $lastestEvents = $eventModel->latestEvents();
         
         // Total de cestas disponíveis
         $totalBaskets = $foodStockModel->calculateBasicBaskets();
@@ -102,6 +106,7 @@ class UserController
             'allFoods' => $allFoods,
             'totalStockFoods' => $totalStockFoods,
             'latestStockFoods' => $latestStockFoods,
+            'latestEvents' => $lastestEvents,
             'totalBaskets' => $totalBaskets,
             'old' => $old
         ]);

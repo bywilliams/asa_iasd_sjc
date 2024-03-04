@@ -1,7 +1,7 @@
 <?php
 
 namespace app\models;
-
+use app\traits\SessionMessageTrait;
 use app\database\Connect;
 use PDO;
 use PDOException;
@@ -15,6 +15,8 @@ use PDOException;
  */
 class UserModel extends Connect
 {
+    use SessionMessageTrait;
+
     private $table;
 
     /**
@@ -46,8 +48,7 @@ class UserModel extends Connect
             $stmt->execute();
             $userData = $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (PDOException $e) {
-            error_log('Erro ao buscar usuários: ' . $e->getMessage());
-            die;
+            $this->log_error('Erro ao buscar usuários: ' . $e->getMessage());
         }
 
         return $userData;
@@ -71,8 +72,7 @@ class UserModel extends Connect
             ]);
             $userData = $stmt->fetch(PDO::FETCH_OBJ);
         } catch (PDOException $e) {
-            echo $e->getMessage();
-            die;
+            $this->log_error("Erro ao checar existência de usuário: $email" . $e->getMessage());
         }
 
         return $userData;

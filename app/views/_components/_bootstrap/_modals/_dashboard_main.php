@@ -35,7 +35,7 @@
                             <label for="categories_revenue">Categoria: *</label>
                             <select name="category_id" id="categories_revenue" class="form-control" required>
                                 <option value="">Selecione</option>
-                                <?php foreach ($revenueCategories as $category): ?>
+                                <?php foreach ($revenueCategories as $category) : ?>
                                     <option value="<?= $category->id ?>"><?= $category->name ?></option>
                                 <?php endforeach; ?>
                             </select>
@@ -44,7 +44,7 @@
                             <label for="categories_expense">Categoria: *</label>
                             <select name="category_id" id="categories_expense" class="form-control" required>
                                 <option value="">Selecione</option>
-                                <?php foreach ($expenseCategories as $category): ?>
+                                <?php foreach ($expenseCategories as $category) : ?>
                                     <option value="<?= $category->id ?> "><?= $category->name ?></option>
                                 <?php endforeach; ?>
                             </select>
@@ -65,7 +65,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <button type="submit" class="btn btn-success">Salvar</button>
                 </div>
             </form>
         </div>
@@ -83,20 +83,33 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="title_event">Nome: *</label>
-                    <input type="text" name="title" id="title_event" class="form-control" placeholder="ex: Campanha do agasalho">
+            <form action="/event/store" method="post">
+                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                <input type="hidden" name="user_id" value="<?= $this->e($user->id) ?>">
+                <div class="modal-body">
+                    <p>Obrigatório *</p>
+                    <div class="form-group">
+                        <label for="nome_evento">Nome: *</label>
+                        <input type="text" name="name" id="nome_evento" class="form-control" placeholder="ex: Campanha do agasalho" value="<?= isset($old['name']) ? $old['name'] : null ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lugar">Lugar: *</label>
+                        <input type="text" name="place" id="lugar" class="form-control" placeholder="ex: expo center" value="<?= isset($old['place']) ? $old['place'] : null ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="descrição">Descrição: *</label>
+                        <textarea name="description" id="" class="form-control" placeholder="ex: evento organizado para arrecadar roupas" required><?= isset($old['description']) ? $old['description'] : null ?></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Data: *</label>
+                        <input type="text" name="event_date" id="date" class="form-control date_time" value="<?= isset($old['event_date']) ? $old['event_date'] : null ?>" required>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="date_event">Data: *</label>
-                    <input type="date" name="date_event" id="" class="form-control">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-success">Salvar</button>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary">Salvar</button>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -154,7 +167,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <button type="submit" class="btn btn-success">Salvar</button>
                 </div>
             </form>
         </div>
@@ -261,7 +274,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <button type="submit" class="btn btn-success">Salvar</button>
                 </div>
             </form>
         </div>

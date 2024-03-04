@@ -41,15 +41,14 @@ class Connect
         date_default_timezone_set('America/Sao_Paulo');
         
         try {
-            $conn = 'mysql:unix_socket=/opt/lampp/var/mysql/mysql.sock;hosd=' . HOST . ';dbname=' . DBNAME;
+            $conn = 'mysql:unix_socket=/opt/lampp/var/mysql/mysql.sock;host=' . HOST . ';dbname=' . DBNAME;
             $this->connection = new PDO($conn, USER, PASSWORD, [
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
             ]);
+            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
             die();
         }
-
-        $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
     }
 }

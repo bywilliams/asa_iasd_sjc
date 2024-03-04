@@ -1,6 +1,7 @@
 <?php
 
 namespace app\models;
+use app\traits\SessionMessageTrait;
 use app\database\Connect;
 use PDO;
 use PDOException;
@@ -14,7 +15,8 @@ use PDOException;
  */
 class FoodModel extends Connect
 {
-
+    use SessionMessageTrait;
+    
     private $table;
     
     /**
@@ -50,8 +52,7 @@ class FoodModel extends Connect
             $stmt->execute();
             $listFood = $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (PDOException $e) {
-            echo $e->getMessage();
-            die;
+            $this->log_error('Erro ao buscar tipos de alimentos: ' . $e->getMessage());
         }
 
         return $listFood;
@@ -77,7 +78,7 @@ class FoodModel extends Connect
             ]);
             return true;        
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            $this->log_error('Erro ao salvar alimento na tabela foods: '. $e->getMessage());
             return false;
         }
     }

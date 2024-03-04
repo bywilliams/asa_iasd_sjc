@@ -2,10 +2,12 @@
 
 <script src="/assets/js/jquery.mask.js"></script>
 <script>
-    // Formatação de valores monetarios com ','
+    // Mascara de valores monetarios com ','
     $('.money').mask('000.000.000.000.000,00', {
         reverse: true
     });
+    // Marcara para input data e hora
+    $('.date_time').mask('00/00/0000 00:00:00');
 
     // Formatação de numero celular ao padrão SP
     $('.phone_with_ddd').mask('(00) 0000-0000');
@@ -105,12 +107,11 @@
             confirmButtonColor: '#0B666A',
             cancelButtonText: 'Fechar',
         });
-        <?php $_SESSION['status'] = null ?>
+        <?php $_SESSION['status_report'] = null ?>
         <?php $_SESSION['message'] = null ?>
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        // ... restante do código ...
 
         // Verifica se há um token na resposta
         var token = <?= json_encode($_SESSION['token'] ?? null) ?>;
@@ -118,33 +119,9 @@
             // Armazena o token no localStorage
             localStorage.setItem('jwtToken', token);
         }
-
-        // ... restante do código ...
+ 
     });
 
-    // document.addEventListener('DOMContentLoaded', function() {
-    //     // Obtém o token do localStorage
-    //     var localStorageToken = localStorage.getItem('jwtToken');
-
-    //     // Obtém o token da $_SESSION
-    //     var sessionToken = <?= json_encode($_SESSION['token'] ?? null) ?>;
-
-    //     // Verifica se há um token no localStorage e na $_SESSION
-    //     if (localStorageToken && sessionToken) {
-    //         // Compara os tokens
-    //         if (localStorageToken !== sessionToken) {
-
-    //             // Aqui você pode redirecionar para a página de login ou realizar outras ações necessárias
-    //             <?php $_SESSION['token'] = '' ?>
-    //             localStorage.setItem('jwtToken', '');
-    //             window.location.href = '/logout';
-    //         }
-    //     }
-    // });
-
-
-    console.log(token);
-    console.log(response);
 </script>
 </body>
 

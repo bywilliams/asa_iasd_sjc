@@ -1,7 +1,6 @@
 <?php
 
 namespace app\controllers;
-
 use app\traits\GlobalControllerTrait;
 use app\traits\SessionMessageTrait;
 use app\models\FamilyModel;
@@ -16,8 +15,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 class FamilyController
 {
 
-    use GlobalControllerTrait;
-    use SessionMessageTrait;
+    use GlobalControllerTrait, SessionMessageTrait;
 
     private $model;
 
@@ -31,7 +29,7 @@ class FamilyController
      * 
      * Este método irá apresentar a página com a listagem das famílias cadastradas
      */
-    public function index(Request $request, Response $response)
+    public function index(Response $response)
     {
         if (!$this->validateJwtToken()) {
             $this->setMessage('error', 'Por favor, faça login novamente!');
@@ -51,14 +49,12 @@ class FamilyController
         // Monta o SQL de pesquisa personalizada
         $sql = '';
         if ($_GET) {
-            $params = ['id', 'full_name', 'gender', 'qtde_childs', 'sits_family_id', 'created_at'];
-            $aliases = ['id' => 'f', 'full_name' => 'f', 'gender' => 'f', 'qtde_childs' => 'f', 'sits_family_id' => 'f', 'created_at' => 'f'];
+            $params = ['id', 'full_name', 'gender', 'address', 'qtde_childs', 'sits_family_id', 'created_at'];
+            $aliases = ['id' => 'f', 'full_name' => 'f', 'gender' => 'f', 'address' => 'f',  'qtde_childs' => 'f', 'sits_family_id' => 'f', 'created_at' => 'f'];
             $sql = $this->createSqlConditions($params, $_GET, $aliases);
             //echo $sql; die;
             $_SESSION['old'] = $_GET;
         }
-
-        //echo $sql; die;
 
         // Mantêm os valores dos inputs de pesquisa
         $old = $_SESSION['old'] ?? null;
@@ -102,14 +98,13 @@ class FamilyController
         // Pega o corpo da requisição com Slim
         $data = $request->getParsedBody();
 
-        // Válida checa a válidade do CSRF Token
+        // Válida e checa a válidade do CSRF Token
         if (!$this->validateCsrfToken($data)) {
             // Limpa o Cookie
             setcookie('token', '');
 
             // redireciona e apresenta mensagem de erro
-            $_SESSION['status'] = 'error';
-            $_SESSION['status_message'] = 'Ação inválida!';
+            $this->setMessage('error', 'Ação inválida!');
             return $response->withRedirect('/');
         }
 
@@ -162,8 +157,7 @@ class FamilyController
             setcookie('token', '', time() - 3600, "/"); // Adiciona tempo no passado e o caminho do cookies
 
             // redireciona e apresenta mensagem de erro
-            $_SESSION['status'] = 'error';
-            $_SESSION['status_message'] = 'Ação inválida!';
+            $this->setMessage('error', 'Ação inválida!');
             return $response->withRedirect('/');
         }
 
@@ -171,7 +165,7 @@ class FamilyController
         $formData = (object) $this->sanitizeData($data);
 
         // Checa se os campos do form estão válidos
-        $fieldsToCheck = ['full_name', 'gender', 'address', 'qtde_childs', 'contact', 'criteria_id'];
+        $fieldsToCheck = ['full_name', 'gender', 'address', 'qtde_childs', 'sits_family_id', 'contact', 'criteria_id'];
 
         foreach ($fieldsToCheck as $field) {
             if ($formData->$field == null) {
@@ -181,8 +175,8 @@ class FamilyController
             }
         }
 
+        // Atualiza família
         $this->model->update($args['id'], $formData);
-        //var_dump($formData); die;
 
         $this->setMessage('success','Família atualizada com sucesso!');
 
@@ -194,7 +188,19 @@ class FamilyController
      * 
      * Este método irá deletar um registro(família) especifíco na tabela
      */
-    public function destroy()
+    public function destroy(Request $request, Response $response, $args)
     {
+        $data = $request->getParsedBody();
+
+        // Válida checa a válidade do CSRF Token
+        if (!$this->validateCsrfToken($data)) {
+            // Limpa o Cookie
+            setcookie('token', '', time() - 3600, "/"); // Adiciona tempo no passado e o caminho do cookies
+
+            // redireciona e apresenta mensagem de erro
+            $this->setMessage('error', 'Ação inválida!');
+            return $response->withRedirect('/');
+        }
+
     }
 }

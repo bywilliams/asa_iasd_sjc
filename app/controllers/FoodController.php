@@ -38,36 +38,36 @@ class FoodController
         return $response;
     }
 
-    public function store(Request $request, Response $response)
-    {
-        // Pega o corpo da requisição com Slim
-        $data = $request->getParsedBody();
+    //TODO: criar feature de cadastrar alimentos disponíveis para cadastro em stock
+    // public function store(Request $request, Response $response)
+    // {
+    //     // Pega o corpo da requisição com Slim
+    //     $data = $request->getParsedBody();
 
-        // Válida checa a válidade do CSRF Token
-        if (!$this->validateCsrfToken($data)) {
-            // Limpa o Cookie
-            setcookie('token', '', time() - 3600, "/"); // Adiciona tempo no passado e o caminho do cookies
+    //     // Válida checa a válidade do CSRF Token
+    //     if (!$this->validateCsrfToken($data)) {
+    //         // Limpa o Cookie
+    //         setcookie('token', '', time() - 3600, "/"); // Adiciona tempo no passado e o caminho do cookies
 
-            // redireciona e apresenta mensagem de erro
-            $_SESSION['status'] = 'error';
-            $_SESSION['status_message'] = 'Ação inválida!';
-            return $response->withRedirect('/');
-        }
+    //         // redireciona e apresenta mensagem de erro
+    //         $this->setMessage('error', 'Ação inválida!');
+    //         return $response->withRedirect('/');
+    //     }
 
-        // Converte em objeto
-        $formData = (object) $this->sanitizeData($data);
+    //     // Converte em objeto
+    //     $formData = (object) $this->sanitizeData($data);
 
-        if (empty($formData->food_id) || empty($formData->qtde) || empty($formData->created_at)) {
-            $this->setMessage('error', 'Preencha os campos obrigatórios!');
-            return $response->withRedirect('/usuario/dashboard');
-        }
+    //     if (empty($formData->food_id) || empty($formData->qtde) || empty($formData->created_at)) {
+    //         $this->setMessage('error', 'Preencha os campos obrigatórios!');
+    //         return $response->withRedirect('/usuario/dashboard');
+    //     }
 
-        // Salva registro no banco de dados
-        $this->model->store($formData);
+    //     // Salva registro no banco de dados
+    //     $this->model->store($formData);
 
-        $this->setMessage('success', 'Alimento cadastrado com sucesso!');
+    //     $this->setMessage('success', 'Alimento cadastrado com sucesso!');
 
-        return $response->withRedirect('/usuario/dashboard');
-    }
+    //     return $response->withRedirect('/usuario/dashboard');
+    // }
 
 }

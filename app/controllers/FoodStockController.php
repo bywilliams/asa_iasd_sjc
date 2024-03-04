@@ -11,8 +11,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class FoodStockController
 {
-    use GlobalControllerTrait;
-    use SessionMessageTrait;
+    use GlobalControllerTrait, SessionMessageTrait;
 
     private $model;
 
@@ -90,8 +89,7 @@ class FoodStockController
             setcookie('token', '');
 
             // redireciona e apresenta mensagem de erro
-            $_SESSION['status'] = 'error';
-            $_SESSION['status_message'] = 'Ação inválida!';
+            $this->setMessage('error', 'Ação inválida!');
             return $response->withRedirect('/');
         }
         

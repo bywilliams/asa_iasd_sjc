@@ -109,7 +109,7 @@ trait GlobalControllerTrait
         foreach ($params as $field) {
             if (isset($getParams[$field]) && !empty($getParams[$field])) {
                 $alias = $aliases[$field] ?? $field;
-                if ($field == 'full_name') {
+                if ($field == 'full_name' || $field == 'address') {
                     $sql .= " AND {$alias}.{$field} LIKE '%{$getParams[$field]}%'";
                 } elseif ($field == 'created_at') {
                     $sql .= " AND DATE({$alias}.{$field}) = '{$getParams[$field]}'";

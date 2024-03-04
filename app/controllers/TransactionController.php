@@ -37,8 +37,7 @@ class TransactionController
             setcookie('token', '');
 
             // redireciona e apresenta mensagem de erro
-            $_SESSION['status'] = 'error';
-            $_SESSION['status_message'] = 'Ação inválida!';
+            $this->setMessage('error', 'Ação inválida!');
             return $response->withRedirect('/');
         }
 

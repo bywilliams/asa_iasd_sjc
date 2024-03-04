@@ -24,4 +24,17 @@ trait SessionMessageTrait
         $_SESSION['message'] = $message;
     }
 
+    private function log_error($error_message)
+    {
+        $currentTime = date('d-m-Y H:i:s');
+
+        // path do arquivo de log
+        $arquivo_log = $_SERVER['DOCUMENT_ROOT'] . '/log/db.log';
+
+        $formatted_msg = $currentTime . " - " . $error_message . "\n";
+
+        file_put_contents($arquivo_log, $formatted_msg, FILE_APPEND);
+
+    }
+
 }

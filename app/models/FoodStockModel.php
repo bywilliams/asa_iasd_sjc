@@ -2,6 +2,7 @@
 
 namespace app\models;
 use app\database\Connect;
+use app\traits\SessionMessageTrait;
 use Exception;
 use PDO;
 use PDOException;
@@ -15,6 +16,7 @@ use PDOException;
  */
 class FoodStockModel extends Connect
 {
+    use SessionMessageTrait;
 
     private $table;
     
@@ -49,7 +51,7 @@ class FoodStockModel extends Connect
             $totalRegistros = $countFamilies->fetch(PDO::FETCH_ASSOC)['total'];
 
         } catch (PDOException $e) {
-            error_log('Erro ao buscar famílias '. $e->getMessage());
+            $this->log_error('Erro ao buscar famílias '. $e->getMessage());
             $result = [];
         }
         
@@ -77,7 +79,7 @@ class FoodStockModel extends Connect
             $stmt->execute();
             $food = $stmt->fetch(PDO::FETCH_OBJ);
         } catch (PDOException $e) {
-            error_log('Erro ao encontrar alimento: ' . $e->getMessage());
+            $this->log_error('Erro ao encontrar alimento: ' . $e->getMessage());
             return null;
         }
 
@@ -111,7 +113,7 @@ class FoodStockModel extends Connect
             return $stmt->execute();    
 
         } catch (PDOException $e) {
-            error_log('Erro ao inserir estoque '. $e->getMessage());
+            $this->log_error('Erro ao inserir estoque '. $e->getMessage());
             return false;
         }
     }
@@ -150,7 +152,7 @@ class FoodStockModel extends Connect
                 $stmt->execute();
                 return true;
             } catch (PDOException $e) {
-                error_log("Erro ao atualizar quantidade do alimento". $e->getMessage());
+                $this->log_error("Erro ao atualizar quantidade do alimento". $e->getMessage());
                 return false;
             }
         }
@@ -171,14 +173,14 @@ class FoodStockModel extends Connect
         WHERE fs.basic_basket = 'S'
         ORDER BY id ASC LIMIT 19
         ");
+        $stmt = $this->connection->query($findLatestFood);
 
         try {
-            $stmt = $this->connection->query($findLatestFood);
             $stmt->execute();
             $listFood = $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (PDOException $e) {
-            error_log('Erro ao buscar os útlimos alimentos '. $e->getMessage());
-            $listFood= [];
+            $this->log_error('Erro ao buscar os útlimos alimentos '. $e->getMessage());
+            $listFood = [];
         }
 
         return $listFood;
@@ -222,8 +224,6 @@ class FoodStockModel extends Connect
             // Atualizar o número de cestas disponíveis com o menor número encontrado
             $availableBaskets = min($availableBaskets, $timesMinQuantityCanBeDivided);
         }
-
-        //echo $availableBaskets;
     
         // Se o número de cestas disponíveis é infinito (o que significa que não há alimentos suficientes), retorna  0
         return $availableBaskets == PHP_INT_MAX ?  0 : $availableBaskets;

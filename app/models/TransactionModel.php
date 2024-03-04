@@ -1,6 +1,7 @@
 <?php
 
 namespace app\models;
+use app\traits\SessionMessageTrait;
 use app\database\Connect;
 use PDO;
 use PDOException;
@@ -14,6 +15,7 @@ use PDOException;
  */
 class TransactionModel extends Connect
 {
+    use SessionMessageTrait;
 
     private $table;
 
@@ -39,8 +41,7 @@ class TransactionModel extends Connect
             $stmt->execute();
             $resultCategories = $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (PDOException $e) {
-            echo "Erro ao trazer categorias";
-            //error_log('Erro ao trazer categorias '. $e->getMessage());
+            $this->log_error('Erro ao trazer categorias' . $e->getMessage());
         }
 
         return $resultCategories;
@@ -63,8 +64,7 @@ class TransactionModel extends Connect
             $stmt->execute();
             $resultCategories = $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (PDOException $e) {
-            echo "Erro ao trazer categorias";
-            //error_log('Erro ao trazer categorias '. $e->getMessage());
+            $this->log_error("Erro ao trazer categorias" . $e->getMessage());
         }
 
         return $resultCategories;
@@ -138,8 +138,7 @@ class TransactionModel extends Connect
             return $stmt->execute();
             
         } catch(PDOException $e) {
-            echo "Erro ao inserir transação";;
-            // error_log($e->getMessage());
+            $this->log_error("Erro ao inserir transação" . $e->getMessage());
             return false;
         }
     }

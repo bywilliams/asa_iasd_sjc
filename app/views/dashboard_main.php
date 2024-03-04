@@ -77,12 +77,12 @@
 <section class="p-2 my-3  bg-white rounded shadow-sm border-left events">
     <div class="container">
         <h3 class="text-secondary text-center mb-3">Calendário de eventos</h3>
-        <div class="row">
+        <div class="row text-center">
             <div class="col-lg-6 col-md-12">
                 <div class="card border-0 mb-3">
                     <div class="row no-gutters">
                         <div class="col-md-4">
-                            <img src="/assets/imgs/calendar.png" alt="...">
+                            <img src="/assets/imgs/calendar.png" alt="calendario">
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
@@ -98,30 +98,16 @@
             <div class="col-lg-6 col-md-12 mt-2 ">
                 <table class="table table-sm rounded table-events">
                     <tbody class="text-center">
-                        <tr>
-                            <td>
-                                <h5><i class="fa-solid fa-socks icon-menu text-info"></i> Campanha do Agasalho</h5>
-                            </td>
-                            <td class="">00/12/2024 00:00</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h5 class=""><i class="fa-solid fa-sack-dollar icon-menu text-success"></i> Recolta </h5>
-                            </td>
-                            <td>00/12/2024 00:00</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h5 class=""><i class="fa-solid fa-cross icon-menu text-warning"></i> Dia da Compaixão </h5>
-                            </td>
-                            <td>00/12/2024 00:00</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h5 class=""><i class="fa-solid fa-tree icon-menu text-danger"></i> Mutirão de Natal</h5>
-                            </td>
-                            <td>00/12/2024 00:00</td>
-                        </tr>
+                        <?php if(count($latestEvents) > 0): ?>
+                        <?php foreach($latestEvents as $event): ?>
+                            <tr>
+                                <td><h5><?= $event->name ?></h5></td>
+                                <td><?= date("d-m-Y H:i:s", strtotime($event->event_date)) ?> </td>
+                            </tr>
+                        <?php endforeach; ?>
+                        <?php else: ?>
+                            <h5 class="text-info">Não há nenhum evento cadastrado.</h5>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
