@@ -29,7 +29,7 @@ class FamilyController
      * 
      * Este método irá apresentar a página com a listagem das famílias cadastradas
      */
-    public function index(Response $response)
+    public function index(Request $request,Response $response)
     {
         if (!$this->validateJwtToken()) {
             $this->setMessage('error', 'Por favor, faça login novamente!');
@@ -201,6 +201,14 @@ class FamilyController
             $this->setMessage('error', 'Ação inválida!');
             return $response->withRedirect('/');
         }
+
+        if($this->model->destroy($args['id'])) {
+            $this->setMessage('success','Família deletada com sucesso!');
+        } else {
+            $this->setMessage('error', 'Falha ao deletar família.');
+        }
+
+        return $response->withRedirect('/family/index');
 
     }
 }

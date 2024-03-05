@@ -3,6 +3,7 @@
 use Slim\Factory\AppFactory;
 use Slim\Middleware\StaticFiles;
 use Slim\Routing\RouteCollectorProxy;
+use Slim\Middleware\MethodOverrideMiddleware;
 
 require '../vendor/autoload.php';
 
@@ -15,6 +16,9 @@ $app = AppFactory::create();
 
 // Add Routing Middleware
 $app->addRoutingMiddleware();
+
+// Add Method Override Middleware
+$app->add(new MethodOverrideMiddleware());
 
 $routes = require'../app/routes/routes.php';
 

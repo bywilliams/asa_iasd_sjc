@@ -148,6 +148,21 @@ class FamilyModel extends Connect
         }
     }
 
+    public function destroy($id): bool
+    {
+        $deleteFamily = "DELETE FROM {$this->table} WHERE id = :id";
+        $stmt = $this->connection->prepare($deleteFamily);
+        try {
+            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            $this->log_error("Erro ao deletar família($id): ". $e->getMessage());
+            return false;
+        }
+
+    }
+
     /**
      * Método checkFamilyExist()
      * 

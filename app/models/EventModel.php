@@ -69,4 +69,18 @@ class EventModel extends Connect
 
         return $listEvents;
     }
+
+    public function destroy($id): bool
+    {
+        $deleteFamily = "DELETE FROM {$this->table} WHERE id = :id";
+        $stmt = $this->connection->prepare($deleteFamily);
+        try {
+            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+            return true;
+        } catch (PDOException $e) {
+            $this->log_error("Erro ao deletar familia($id): ". $e->getMessage());
+            return false;
+        }
+
+    }
 }

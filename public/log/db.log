@@ -1,3 +1,4 @@
 
 04-03-2024 16:56:07 - Erro ao cadastrar evento: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'asa_sjc.teste' doesn't exist
 04-03-2024 19:17:19 - Erro ao cadastrar evento: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'asa_sjc.teste' doesn't exist
+04-03-2024 21:23:57 - Erro ao deletar família(7): SQLSTATE[HY093]: Invalid parameter number: parameter was not defined
