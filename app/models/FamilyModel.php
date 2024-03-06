@@ -49,7 +49,6 @@ class FamilyModel extends Connect
         ORDER BY f.id LIMIT $inicio, $itensPorPagina");
         $totalRegistros = 0;
 
-        //echo $selectFamilies; die;
         try {
             $stmt = $this->connection->query($selectFamilies);
             $result = $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -57,7 +56,7 @@ class FamilyModel extends Connect
             $countFamilies = $this->connection->query("SELECT COUNT(*) as total FROM {$this->table} f WHERE f.id > 0 $sql");
             $totalRegistros = $countFamilies->fetch(PDO::FETCH_ASSOC)['total'];
         } catch (PDOException $e) {
-            error_log('Erro ao buscar famílias ' . $e->getMessage());
+            $this->log_error('Erro ao buscar famílias ' . $e->getMessage());
             $result = [];
         }
 
@@ -186,9 +185,32 @@ class FamilyModel extends Connect
                 return false;
             }
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            $this->log_error("Erro ao buscar existência de família: ". $e->getMessage());
             return false;
         }
+    }
+
+    /**
+     * Método getActiveFamilies()
+     * 
+     * Este método traz todas as famílias ativas 
+     *
+     * @return array $result A lista de todas as famílias
+     */
+    public function getActiveFamilies(): array
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE sits_family_id = 1";
+        $stmt = $this->connection->prepare($sql);
+
+        try {
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+            return $result;
+        } catch (PDOException $e) {
+            $this->log_error("Erro ao trazer total de famílias ativas: ". $e->getMessage());
+            return $result = [];
+        }
+
     }
 
     /**
@@ -203,11 +225,13 @@ class FamilyModel extends Connect
         $sql = "SELECT COUNT(*) as total FROM {$this->table} WHERE sits_family_id = 1";
         $stmt = $this->connection->prepare($sql);
 
-        if ($stmt->execute()) {
+        try{
+            $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_OBJ);
             return (int)($result->total ?? 0);
-        } else {
-            throw new Exception('Falha ao executar query: ' . implode(', ', $stmt->errorInfo()));
+        } catch(PDOException $e) {
+            $this->log_error("Erro ao trazer total de famílias ativas: ". $e->getMessage());
+            return 0;
         }
     }
 }

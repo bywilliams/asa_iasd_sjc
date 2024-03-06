@@ -282,6 +282,42 @@
 </div>
 <!-- End Family Modal -->
 
+<!-- Basket Donated Modal -->
+<div class="modal fade modal_bg" id="basket_donated" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Doar cesta</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/basket/donated" method="post">
+                <input type="hidden" name="_METHOD" value="PUT">
+                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                <input type="hidden" name="user_id" value="<?= $this->e($user->id) ?>">
+                <div class="modal-body">
+                    <p>Obrigatório *</p>
+                    <div class="form-group">
+                        <label for="date">Para família: *</label>
+                        <select name="family_id" id="" class="form-control" required>
+                            <option value="">Selecione</option>
+                            <?php foreach ($getActiveFamilies as $family): ?>
+                                <option value="<?= $family->id ?>" <?= isset($old['family_id']) == $family->id ? 'selected' : null ?>><?= $family->full_name ?> </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-primary">Doar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- End Basket Donated Modal -->
+
 <script>
     $(document).ready(function() {
 

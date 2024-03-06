@@ -48,6 +48,8 @@ return function (App $app) {
         $group->post('/store', [EventController::class,'store']);
     });
 
+    $app->put('/basket/donated', [FoodStockController::class,'donatedBasket']);
+
     // Rota fallback exibi uma mensagem
     $app->any('{route:.*}', function (Request $request, Response $response) {
         $response->getBody()->write('

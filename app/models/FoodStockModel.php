@@ -19,6 +19,22 @@ class FoodStockModel extends Connect
     use SessionMessageTrait;
 
     private $table;
+    private $basicBasketRequirements = [
+        'Arroz' => ['id' => 1, 'minQtde' => 1],
+        'Feijão' => ['id' => 2, 'minQtde' => 3],
+        'Macarrão' => ['id' => 3, 'minQtde' => 2],
+        'Molho tomate' => ['id' => 4, 'minQtde' => 2],
+        'Óleo' => ['id' => 5, 'minQtde' => 2],
+        'Açucar' => ['id' => 6, 'minQtde' => 2],
+        'Sal' => ['id' => 7, 'minQtde' => 1],
+        'Farinha de trigo' => ['id' => 8, 'minQtde' => 1],
+        'Flocão' => ['id' => 9, 'minQtde' => 1],
+        'Farinha mandioca' => ['id' => 10, 'minQtde' => 1],
+        'Fuba' => ['id' => 11, 'minQtde' => 1],
+        'Bolacha doce' => ['id' => 12, 'minQtde' => 1],
+        'Bolacha Sal' => ['id' => 13, 'minQtde' => 1],
+        'Esponja' => ['id' => 17, 'minQtde' => 1],
+    ];
     
     /**
      * Construtor da classe FoodModel
@@ -33,10 +49,17 @@ class FoodStockModel extends Connect
         $this->table = 'foods_stock';
     }
 
+    /**
+     * Método index()
+     *
+     * @param [type] $inicio
+     * @param [type] $itensPorPagina
+     * @param [type] $sql
+     * @return array|null
+     */
     public function index($inicio, $itensPorPagina, $sql): ?array 
     {
-        
-        $selectFamilies = ("SELECT fs.id, fs.qtde, fs.user_id, fs.created_at, fs.updated_at, f.name, CONCAT(usr.name , ' ', usr.lastname) as author   
+        $selectStockFoods = ("SELECT fs.id, fs.qtde, fs.user_id, fs.created_at, fs.updated_at, f.name, CONCAT(usr.name , ' ', usr.lastname) as author   
         FROM {$this->table} fs
         INNER JOIN foods f ON fs.food_id = f.id
         INNER JOIN users usr 
@@ -44,11 +67,11 @@ class FoodStockModel extends Connect
         ORDER BY id LIMIT $inicio, $itensPorPagina");
         $totalRegistros = 0;
         try {
-            $stmt = $this->connection->query($selectFamilies);
+            $stmt = $this->connection->query($selectStockFoods);
             $result = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-            $countFamilies = $this->connection->query("SELECT COUNT(*) as total FROM {$this->table} fs WHERE fs.id > 0 $sql");
-            $totalRegistros = $countFamilies->fetch(PDO::FETCH_ASSOC)['total'];
+            $countRows = $this->connection->query("SELECT COUNT(*) as total FROM {$this->table} fs WHERE fs.id > 0 $sql");
+            $totalRegistros = $countRows->fetch(PDO::FETCH_ASSOC)['total'];
 
         } catch (PDOException $e) {
             $this->log_error('Erro ao buscar famílias '. $e->getMessage());
@@ -166,11 +189,11 @@ class FoodStockModel extends Connect
      */
     public function latestStockFoods(): array
     {
-        $findLatestFood = ("SELECT fs.id, f.name, fs.qtde, fs.basic_basket, fs.created_at, fs.updated_at, usr.name as 'author'
+        $findLatestFood = ("SELECT fs.id, f.name, fs.qtde, fs.basic_basket, fs.food_id, fs.created_at, fs.updated_at, usr.name as 'author'
         FROM $this->table fs
         INNER JOIN users usr ON fs.user_id = usr.id
         INNER JOIN foods f ON fs.food_id = f.id
-        WHERE fs.basic_basket = 'S'
+       
         ORDER BY id ASC LIMIT 19
         ");
         $stmt = $this->connection->query($findLatestFood);
@@ -192,24 +215,10 @@ class FoodStockModel extends Connect
      */
     public function calculateBasicBaskets(): int
     {
-        $basicBasketRequirements = [
-            'Arroz' => ['id' => 1, 'minQtde' => 1],
-            'Feijão' => ['id' => 2, 'minQtde' => 3],
-            'Macarrão' => ['id' => 3, 'minQtde' => 2],
-            'Molho tomate' => ['id' => 4, 'minQtde' => 2],
-            'Óleo' => ['id' => 5, 'minQtde' => 2],
-            'Açucar' => ['id' => 6, 'minQtde' => 2],
-            'Sal' => ['id' => 7, 'minQtde' => 1],
-            'Farinha de trigo' => ['id' => 8, 'minQtde' => 1],
-            'Flocão' => ['id' => 9, 'minQtde' => 1],
-            'Farinha mandioca' => ['id' => 10, 'minQtde' => 1],
-            'Fuba' => ['id' => 11, 'minQtde' => 1],
-            'Bolacha doce' => ['id' => 12, 'minQtde' => 1],
-            'Bolacha Sal' => ['id' => 13, 'minQtde' => 1],
-            'Esponja' => ['id' => 17, 'minQtde' => 1],
-        ];
 
         $availableBaskets = PHP_INT_MAX; // Assumimos que temos um número ilimitado de cestas
+
+        $basicBasketRequirements = $this->basicBasketRequirements;
 
         foreach ($basicBasketRequirements as $foodName => $requirement) {
             $stmt = $this->connection->prepare("SELECT SUM(qtde) AS totalQuantity FROM {$this->table} WHERE food_id = :foodId AND basic_basket = 'S'");
@@ -228,6 +237,50 @@ class FoodStockModel extends Connect
         // Se o número de cestas disponíveis é infinito (o que significa que não há alimentos suficientes), retorna  0
         return $availableBaskets == PHP_INT_MAX ?  0 : $availableBaskets;
         
+    }
+
+    public function donatedBasket($request): bool
+    {
+
+        $basicBasketRequirements = $this->basicBasketRequirements;
+        // Estoque de alimentos
+        $foodStock = $this->latestStockFoods();
+        $success = false; // Variável para controlar o sucesso da operação
+
+        foreach ($basicBasketRequirements as $foodName => $requeriment) {
+            //echo ''. $foodName .' id:'. $requeriment['id'] . ' QtdeMin: ' . $requeriment['minQtde'] . '<br>';
+
+            foreach ($foodStock as $food) {
+                
+                if ($requeriment['id'] == $food->food_id) {
+                    //echo "$foodName com id {$requeriment['id']} e quantidade: {$food->qtde} deve subtrair {$requeriment['minQtde']} ... ";
+                    $currentQty = $food->qtde;
+                    $valueToSubtracted = $requeriment['minQtde'];
+                    
+                    $newQty = $currentQty - $valueToSubtracted;
+                    //echo "Nova quantidade: " . $newQty . '<br>';
+                    
+                    $updateFoodStock = "UPDATE {$this->table} SET qtde = :qtde WHERE food_id = :food_id";
+                    
+                    $stmt = $this->connection->prepare($updateFoodStock);
+                    $stmt->bindParam(":qtde", $newQty, PDO::PARAM_INT);
+                    $stmt->bindParam(":food_id", $food->food_id, PDO::PARAM_INT);
+
+                    try {
+                        $stmt->execute();
+                        $success = true;
+                    } catch (PDOException $e) {
+                        $this->log_error('Erro ao doar cesta: '. $e->getMessage());
+                        $success = false;
+                    }
+
+                }
+
+            }
+        }
+
+        return $success;
+               
     }
 
     /**

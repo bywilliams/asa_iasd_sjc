@@ -24,7 +24,16 @@ class FoodStockController
     {
         $this->model = new FoodStockModel();
     }
-
+    
+    /**
+     * Método index()
+     * 
+     * Este método apresenta a view de estoque de alimentos rota /food/index
+     *
+     * @param Request $request
+     * @param Response $response
+     * @return void
+     */
     public function index(Request $request, Response $response) 
     {
         if(!$this->validateJwtToken()) {
@@ -32,11 +41,9 @@ class FoodStockController
             return $response->withRedirect('/');
         }
 
-        // Limpa a sessão old
-        unset($_SESSION['old']);
+        unset($_SESSION['old']); // Limpa a sessão old
         
-        // check e recebe dados do usuário logado
-        $userLogged = (object) $this->validateJwtToken();
+        $userLogged = (object) $this->validateJwtToken(); // checa e recebe dados do usuário logado
 
         $foods = new FoodModel();
         $foodsList = $foods->findAllFoods(); // Lista de alimentos para form da view
@@ -119,6 +126,36 @@ class FoodStockController
         }
         
         return $response->withRedirect('/usuario/dashboard');
+    }
+
+    public function donatedBasket(Request $request, Response $response)
+    {
+        $data = $request->getParsedBody();
+
+        // Válida checa a válidade do CSRF Token
+        if (!$this->validateCsrfToken($data)) {
+            // Limpa o Cookie
+            setcookie('token', '');
+
+            // redireciona e apresenta mensagem de erro
+            $this->setMessage('error', 'Ação inválida!');
+            return $response->withRedirect('/');
+        }
+
+        if(empty($data['family_id'])) {
+            $_SESSION['old'] = $_POST;
+            $this->setMessage('error', 'Preencha os campos obrigatórios!');
+            return $response->withRedirect('/usuario/dashboard');
+        }
+
+        if($this->model->donatedBasket($data['family_id'])) {
+            $this->setMessage('success', 'Cesta doada com sucesso!');
+        } else {
+            $this->setMessage('error', 'Falha ao doar cesta consulte administrador do sistema');
+        }
+
+        return $response->withRedirect('/usuario/dashboard');
+
     }
 
 }

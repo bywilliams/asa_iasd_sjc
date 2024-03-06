@@ -82,6 +82,7 @@ class UserController
 
         // Traz a quantidade de famílias cadastradas que  estão ativas
         $familyModel = new FamilyModel();
+        $getActiveFamilies = $familyModel->getActiveFamilies();
         $totalActiveFamilies = $familyModel->getTotalActiveFamilies();
 
         // Traz os últimos eventos cadastrados
@@ -103,6 +104,7 @@ class UserController
             'totalExpense' => $totalExpense,
             'totalBalance' => $totalBalance,
             'totalActiveFamilies' => $totalActiveFamilies,
+            'getActiveFamilies' => $getActiveFamilies,
             'allFoods' => $allFoods,
             'totalStockFoods' => $totalStockFoods,
             'latestStockFoods' => $latestStockFoods,
@@ -153,8 +155,8 @@ class UserController
             $this->setMessage('error', 'Usuário e/ou senha inválidos!');
             return $response->withRedirect('/');
         }
-        // Gera o JWT Token para usuário
         
+        // Gera o JWT Token para usuário
         $this->generateJwtToken($userFound);               
 
         // Configura uma mensagem de boas vindas 
