@@ -37,7 +37,7 @@ class FoodStockController
     public function index(Request $request, Response $response) 
     {
         if(!$this->validateJwtToken()) {
-            $this->setMessage('error', 'Por favor, faça login novamente!');
+            manageMessages('error',  4);
             return $response->withRedirect('/');
         }
 
@@ -96,7 +96,7 @@ class FoodStockController
             setcookie('token', '');
 
             // redireciona e apresenta mensagem de erro
-            $this->setMessage('error', 'Ação inválida!');
+            manageMessages('error', 1);
             return $response->withRedirect('/');
         }
         
@@ -105,7 +105,7 @@ class FoodStockController
 
         if (empty($formData->food_id) || empty($formData->qtde) || empty($formData->created_at)) {
             $_SESSION['old'] = $_POST;
-            $this->setMessage('error', 'Preencha os campos obrigatórios!');
+            manageMessages('error',3);  
             return $response->withRedirect('/usuario/dashboard');
         }
 
@@ -115,16 +115,19 @@ class FoodStockController
         // checar se alimento já existe no estoque
         $foodStockExists = $this->model->findFoodById($formData);
 
-        // fluxo condicional para decidir se o alimento será inserido (novo) ou atualizado de acordo com a etapa 1
-        if (!$foodStockExists) { 
-            // Salva registro no banco de dados
-            $this->model->store($formData);
-            $this->setMessage('success', 'Alimento cadastrado no estoque com sucesso!');
-        } else {
-            $this->model->updateFoodStock($formData);
-            $this->setMessage('success', 'Alimento atualizado no estoque com sucesso!');
-        }
+        // Determina ação com base na existência do alimento no estoque
+        $action = $foodStockExists->qtde >= 0 ? 'atualizar' : 'cadastrar';
+        $modelMethod = $action === 'atualizar' ? 'updateFoodStock' : 'store';
+
+        // executa a ação e define mensagem de acordo com resultado
+        $success = $this->model->$modelMethod($formData);
+
+        // Define a chave da mensagem com base no sucesso e na ação
+        $messageKey = $success ?  ($modelMethod === 'store' ? 1 : 3) : ($modelMethod === 'store' ? 6 : 8);
         
+        // chama a função para definir a mensagem correta
+        manageMessages($success ? 'success' : 'error', $messageKey);
+                
         return $response->withRedirect('/usuario/dashboard');
     }
 
@@ -138,20 +141,20 @@ class FoodStockController
             setcookie('token', '');
 
             // redireciona e apresenta mensagem de erro
-            $this->setMessage('error', 'Ação inválida!');
+            manageMessages('error', 1);
             return $response->withRedirect('/');
         }
 
         if(empty($data['family_id'])) {
             $_SESSION['old'] = $_POST;
-            $this->setMessage('error', 'Preencha os campos obrigatórios!');
+            manageMessages('error',3);
             return $response->withRedirect('/usuario/dashboard');
         }
 
         if($this->model->donatedBasket($data['family_id'])) {
-            $this->setMessage('success', 'Cesta doada com sucesso!');
+            manageMessages('success',6);
         } else {
-            $this->setMessage('error', 'Falha ao doar cesta consulte administrador do sistema');
+            manageMessages('error',7);
         }
 
         return $response->withRedirect('/usuario/dashboard');

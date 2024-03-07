@@ -128,7 +128,7 @@ trait GlobalControllerTrait
     {
         if (isset($_COOKIE['token'])) {
             setcookie('token', '', time() - 3600, "/");
-            $this->setMessage('success', "Loggof efetuado com sucesso!");
+            manageMessages('success', 7);
             return $response->withRedirect('/');
         }
     }

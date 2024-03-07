@@ -9,22 +9,17 @@ namespace app\traits;
  */
 trait SessionMessageTrait
 {  
-
+    
     /**
-     * Função setMessage()
+     * Função log_error()
      * 
-     * Está função seta um status (error, success) para uma mensagem de retorno parta alguma ação realizada pelo usuário
-     * 
-     * @param mixed $type O tipo da mensagem (error) ou (success)
-     * @param mixed $message A mensagem referênte ao status 
+     * Esta função é reponsável por alimentar o log de erros proveniente do banco de dados,
+     * ela grava as mensagens no arquivo db.log dentro do path public/log
+     *
+     * @param string $error_message A mensagem vinda do PDOException
+     * @return void
      */
-    private function setMessage($type, $message)
-    {
-        $_SESSION['status_report'] = $type;
-        $_SESSION['message'] = $message;
-    }
-
-    private function log_error($error_message)
+    private function log_error(string $error_message)
     {
         $currentTime = date('d-m-Y H:i:s');
 

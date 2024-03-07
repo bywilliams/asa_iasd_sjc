@@ -30,7 +30,7 @@ class FoodController
     {
 
         if (!$this->validateJwtToken()) {
-            $this->setMessage('error', 'Por favor, faça login novamente!');
+            manageMessages('error', 4);
             return $response->withRedirect('/');
         }
 
@@ -38,36 +38,5 @@ class FoodController
         return $response;
     }
 
-    //TODO: criar feature de cadastrar alimentos disponíveis para cadastro em stock
-    // public function store(Request $request, Response $response)
-    // {
-    //     // Pega o corpo da requisição com Slim
-    //     $data = $request->getParsedBody();
-
-    //     // Válida checa a válidade do CSRF Token
-    //     if (!$this->validateCsrfToken($data)) {
-    //         // Limpa o Cookie
-    //         setcookie('token', '', time() - 3600, "/"); // Adiciona tempo no passado e o caminho do cookies
-
-    //         // redireciona e apresenta mensagem de erro
-    //         $this->setMessage('error', 'Ação inválida!');
-    //         return $response->withRedirect('/');
-    //     }
-
-    //     // Converte em objeto
-    //     $formData = (object) $this->sanitizeData($data);
-
-    //     if (empty($formData->food_id) || empty($formData->qtde) || empty($formData->created_at)) {
-    //         $this->setMessage('error', 'Preencha os campos obrigatórios!');
-    //         return $response->withRedirect('/usuario/dashboard');
-    //     }
-
-    //     // Salva registro no banco de dados
-    //     $this->model->store($formData);
-
-    //     $this->setMessage('success', 'Alimento cadastrado com sucesso!');
-
-    //     return $response->withRedirect('/usuario/dashboard');
-    // }
 
 }

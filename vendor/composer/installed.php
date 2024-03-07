@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'e502219f05e8e7965a61d7358242880ebe916be4',
+        'reference' => '0d818b40aa88aa7059d48a5c9fb83b70b5455dd8',
         'name' => '__root__',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'e502219f05e8e7965a61d7358242880ebe916be4',
+            'reference' => '0d818b40aa88aa7059d48a5c9fb83b70b5455dd8',
             'dev_requirement' => false,
         ),
         'fig/http-message-util' => array(
@@ -146,15 +146,6 @@
             'install_path' => __DIR__ . '/../ralouphie/getallheaders',
             'aliases' => array(),
             'reference' => '120b605dfeb996808c31b6477290a714d356e822',
-            'dev_requirement' => false,
-        ),
-        'slim/flash' => array(
-            'pretty_version' => '0.4.0',
-            'version' => '0.4.0.0',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../slim/flash',
-            'aliases' => array(),
-            'reference' => '9aaff5fded3b54f4e519ec3d4ac74d3d1f2cbbbc',
             'dev_requirement' => false,
         ),
         'slim/http' => array(

@@ -32,7 +32,7 @@ class FamilyController
     public function index(Request $request,Response $response)
     {
         if (!$this->validateJwtToken()) {
-            $this->setMessage('error', 'Por favor, faça login novamente!');
+            manageMessages('error', 4);
             return $response->withRedirect('/');
         }
 
@@ -104,7 +104,7 @@ class FamilyController
             setcookie('token', '');
 
             // redireciona e apresenta mensagem de erro
-            $this->setMessage('error', 'Ação inválida!');
+            manageMessages('error', 1);
             return $response->withRedirect('/');
         }
 
@@ -120,22 +120,23 @@ class FamilyController
         foreach ($fieldsToCheck as $field) {
             if ($formData->$field == null) {
                 $_SESSION['old'] = $_POST;
-                $this->setMessage('error', 'Preencha os campos obrigatórios!');
+                manageMessages('error',3);
                 return $response->withRedirect('/usuario/dashboard');
             }
         }
 
         // checka se a familia já foi cadastrada
         if ($this->model->checkFamilyExist($formData->contact)) {
-            $this->setMessage('error', 'Familia já existente!');
+            manageMessages('error',2);
             return $response->withRedirect('/usuario/dashboard');
         }
 
-        // Salva registro no banco de dados
-        $this->model->store($formData);
-
-        // Configura mensagem de status de sucesso
-        $this->setMessage('success', 'Registro inserido com sucesso!');
+        // Salva registro no banco de dados e apresenta mensagem status
+        if($this->model->store($formData)) {
+            manageMessages('success',1);
+        } else {
+            manageMessages('error',6);
+        }
 
         // Redireciona para a rota da dashboard
         return $response->withRedirect('/usuario/dashboard');
@@ -157,7 +158,7 @@ class FamilyController
             setcookie('token', '', time() - 3600, "/"); // Adiciona tempo no passado e o caminho do cookies
 
             // redireciona e apresenta mensagem de erro
-            $this->setMessage('error', 'Ação inválida!');
+            manageMessages('error', 1);
             return $response->withRedirect('/');
         }
 
@@ -170,15 +171,17 @@ class FamilyController
         foreach ($fieldsToCheck as $field) {
             if ($formData->$field == null) {
                 $_SESSION['old'] = $_POST;
-                $this->setMessage('error', 'Preencha os campos obrigatórios!');
+                manageMessages('error',3);
                 return $response->withRedirect('/family/index');
             }
         }
 
-        // Atualiza família
-        $this->model->update($args['id'], $formData);
-
-        $this->setMessage('success','Família atualizada com sucesso!');
+        // Atualiza família e apresenta mensagem status
+        if($this->model->update($args['id'], $formData)) {
+            manageMessages('success',3);
+        } else {
+            manageMessages('error',7);
+        }
 
         return $response->withRedirect('/family/index');
     }
@@ -198,14 +201,14 @@ class FamilyController
             setcookie('token', '', time() - 3600, "/"); // Adiciona tempo no passado e o caminho do cookies
 
             // redireciona e apresenta mensagem de erro
-            $this->setMessage('error', 'Ação inválida!');
+            manageMessages('error', 1);
             return $response->withRedirect('/');
         }
 
         if($this->model->destroy($args['id'])) {
-            $this->setMessage('success','Família deletada com sucesso!');
+            manageMessages('success', 2);
         } else {
-            $this->setMessage('error', 'Falha ao deletar família.');
+            manageMessages('error', 5);
         }
 
         return $response->withRedirect('/family/index');

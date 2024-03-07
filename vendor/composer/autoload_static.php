@@ -27,7 +27,6 @@ class ComposerStaticInitb337857b14ef8ff57bc3cdb2a6920535
             'Symfony\\Polyfill\\Ctype\\' => 23,
             'Slim\\Psr7\\' => 10,
             'Slim\\Http\\' => 10,
-            'Slim\\Flash\\' => 11,
             'Slim\\' => 5,
         ),
         'P' => 
@@ -82,10 +81,6 @@ class ComposerStaticInitb337857b14ef8ff57bc3cdb2a6920535
         'Slim\\Http\\' => 
         array (
             0 => __DIR__ . '/..' . '/slim/http/src',
-        ),
-        'Slim\\Flash\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/slim/flash/src',
         ),
         'Slim\\' => 
         array (

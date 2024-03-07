@@ -43,8 +43,7 @@ class UserController
     public function dashboard(Request $request, Response $response)
     {
         if(empty($this->validateJwtToken())) {
-            //echo "entrou no if "; die;
-            $this->setMessage('error', 'Por favor, faça login novamente!');
+            manageMessages('error', 4);
             return $response->withRedirect('/');
         }
         
@@ -55,8 +54,7 @@ class UserController
         $userLogged = (object) $this->validateJwtToken();
         
         if ($userLogged == null) {
-            //echo "entrou aqui"; die; 
-            $this->setMessage('error', 'Acesso negado, faça login novamente!');
+            manageMessages('error',9);
             return $response->withRedirect('/');
         }
         
@@ -129,7 +127,7 @@ class UserController
 
         // Válida checa a válidade do CSRF Token
         if (!$this->validateCsrfToken($formData)) {
-            $this->setMessage('error', 'Ação inválida!');
+            manageMessages('error','1');
             return $response->withRedirect('/');
         }
 
@@ -137,7 +135,7 @@ class UserController
         $data = $this->sanitizeData($formData);
         
         if (empty($data['email']) || empty($data['password'])) {
-            $this->setMessage('error', 'Preencha os campos email e senha!');
+            manageMessages('error','3');
             return $response->withRedirect('/');
         }
 
@@ -146,13 +144,13 @@ class UserController
 
         // Checa se a variável do usuário possui valor
         if (empty($userFound)) {
-            $this->setMessage('error', 'Usuário não encontrado.');
+            manageMessages('error','10');
             return $response->withRedirect('/');
         } 
         
         // Checa igualdade das senhas
         if (!password_verify($data['password'], $userFound->password)) {
-            $this->setMessage('error', 'Usuário e/ou senha inválidos!');
+            manageMessages('error','11');
             return $response->withRedirect('/');
         }
         
@@ -160,7 +158,7 @@ class UserController
         $this->generateJwtToken($userFound);               
 
         // Configura uma mensagem de boas vindas 
-        $this->setMessage('success', "Seja bem vindo $userFound->name!");
+        manageMessages('success','4', $userFound);
 
         // Redireciona para a rota da dashboard
         return $response->withRedirect('/usuario/dashboard');

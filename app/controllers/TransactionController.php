@@ -37,7 +37,7 @@ class TransactionController
             setcookie('token', '');
 
             // redireciona e apresenta mensagem de erro
-            $this->setMessage('error', 'Ação inválida!');
+            manageMessages('error', 1);
             return $response->withRedirect('/');
         }
 
@@ -51,15 +51,17 @@ class TransactionController
 
         foreach($fieldsToCheck as $field) {
             if (empty($formData->$field)) {
-                $this->setMessage('error', 'Preencha os campos obrigatórios!');
+                manageMessages('error',3);
                 return $response->withRedirect('/usuario/dashboard');
             }
         }
 
         // Salva transação no banco de dados
-        $this->model->store($formData);
-
-        $this->setMessage('success', 'Transação inserida com sucesso!');
+        if($this->model->store($formData)) {
+            manageMessages('success',1);
+        } else {
+            manageMessages('error',6);
+        }
 
         // Redireciona para a rota da dashboard
         return $response->withRedirect('/usuario/dashboard');

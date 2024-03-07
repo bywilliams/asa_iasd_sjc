@@ -41,7 +41,7 @@ class EventController
             setcookie('token', '');
 
             // redireciona e apresenta mensagem de erro
-            $this->setMessage('error', 'Ação inválida!');
+            manageMessages('error', 1);
             return $response->withRedirect('/');
         }
 
@@ -49,26 +49,23 @@ class EventController
         unset($_SESSION['old']);
 
         $formData = (object) $this->sanitizeData($data);
-
-        //print_r($formData); die;
-
+        
         // Checa se os campos do form estão válidos
         $fieldsToCheck = ['name', 'place', 'user_id', 'description', 'event_date'];
 
         foreach ($fieldsToCheck as $field) {
             if ($formData->$field == null) {
                 $_SESSION['old'] = $_POST;
-                $this->setMessage('error', 'Preencha os campos obrigatórios!');
+                manageMessages('error',3);
                 return $response->withRedirect('/usuario/dashboard');
             }
         }
 
         if($this->model->store($formData)) {
-            $this->setMessage('success','Evento cadastrado com sucesso!');
+            manageMessages('success',1);
         } else {
-            $this->setMessage('error','Falha ao cadastrar evento!');
+            manageMessages('error',6);
         }
-
 
         return $response->withRedirect('/usuario/dashboard');
     }
