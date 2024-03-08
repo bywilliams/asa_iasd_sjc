@@ -15,9 +15,12 @@ Projeto feito com:
 O Intuito do projeto é criar uma aplicação web para controle financeiro pessoal e para amigos.
 ___
 
-# Mockup do projeto
-Agora será mostrado o Mockup inicial do projeto.
+# Tela de login
 ![mockup projeto finance control](public/assets/imgs/readme/Bem-vindo-.png)
+&nbsp;
+___
+# Dashboard Principal
+![mockup projeto finance control](public/assets/imgs/readme/dashboard.png)
 &nbsp;
 ___
 # Fluxos da Aplicação
@@ -28,7 +31,7 @@ Agora será mostrado como está o projeto no momento.
 &nbsp;
 
 ### Fluxo da Dashboard principal
-Agora será mostrado como está o projeto no momento.
+Na dashboard principal há um core de features essenciais que são utilizadas através de modais.
 ![finance control](public/assets/imgs/readme/core_fluxo.gif)
 &nbsp;
 
