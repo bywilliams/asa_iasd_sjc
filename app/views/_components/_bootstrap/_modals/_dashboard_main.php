@@ -102,7 +102,7 @@
                     </div>
                     <div class="form-group">
                         <label for="date">Data: *</label>
-                        <input type="text" name="event_date" id="date" class="form-control date_time" value="<?= isset($old['event_date']) ? $old['event_date'] : null ?>" required>
+                        <input type="text" name="event_date" id="date" class="form-control date_time" placeholder="ex: 23/03/2024 09:00:00" value="<?= isset($old['event_date']) ? $old['event_date'] : null ?>" required>
                     </div>
                 </div>
                 <div class="modal-footer">

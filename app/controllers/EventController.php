@@ -1,7 +1,6 @@
 <?php 
 namespace app\controllers;
 use app\traits\GlobalControllerTrait;
-use app\traits\SessionMessageTrait;
 use app\models\EventModel;
 use Slim\Http\Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -13,13 +12,40 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class EventController
 {
-    use GlobalControllerTrait, SessionMessageTrait;
+    use GlobalControllerTrait;
 
     private $model;
 
     public function __construct()
     {
         $this->model = new EventModel();
+    }
+
+    public function index(Request $request, Response $response)
+    {
+
+        if (!$this->validateJwtToken()) {
+            manageMessages('error', 4);
+            return $response->withRedirect('/');
+        }
+
+        // check e recebe dados do usuário logado
+        $userLogged = (object) $this->validateJwtToken();
+
+        // Mantêm os valores dos inputs de pesquisa
+        $old = $_SESSION['old'] ?? null;
+
+        $listEvents = $this->model->index();
+
+        // var_dump($listEvents); die;
+
+        view('events', [
+            'title' => 'Lista de Eventos',
+            'user' => $userLogged,
+            'listEvents' => $listEvents            
+        ]);
+        
+        return $response;
     }
 
     /**

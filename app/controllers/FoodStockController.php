@@ -2,7 +2,6 @@
 
 namespace app\controllers;
 use app\traits\GlobalControllerTrait;
-use app\traits\SessionMessageTrait;
 use app\models\FoodStockModel;
 use app\models\FoodModel;
 use app\models\UserModel;
@@ -11,7 +10,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class FoodStockController
 {
-    use GlobalControllerTrait, SessionMessageTrait;
+    use GlobalControllerTrait;
 
     private $model;
 

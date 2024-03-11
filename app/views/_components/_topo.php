@@ -42,22 +42,27 @@
                 <span class="ml-2">Familias</span>
             </a>
 
-            <a href="#" class="list-group-item list-group-item-action border-0 align-items-center">
+            <a href="/event/index" class="list-group-item list-group-item-action border-0 align-items-center">
                 <span class="bi bi-calendar-event icon-menu"></span>
                 <span class="ml-2">Eventos</span>
             </a>
 
+            <a href="/food/index" class="list-group-item list-group-item-action border-0 align-items-center">
+                <span class="bi bi-archive icon-menu"></span>
+                <span class="ml-2">Alimentos</span>
+            </a>
+<!-- 
             <button class="list-group-item list-group-item-action border-0 d-flex justify-content-between align-items-center" data-toggle="collapse" data-target="#product-collapse">
                 <div>
                     <span class="bi bi-archive icon-menu"></span>
                     <span class="ml-2">Estoque</span>
                 </div>
                 <span class="bi bi-chevron-down small"></span>
-            </button>
+            </button> -->
             <div class="collapse" id="product-collapse" data-parent="#sidebar">
                 <div class="list-group">
                     <a href="/food/index" class="list-group-item list-group-item-action border-0 pl-5">Alimentos</a>
-                    <a href="#" class="list-group-item list-group-item-action border-0 pl-5">Roupas</a>
+                    <!-- <a href="#" class="list-group-item list-group-item-action border-0 pl-5">Roupas</a> -->
                 </div>
             </div>
 
@@ -88,7 +93,7 @@
                     <!-- <a href="#" class="list-group-item list-group-item-action border-0 pl-5">Despesas</a> -->
                 </div>
             </div>
-            <a href="#" class="list-group-item list-group-item-action border-0 align-items-center">
+            <a href="/usuario/equipe-asa" class="list-group-item list-group-item-action border-0 align-items-center">
                 <span class="bi bi-person-square icon-menu"></span>
                 <span class="ml-2">Equipe</span>
             </a>

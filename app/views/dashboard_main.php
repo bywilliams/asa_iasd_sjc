@@ -93,7 +93,7 @@
                             <div class="card-body">
                                 <h5 class="card-title font-weight-bold">Hoje: <?= date('d-m-y') ?></h5>
                                 <p class="card-text">Nenhum evento marcado para este dia.</p>
-                                <p class="card-text text-info">Clique aqui para criar um evento.</p>
+                               <a href="#!" data-toggle="modal" data-target="#event_create"> <p class="card-text text-info">Clique aqui para criar um evento.</p> </a>
                             </div>
                         </div>
                     </div>

@@ -20,6 +20,31 @@ class EventModel extends Connect
         $this->table = 'events';
     }
 
+    /**
+     * Método index()
+     * 
+     * Este método traz todos os eventos cadastrados no sitema
+     *
+     * @return array $listEvents
+     */
+    public function index(): array
+    {
+        $sql = "SELECT e.id, e.name, e.event_date, e.place, e.description, e.user_id, e.created_at, e.updated_at, CONCAT(usr.name, ' ', usr.lastname) as 'author'
+        FROM {$this->table} e
+        INNER JOIN users usr
+        ORDER BY event_date";
+        $stmt = $this->connection->query($sql);
+        try {
+            $stmt->execute();
+            $listEvents = $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (PDOException $e) {
+            $this->log_error("Erro ao trazer eventos cadastrados: " . $e->getMessage());
+            $listEvents = [];
+        }
+
+        return $listEvents;
+    }
+
     public function store($request): bool
     {
         $insertEvent = ("INSERT INTO {$this->table}

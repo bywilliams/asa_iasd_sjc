@@ -3,7 +3,6 @@
 namespace app\controllers;
 session_start();
 use app\traits\GlobalControllerTrait;
-use app\traits\SessionMessageTrait;
 use app\models\TransactionModel;
 use PDOException;
 use Slim\Http\Response;
@@ -13,7 +12,6 @@ class TransactionController
 {
 
     use GlobalControllerTrait;
-    use SessionMessageTrait;
 
     private $model;
 

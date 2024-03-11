@@ -21,6 +21,7 @@ return function (App $app) {
         $group->post('/login', [UserController::class, 'validarUser']);
         $group->get('/dashboard', [UserController::class, 'dashboard']);
         $group->get('/logout', [UserController::class, 'logout']);
+        $group->get('/equipe-asa', [UserController::class,'team']);
     });
 
     // Family Routes
@@ -46,6 +47,7 @@ return function (App $app) {
     // Events routes
     $app->group('/event', function ($group) {
         $group->post('/store', [EventController::class,'store']);
+        $group->get('/index', [EventController::class,'index']);
     });
 
     $app->put('/basket/donated', [FoodStockController::class,'donatedBasket']);

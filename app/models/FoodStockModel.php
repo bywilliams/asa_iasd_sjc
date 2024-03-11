@@ -52,6 +52,8 @@ class FoodStockModel extends Connect
 
     /**
      * Método index()
+     * 
+     * Este método traz todos os  alimentos cadastrados no sistema por padrão ou por paginação
      *
      * @param [type] $inicio
      * @param [type] $itensPorPagina

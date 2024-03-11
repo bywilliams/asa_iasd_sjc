@@ -8,7 +8,6 @@ use app\models\TransactionModel;
 use app\models\FamilyModel;
 use app\models\EventModel;
 use app\traits\GlobalControllerTrait;
-use app\traits\SessionMessageTrait;
 use Slim\Http\Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -20,7 +19,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class UserController
 {
-    use GlobalControllerTrait, SessionMessageTrait;
+    use GlobalControllerTrait;
 
     private $model;
 
@@ -162,6 +161,24 @@ class UserController
 
         // Redireciona para a rota da dashboard
         return $response->withRedirect('/usuario/dashboard');
+    }
+
+    public function team(Request $request, Response $response)
+    {
+        if(empty($this->validateJwtToken())) {
+            manageMessages('error', 4);
+            return $response->withRedirect('/');
+        }
+
+        // Obter os dados do usuário decodificados
+        $userLogged = (object) $this->validateJwtToken();
+
+        view('team_asa',[
+            'title' => 'Equipe da ASA 2024',
+            'user' => $userLogged
+        ]);
+
+        return $response;
     }
 
 }

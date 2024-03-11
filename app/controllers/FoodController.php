@@ -3,7 +3,6 @@
 namespace app\controllers;
 session_start();
 use app\traits\GlobalControllerTrait;
-use app\traits\SessionMessageTrait;
 use app\models\FoodModel;
 use Slim\Http\Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -11,7 +10,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 class FoodController
 {
     use GlobalControllerTrait;
-    use SessionMessageTrait;
 
     private $model;
 

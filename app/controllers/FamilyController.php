@@ -2,7 +2,6 @@
 
 namespace app\controllers;
 use app\traits\GlobalControllerTrait;
-use app\traits\SessionMessageTrait;
 use app\models\FamilyModel;
 use Slim\Http\Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -15,7 +14,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 class FamilyController
 {
 
-    use GlobalControllerTrait, SessionMessageTrait;
+    use GlobalControllerTrait;
 
     private $model;
 
