@@ -44,7 +44,7 @@
         <div class="team-member">
             <img src="/assets/imgs/team/wil_perfil.png" alt="Team Member 3">
             <h3>William</h3>
-            <p class="role">Secretária</p>
+            <p class="role">Secretaria</p>
         </div>
     </div>
 </section>

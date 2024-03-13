@@ -4,7 +4,6 @@ namespace app\controllers;
 session_start();
 use app\traits\GlobalControllerTrait;
 use app\models\TransactionModel;
-use PDOException;
 use Slim\Http\Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -20,9 +19,54 @@ class TransactionController
         $this->model = new TransactionModel();
     }
 
-    public function index(Request $request, Response $response)
+    public function revenues(Request $request, Response $response)
     {
-        echo 'Chegou aqui'; die;
+        if (!$this->validateJwtToken()) {
+            manageMessages('error', 4);
+            return $response->withRedirect('/');
+        }
+
+        // checa e recebe dados do usuário logado
+        $userLogged = (object) $this->validateJwtToken();
+
+        // Mantêm os valores dos inputs de pesquisa
+        $old = $_SESSION['old'] ?? null;
+
+        $revenues = $this->model->getRevenues();
+
+        view('receitas', [
+            'title' => 'Lista de receitas',
+            'user' => $userLogged,
+            'old' => $old,
+            'revenues' => $revenues
+        ]);
+
+        return $response;
+    }
+
+    public function expenses(Request $request, Response $response)
+    {
+        if (!$this->validateJwtToken()) {
+            manageMessages('error', 4);
+            return $response->withRedirect('/');
+        }
+
+        // checa e recebe dados do usuário logado
+        $userLogged = (object) $this->validateJwtToken();
+
+        // Mantêm os valores dos inputs de pesquisa
+        $old = $_SESSION['old'] ?? null;
+
+        $expenses = $this->model->getExpenses();
+
+        view('despesas', [
+            'title' => 'Lista de despesas',
+            'user' => $userLogged,
+            'old' => $old,
+            'expenses' => $expenses
+        ]);
+
+        return $response;
     }
 
     public function store(Request $request, Response $response)

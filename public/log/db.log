@@ -14,3 +14,7 @@
 06-03-2024 10:03:33 - Database error: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'asa_sjc.teste' doesn't exist
 06-03-2024 10:16:20 - Alimento não encontrado no estoque
 06-03-2024 10:18:15 - Alimento não encontrado no estoque
+12-03-2024 22:09:25 - Erro ao trazer receitas:SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'FROM transactions  
+        WHERE type = 'receita'' at line 2
+12-03-2024 22:15:51 - Erro ao trazer receitas:SQLSTATE[23000]: Integrity constraint violation: 1052 Column 'type' in where clause is ambiguous
+12-03-2024 22:16:33 - Erro ao trazer receitas:SQLSTATE[23000]: Integrity constraint violation: 1052 Column 'type' in where clause is ambiguous

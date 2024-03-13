@@ -25,6 +25,46 @@ class TransactionModel extends Connect
         $this->table = 'transactions';
     }
 
+    public function getRevenues(): array
+    {
+        $query = "SELECT t.id, t.title, t.description, t.value, c.name AS 'category', CONCAT(usr.name, ' ', usr.lastname) AS 'author', t.created_at, t.updated_at  
+        FROM {$this->table} t
+        INNER JOIN categories c ON t.category_id = c.id
+        INNER JOIN users usr 
+        WHERE t.type = 'receita'";
+        $stmt = $this->connection->prepare($query);
+
+        try {
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (PDOException $e) {
+            $this->log_error('Erro ao trazer receitas:' . $e->getMessage());
+            $result = [];
+        }
+
+        return $result;
+    }
+
+    public function getExpenses(): array
+    {
+        $query = "SELECT t.id, t.title, t.description, t.value, c.name AS 'category', CONCAT(usr.name, ' ', usr.lastname) AS 'author', t.created_at, t.updated_at  
+        FROM {$this->table} t
+        INNER JOIN categories c ON t.category_id = c.id
+        INNER JOIN users usr 
+        WHERE t.type = 'despesa'";
+        $stmt = $this->connection->prepare($query);
+
+        try {
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (PDOException $e) {
+            $this->log_error('Erro ao trazer receitas:' . $e->getMessage());
+            $result = [];
+        }
+
+        return $result;
+    }
+
     /**
      * Método getExpenseCategories()
      * 

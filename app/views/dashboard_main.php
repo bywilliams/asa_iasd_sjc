@@ -186,6 +186,6 @@
 </section>
 <!-- End Food Products Section  -->
 
-<?php require_once '_components/_bootstrap/_modals/_dashboard_main.php' ?>
+<?=$this->insert('_components/_bootstrap/_modals/_dashboard_main'); ?>
 
 <?= $this->end() ?>

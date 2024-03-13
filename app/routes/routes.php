@@ -41,6 +41,8 @@ return function (App $app) {
     // Transaction routes
     $app->group('/transacao', function ($group) {
         $group->get('/index', [TransactionController::class, 'index']);
+        $group->get('/receitas', [TransactionController::class,'revenues']);
+        $group->get('/despesas', [TransactionController::class,'expenses']);
         $group->post('/store', [TransactionController::class, 'store']);
     });;
 

@@ -75,8 +75,8 @@
             </button>
             <div class="collapse" id="sale-collapse" data-parent="#sidebar">
                 <div class="list-group">
-                    <a href="#" class="list-group-item list-group-item-action border-0 pl-5">Receitas</a>
-                    <a href="#" class="list-group-item list-group-item-action border-0 pl-5">Despesas</a>
+                    <a href="/transacao/receitas" class="list-group-item list-group-item-action border-0 pl-5">Receitas</a>
+                    <a href="/transacao/despesas" class="list-group-item list-group-item-action border-0 pl-5">Despesas</a>
                 </div>
             </div>
 
@@ -89,8 +89,7 @@
             </button>
             <div class="collapse" id="purchase-collapse" data-parent="#sidebar">
                 <div class="list-group">
-                    <a href="#" class="list-group-item list-group-item-action border-0 pl-5">Receitas | Despesas</a>
-                    <!-- <a href="#" class="list-group-item list-group-item-action border-0 pl-5">Despesas</a> -->
+                    <a href="#!" data-toggle="modal" data-target="#categorieCreate" class="list-group-item list-group-item-action border-0 pl-5">Receitas | Despesas</a>
                 </div>
             </div>
             <a href="/usuario/equipe-asa" class="list-group-item list-group-item-action border-0 align-items-center">
@@ -115,9 +114,7 @@
                 <div class="dropdown-menu dropdown-menu-right border-0 shadow-sm" aria-labelledby="logout-dropdown">
                     <div class="text-center mx-auto">
                         <img src="/assets/imgs/user.png" width="60" height="60"></img>
-                        <p> 
-                            <?= $this->e($user->username) ?>
-                        </p>
+                        <p><?= $this->e($user->username) ?></p>
                     </div>
                     <hr class="hr w-75">
                     <a class="dropdown-item" href="#">Configurações</a>
@@ -126,4 +123,5 @@
             </div>
         </nav>
     
+        <?=$this->insert('_components/_bootstrap/_modals/_nav_modal'); ?>
     
