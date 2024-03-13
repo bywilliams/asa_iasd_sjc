@@ -89,7 +89,7 @@
             </button>
             <div class="collapse" id="purchase-collapse" data-parent="#sidebar">
                 <div class="list-group">
-                    <a href="#!" data-toggle="modal" data-target="#categorieCreate" class="list-group-item list-group-item-action border-0 pl-5">Receitas | Despesas</a>
+                    <a href="#!" data-toggle="modal" data-target="#categorieCreate" class="list-group-item list-group-item-action border-0 pl-5">Criar categoria</a>
                 </div>
             </div>
             <a href="/usuario/equipe-asa" class="list-group-item list-group-item-action border-0 align-items-center">

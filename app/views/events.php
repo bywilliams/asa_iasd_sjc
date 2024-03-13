@@ -4,7 +4,59 @@
 
 <h1 class="text-center">Eventos</h1>
 
-<!-- Family table section -->
+<!-- Event section form -->
+<section>
+    <div class="bg-light p-3 mb-4 rounded">
+
+        <div class="row mx-4">
+            <div class="col-lg-12 d-flex justify-content-between">
+                <h3 class="text-secondary mb-3">Pesquisar:</h5>
+                    <button class="btn btn-outline-secondary mr-2" id="limparCampos" title="Limpa todos os campos">Limpar</button>
+            </div>
+        </div>
+
+        <form method="get" id="meuFormulario">
+            <input type="hidden" name="page" id="page" value="<?= $page ?>">
+            <div class="row mx-4">
+                <div class="col-lg-2 col-md-6">
+                    <div class="form-group">
+                        <label for="id">Por id:</label>
+                        <input type="number" name="id" id="id" class="form-control inputForm" placeholder="ex: 5" value="<?= isset($old['id']) ? $old['id'] : ''  ?>" oninput="verificarInput()">
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="form-group">
+                        <label for="title">Por nome:</label>
+                        <input type="text" name="title" id="title" class="form-control" placeholder="Ex: mutirão páscoa">                        
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="form-group">
+                        <label for="user">Por usuário:</label>
+                        <select name="user_id" id="user" class="form-control inputForm" oninput="verificarInput()">
+                            <option value="">Selecione</option>
+                            <?php foreach ($usersList as $user) : ?>
+                                <option value="<?= $user->id ?>" <?= isset($old['user_id']) && $old['user_id'] == $user->id ? 'selected' : ''  ?>><?= $user->nome ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="form-group">
+                        <label for="data">Por data:</label>
+                        <input type="date" name="created_at" id="data" class="form-control">
+                    </div>
+                </div>
+                <div class="col-lg-1 col-md-12 text-center">
+                    <button type="submit" class="btn btn-success px-3 shadow-sm" id="search" value="Buscar">Buscar
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+<!-- End Event section form -->
+
+<!-- Event table section -->
 <section>
     <table class="table table-bordered content-table table-hover ">
         <thead class="thead-dark">
@@ -62,6 +114,6 @@
 
 
 </section>
-<!-- End Family table section -->
+<!-- End Event table section -->
 
 <?= $this->end() ?>

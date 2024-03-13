@@ -43,8 +43,6 @@ function generateCsrfToken()
  */
 function manageMessages(string $type, int $messageKey, object $data = null) {
 
-    //var_dump($data); die;
-
     // Define as mensagens pré-definidas
     $messages = new stdClass();
     $messages->success = array(

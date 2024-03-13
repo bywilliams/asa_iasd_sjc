@@ -283,6 +283,14 @@ class FoodStockModel extends Connect
         return $success;
     }
 
+    /**
+     * Método registerBasketBeneficiary()
+     * 
+     * Este método insere no banco de dados um registro com id da família que recebeu a cesta juntamente com a data da entrega
+     *
+     * @param [type] $family_id O id da família beneficiaria
+     * @return boolean true or false em caso de sucesso ou erro
+     */
     public function registerBasketBeneficiary($family_id): bool 
     {
         $queryRegister = "INSERT INTO donated_baskets (family_id, donation_date) VALUES (:family_id, NOW())";

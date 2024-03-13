@@ -10,6 +10,7 @@ use app\controllers\FoodController;
 use app\controllers\FoodStockController;
 use app\controllers\TransactionController;
 use app\controllers\EventController;
+use app\controllers\CategorieController;
 
 
 return function (App $app) {
@@ -32,10 +33,11 @@ return function (App $app) {
         $group->delete('/delete/{id}', [FamilyController::class, 'destroy']);
     });
 
-    // Food routes
+    // Food Stock routes
     $app->group('/food', function ($group) {
         $group->get('/index', [FoodStockController::class, 'index']);
         $group->post('/stock-store', [FoodStockController::class, 'stockStore']);
+        $group->put('/basket-donated', [FoodStockController::class,'donatedBasket']);
     });;
 
     // Transaction routes
@@ -46,12 +48,18 @@ return function (App $app) {
         $group->post('/store', [TransactionController::class, 'store']);
     });;
 
+    // Categories routes
+    $app->group('/categories', function ($group) {
+       $group->post('/store', [CategorieController::class, 'store']); 
+    });
+
     // Events routes
     $app->group('/event', function ($group) {
         $group->post('/store', [EventController::class,'store']);
         $group->get('/index', [EventController::class,'index']);
     });
 
+    // 
     $app->put('/basket/donated', [FoodStockController::class,'donatedBasket']);
 
     // Rota fallback exibi uma mensagem

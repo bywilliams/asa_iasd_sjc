@@ -292,7 +292,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="/basket/donated" method="post">
+            <form action="/food/basket-donated" method="post">
                 <input type="hidden" name="_METHOD" value="PUT">
                 <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                 <input type="hidden" name="user_id" value="<?= $this->e($user->id) ?>">

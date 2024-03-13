@@ -2,6 +2,7 @@
 namespace app\controllers;
 use app\traits\GlobalControllerTrait;
 use app\models\EventModel;
+use app\models\UserModel;
 use Slim\Http\Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -37,12 +38,14 @@ class EventController
 
         $listEvents = $this->model->index();
 
-        // var_dump($listEvents); die;
+        $users = new UserModel();
+        $usersList = $users->index(); // Lista de usuários para o form da view
 
         view('events', [
             'title' => 'Lista de Eventos',
             'user' => $userLogged,
-            'listEvents' => $listEvents            
+            'listEvents' => $listEvents,
+            'usersList' => $usersList            
         ]);
         
         return $response;

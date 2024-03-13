@@ -93,7 +93,9 @@
                             <div class="card-body">
                                 <h5 class="card-title font-weight-bold">Hoje: <?= date('d-m-y') ?></h5>
                                 <p class="card-text">Nenhum evento marcado para este dia.</p>
-                               <a href="#!" data-toggle="modal" data-target="#event_create"> <p class="card-text text-info">Clique aqui para criar um evento.</p> </a>
+                                <a href="#!" data-toggle="modal" data-target="#event_create">
+                                    <p class="card-text text-info">Clique aqui para criar um evento.</p>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -141,7 +143,6 @@
             </tr>
         </thead>
         <tbody>
-            <?php $totalFoods = 0; ?>
             <?php foreach ($latestStockFoods as $food) : ?>
                 <tr>
                     <td>
@@ -173,19 +174,12 @@
                         </div>
                     </td>
                 </tr>
-                <?php $totalFoods += $food->qtde ?>
             <?php endforeach; ?>
         </tbody>
-        <tfoot>
-            <tr class="text-center">
-                <td colspan="7"> <strong class="mr-2"> Total de alimentos: <?= $totalFoods ?> </strong> <strong> Total de cestas: <?= $totalBaskets ?></strong>
-                </td>
-            </tr>
-        </tfoot>
     </table>
 </section>
 <!-- End Food Products Section  -->
 
-<?=$this->insert('_components/_bootstrap/_modals/_dashboard_main'); ?>
+<?= $this->insert('_components/_bootstrap/_modals/_dashboard_main', ['user' => $user, 'getActiveFamilies' => $getActiveFamilies, 'revenueCategories' => $revenueCategories, 'expenseCategories' => $expenseCategories, 'allFoods' => $allFoods]); ?>
 
 <?= $this->end() ?>

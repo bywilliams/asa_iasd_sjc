@@ -144,6 +144,19 @@ class FoodStockController
             return $response->withRedirect('/');
         }
 
+        // Total de cestas disponíveis
+        $totalBaskets = $this->model->calculateBasicBaskets();
+
+        // Validação no back contra envio malicioso de form
+        if($totalBaskets == 0) {
+            // Limpa o Cookie
+            setcookie('token', '');
+
+            // redireciona e apresenta mensagem de erro
+            manageMessages('error', 1);
+            return $response->withRedirect('/');
+        }
+
         if(empty($data['family_id'])) {
             $_SESSION['old'] = $_POST;
             manageMessages('error',3);
