@@ -18,3 +18,4 @@
         WHERE type = 'receita'' at line 2
 12-03-2024 22:15:51 - Erro ao trazer receitas:SQLSTATE[23000]: Integrity constraint violation: 1052 Column 'type' in where clause is ambiguous
 12-03-2024 22:16:33 - Erro ao trazer receitas:SQLSTATE[23000]: Integrity constraint violation: 1052 Column 'type' in where clause is ambiguous
+14-03-2024 14:44:08 - Erro ao buscar famílias SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'f.id <> 8' at line 1

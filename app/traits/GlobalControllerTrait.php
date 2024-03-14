@@ -1,9 +1,6 @@
 <?php
 
 namespace app\traits;
-
-session_start();
-
 use Exception;
 use Slim\Http\Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -21,7 +18,7 @@ trait GlobalControllerTrait
      */
     private function validateCsrfToken($request)
     {
-        return isset($_POST['csrf_token']) && $_POST['csrf_token'] == $_SESSION['csrf_token'];
+        return isset($request['csrf_token']) && $request['csrf_token'] == $_SESSION['csrf_token'];
     }
 
     private function sanitizeData($formData)

@@ -84,9 +84,9 @@
 
 <!-- Family table section -->
 <section>
-    <table class="table table-bordered content-table table-hover ">
+    <table class="table table-bordered content-table table-hover text-center">
         <thead class="thead-dark">
-            <tr>
+            <tr class="text-center">
                 <th>Id</th>
                 <th>Nome</th>
                 <th>Endereço</th>
@@ -95,7 +95,9 @@
                 <th>Situação</th>
                 <th>Criado em</th>
                 <th>Atualizado em</th>
+                <?php if ($user->nivel_acesso == 1) : ?>
                 <th>Ação</th>
+                <?php endif ?>
             </tr>
         </thead>
         <tbody>
@@ -114,6 +116,7 @@
                     <td><?= $family->situacao ?></td>
                     <td><?= date("d-m-Y H:i:s", strtotime($family->created_at)) ?> </td>
                     <td><?= isset($family->updated_at) ? date("d-m-Y H:i:s", strtotime($family->updated_at)) : '' ?></td>
+                    <?php if ($user->nivel_acesso == 1) : ?>
                     <td>
                         <div style="display: flex; justify-content: space-evenly; cursor: pointer;">
                             <a data-toggle="modal" data-target="#family_edit_<?= $family->id ?>">
@@ -124,6 +127,7 @@
                             </a>
                         </div>
                     </td>
+                    <?php endif ?>
                 </tr>
                 <?php $totalFamilies += 1; ?>
             <?php endforeach; ?>
@@ -265,6 +269,10 @@
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="criteria_id" value="6" <?= $family->criteria_id  == 6 ? 'checked' : ''  ?>>
                                         <label class="form-check-label" for="inlineRadio3">Escolinha infantil</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="criteria_id" value="7" <?= $family->criteria_id  == 7 ? 'checked' : ''  ?>>
+                                        <label class="form-check-label" for="inlineRadio3">Outros</label>
                                     </div>
                                 </div>
                             </div>

@@ -1,7 +1,6 @@
 <?php 
 
 namespace app\controllers;
-session_start();
 use app\traits\GlobalControllerTrait;
 use app\models\FoodModel;
 use Slim\Http\Response;

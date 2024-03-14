@@ -45,7 +45,7 @@ class FamilyModel extends Connect
         $selectFamilies = ("SELECT f.id, f.full_name, f.address,f.gender, f.age, f.criteria_id, f.obs, f.job, f.qtde_childs, f.contact, f.sits_family_id, f.created_at, f.updated_at, sf.name AS 'situacao'  
         FROM {$this->table} f 
         INNER JOIN sits_family sf ON f.sits_family_id = sf.id 
-        WHERE f.id > 0 $sql
+        WHERE f.id <> 8 $sql 
         ORDER BY f.id LIMIT $inicio, $itensPorPagina");
         $totalRegistros = 0;
 
@@ -53,7 +53,7 @@ class FamilyModel extends Connect
             $stmt = $this->connection->query($selectFamilies);
             $result = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-            $countFamilies = $this->connection->query("SELECT COUNT(*) as total FROM {$this->table} f WHERE f.id > 0 $sql");
+            $countFamilies = $this->connection->query("SELECT COUNT(*) as total FROM {$this->table} f WHERE f.id <> 8 $sql");
             $totalRegistros = $countFamilies->fetch(PDO::FETCH_ASSOC)['total'];
         } catch (PDOException $e) {
             $this->log_error('Erro ao buscar famílias ' . $e->getMessage());

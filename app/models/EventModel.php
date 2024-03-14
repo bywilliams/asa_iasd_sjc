@@ -95,6 +95,22 @@ class EventModel extends Connect
         return $listEvents;
     }
 
+    public function todayEvent(): array
+    {
+        $querySelect = "SELECT * FROM {$this->table} WHERE DATE(event_date) = CURRENT_DATE()";
+        $stmt = $this->connection->prepare($querySelect);
+
+        try {
+            $stmt->execute();
+            $event = $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (PDOException $e) {
+            $this->log_error("Erro ao buscar evento: ". $e->getMessage());
+            $event = null;
+        }
+
+        return $event;
+    }
+
     public function destroy($id): bool
     {
         $deleteFamily = "DELETE FROM {$this->table} WHERE id = :id";

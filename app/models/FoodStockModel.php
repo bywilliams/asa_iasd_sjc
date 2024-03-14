@@ -65,7 +65,7 @@ class FoodStockModel extends Connect
         $selectStockFoods = ("SELECT fs.id, fs.qtde, fs.user_id, fs.created_at, fs.updated_at, f.name, CONCAT(usr.name , ' ', usr.lastname) as author   
         FROM {$this->table} fs
         INNER JOIN foods f ON fs.food_id = f.id
-        INNER JOIN users usr 
+        INNER JOIN users usr ON fs.user_id = usr.id
         WHERE fs.id > 0 $sql
         ORDER BY id LIMIT $inicio, $itensPorPagina");
         $totalRegistros = 0;

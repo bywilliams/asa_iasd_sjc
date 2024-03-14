@@ -163,13 +163,15 @@ class TransactionModel extends Connect
         )");
         $stmt = $this->connection->prepare($insertTransaction);
 
-        $value = $value = str_replace([".", ","], "", $request->value);
+        $value = str_replace([".", ","], "", $request->value);
         $finalValue = substr_replace($value, ".", -2, 0); // Insere o ponto na posição correta para as casas decimais
+
+        //echo $finalValue; die;
 
         try{
             $stmt->bindParam(':title', $request->title, PDO::PARAM_STR);
             $stmt->bindParam(':description', $request->description, PDO::PARAM_STR);
-            $stmt->bindParam(':value', $finalValue, PDO::PARAM_INT);
+            $stmt->bindParam(':value', $finalValue, PDO::PARAM_STR);
             $stmt->bindParam(':type', $request->type, PDO::PARAM_INT);
             $stmt->bindParam(':category_id', $request->category_id, PDO::PARAM_INT);
             $stmt->bindParam(':user_id', $request->user_id, PDO::PARAM_INT);

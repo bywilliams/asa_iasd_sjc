@@ -77,7 +77,7 @@ class UserController
         $totalExpense = $transactionModel->getTotalTransactionsByType('despesa');
         $totalBalance = $transactionModel->getTotalBalance();
 
-        // Traz a quantidade de famílias cadastradas que  estão ativas
+        // Traz as famílias cadastradas que estão ativas e o total
         $familyModel = new FamilyModel();
         $getActiveFamilies = $familyModel->getActiveFamilies();
         $totalActiveFamilies = $familyModel->getTotalActiveFamilies();
@@ -85,6 +85,7 @@ class UserController
         // Traz os últimos eventos cadastrados
         $eventModel = new EventModel();
         $lastestEvents = $eventModel->latestEvents();
+        $eventToday = $eventModel->todayEvent();
         
         // Total de cestas disponíveis
         $totalBaskets = $foodStockModel->calculateBasicBaskets();
@@ -106,6 +107,7 @@ class UserController
             'totalStockFoods' => $totalStockFoods,
             'latestStockFoods' => $latestStockFoods,
             'latestEvents' => $lastestEvents,
+            'todayEvent' => $eventToday,
             'totalBaskets' => $totalBaskets,
             'old' => $old
         ]);

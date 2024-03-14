@@ -50,8 +50,8 @@
                         <label for="user">Por usuário:</label>
                         <select name="user_id" id="user" class="form-control inputForm" oninput="verificarInput()">
                             <option value="">Selecione</option>
-                            <?php foreach ($usersList as $user) : ?>
-                                <option value="<?= $user->id ?>" <?= isset($old['user_id']) && $old['user_id'] == $user->id ? 'selected' : ''  ?>><?= $user->nome ?></option>
+                            <?php foreach ($usersList as $usuario) : ?>
+                                <option value="<?= $usuario->id ?>" <?= isset($old['user_id']) && $old['user_id'] == $usuario->id ? 'selected' : ''  ?>><?= $usuario->nome ?></option>
                             <?php endforeach ?>
                         </select>
                     </div>
@@ -67,16 +67,18 @@
 
 <!-- Family table section -->
 <section>
-    <table class="table table-bordered content-table table-hover ">
+    <table class="table table-bordered content-table table-hover text-center">
         <thead class="thead-dark">
-            <tr>
+            <tr class="text-center">
                 <th>Id</th>
                 <th>Nome</th>
                 <th>Qtde</th>
                 <th>Usuário</th>
                 <th>Cadastrado em</th>
                 <th>Atualizado em</th>
-                <th>Ação</th>
+                <?php if ($user->nivel_acesso == 1) : ?>
+                    <th>Ação</th>
+                <?php endif ?>
             </tr>
         </thead>
         <tbody>
@@ -94,20 +96,22 @@
                     <td><?= $food->author ?></td>
                     <td><?= date("d-m-Y", strtotime($food->created_at)) ?> </td>
                     <td><?= isset($food->updated_at) ? date("d-m-Y", strtotime($food->updated_at)) : '' ?></td>
-                    <td>
-                        <div class="d-flex" style="justify-content: space-evenly">
-                            <a href="#!" onclick="openModalEdit(<?= $food->id ?>)" title="Editar">
-                                <i class="fa-regular fa-pen-to-square icon-menu"></i>
-                            </a>
-                            <a href="#!" onclick="openModalDelete(<?= $food->id ?>)">
-                                <i class="fa-solid fa-trash icon-menu"></i>
-                            </a>
-                        </div>
-                    </td>
+                    <?php if ($user->nivel_acesso == 1) : ?>
+                        <td>
+                            <div class="d-flex" style="justify-content: space-evenly">
+                                <a href="#!" onclick="openModalEdit(<?= $food->id ?>)" title="Editar">
+                                    <i class="fa-regular fa-pen-to-square icon-menu"></i>
+                                </a>
+                                <a href="#!" onclick="openModalDelete(<?= $food->id ?>)">
+                                    <i class="fa-solid fa-trash icon-menu"></i>
+                                </a>
+                            </div>
+                        </td>
+                    <?php endif ?>
                 </tr>
-                <?php 
+                <?php
                 $totalItens += 1;
-                $totalFoods += $food->qtde; 
+                $totalFoods += $food->qtde;
                 ?>
             <?php endforeach; ?>
         </tbody>

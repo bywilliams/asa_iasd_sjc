@@ -7,6 +7,17 @@ body {
     padding: 0;
 }
 
+html ::-webkit-scrollbar {
+    width: 13px;
+}
+html ::-webkit-scrollbar-thumb {
+    border-radius: 30px;
+    background: #333;
+}
+html ::-webkit-scrollbar-track {
+  background: #ccc;
+}
+
 /* ---------------------------------------------------
     NAVBAR & SIDEBAR
 ----------------------------------------------------- */

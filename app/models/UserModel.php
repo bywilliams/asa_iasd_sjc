@@ -67,15 +67,14 @@ class UserModel extends Connect
         $sqlUser = ("SELECT * FROM users WHERE email = :email");
         $stmt = $this->connection->prepare($sqlUser);
         try {
-            $stmt->execute([
-                'email' => $email
-            ]);
+            $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+            $stmt->execute();
             $userData = $stmt->fetch(PDO::FETCH_OBJ);
+            return $userData ?: null;
         } catch (PDOException $e) {
             $this->log_error("Erro ao checar existência de usuário: $email" . $e->getMessage());
+            return null;
         }
-
-        return $userData;
 
     }
 }

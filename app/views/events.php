@@ -27,7 +27,7 @@
                 <div class="col-lg-3 col-md-6">
                     <div class="form-group">
                         <label for="title">Por nome:</label>
-                        <input type="text" name="title" id="title" class="form-control" placeholder="Ex: mutirão páscoa">                        
+                        <input type="text" name="title" id="title" class="form-control" placeholder="Ex: mutirão páscoa">
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
@@ -35,8 +35,8 @@
                         <label for="user">Por usuário:</label>
                         <select name="user_id" id="user" class="form-control inputForm" oninput="verificarInput()">
                             <option value="">Selecione</option>
-                            <?php foreach ($usersList as $user) : ?>
-                                <option value="<?= $user->id ?>" <?= isset($old['user_id']) && $old['user_id'] == $user->id ? 'selected' : ''  ?>><?= $user->nome ?></option>
+                            <?php foreach ($usersList as $usuario) : ?>
+                                <option value="<?= $usuario->id ?>" <?= isset($old['user_id']) && $old['user_id'] == $usuario->id ? 'selected' : ''  ?>><?= $usuario->nome ?></option>
                             <?php endforeach ?>
                         </select>
                     </div>
@@ -68,7 +68,9 @@
                 <th>Autor</th>
                 <th>Criado em</th>
                 <th>Atualizado em</th>
-                <th>Ação</th>
+                <?php if ($user->nivel_acesso == 1) : ?>
+                    <th>Ação</th>
+                <?php endif ?>
             </tr>
         </thead>
         <tbody>
@@ -81,16 +83,18 @@
                     <td><?= $event->author ?></td>
                     <td><?= date("d-m-Y H:i:s", strtotime($event->created_at)) ?> </td>
                     <td><?= isset($event->updated_at) ? date("d-m-Y H:i:s", strtotime($event->updated_at)) : '' ?></td>
-                    <td>
-                        <div style="display: flex; justify-content: space-evenly; cursor: pointer;">
-                            <a data-toggle="modal" data-target="#family_edit_<?= $event->id ?>">
-                                <i class="fa-regular fa-pen-to-square icon-menu"></i>
-                            </a>
-                            <a data-toggle="modal" data-target="#family_delete_<?= $event->id ?>">
-                                <i class="fa-solid fa-trash icon-menu"></i>
-                            </a>
-                        </div>
-                    </td>
+                    <?php if ($user->nivel_acesso == 1) : ?>
+                        <td>
+                            <div style="display: flex; justify-content: space-evenly; cursor: pointer;">
+                                <a data-toggle="modal" data-target="#family_edit_<?= $event->id ?>">
+                                    <i class="fa-regular fa-pen-to-square icon-menu"></i>
+                                </a>
+                                <a data-toggle="modal" data-target="#family_delete_<?= $event->id ?>">
+                                    <i class="fa-solid fa-trash icon-menu"></i>
+                                </a>
+                            </div>
+                        </td>
+                    <?php endif ?>
                 </tr>
             <?php endforeach; ?>
         </tbody>

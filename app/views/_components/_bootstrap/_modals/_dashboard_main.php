@@ -269,6 +269,10 @@
                                 <input class="form-check-input" type="radio" name="criteria_id" value="6" <?= isset($old['criteria_id']) && $old['criteria_id']  == 6 ? 'checked' : ''  ?>>
                                 <label class="form-check-label" for="inlineRadio3">Escolinha infantil</label>
                             </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="criteria_id" value="7" <?= isset($old['criteria_id']) && $old['criteria_id']  == 7 ? 'checked' : ''  ?>>
+                                <label class="form-check-label" for="inlineRadio3">Outros</label>
+                            </div>
                         </div>
                     </div>
                 </div>

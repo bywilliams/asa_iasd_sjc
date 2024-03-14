@@ -51,7 +51,6 @@ class FamilyController
             $params = ['id', 'full_name', 'gender', 'address', 'qtde_childs', 'sits_family_id', 'created_at'];
             $aliases = ['id' => 'f', 'full_name' => 'f', 'gender' => 'f', 'address' => 'f',  'qtde_childs' => 'f', 'sits_family_id' => 'f', 'created_at' => 'f'];
             $sql = $this->createSqlConditions($params, $_GET, $aliases);
-            //echo $sql; die;
             $_SESSION['old'] = $_GET;
         }
 

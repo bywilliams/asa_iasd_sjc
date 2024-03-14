@@ -22,6 +22,15 @@ class EventController
         $this->model = new EventModel();
     }
 
+    /**
+     * Método index()
+     * 
+     * Este método apresenta todos os eventos cadastrados em uma view
+     *
+     * @param Request $request A requisição
+     * @param Response $response A resposta
+     * @return void
+     */
     public function index(Request $request, Response $response)
     {
 
@@ -30,13 +39,11 @@ class EventController
             return $response->withRedirect('/');
         }
 
-        // check e recebe dados do usuário logado
-        $userLogged = (object) $this->validateJwtToken();
+        $userLogged = (object) $this->validateJwtToken(); // check e recebe dados do usuário logado
 
-        // Mantêm os valores dos inputs de pesquisa
-        $old = $_SESSION['old'] ?? null;
+        $old = $_SESSION['old'] ?? null;  // Mantêm os valores dos inputs de pesquisa
 
-        $listEvents = $this->model->index();
+        $listEvents = $this->model->index(); // Lista de eventos para a view
 
         $users = new UserModel();
         $usersList = $users->index(); // Lista de usuários para o form da view
@@ -52,9 +59,9 @@ class EventController
     }
 
     /**
-     * Método store 
+     * Método store() 
      * 
-     * Este método irá salvar um novo registro(evento) na tabela 'events'
+     * Este método irá validar o form de eventos e salvar um novo registro(evento) na tabela 'events'
      *
      * @param Request $request A requisição efetuada
      * @param Response $response A resposta 
