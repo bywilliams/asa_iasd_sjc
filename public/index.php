@@ -1,8 +1,6 @@
 <?php 
 
 use Slim\Factory\AppFactory;
-use Slim\Middleware\StaticFiles;
-use Slim\Routing\RouteCollectorProxy;
 use Slim\Middleware\MethodOverrideMiddleware;
 
 require '../vendor/autoload.php';

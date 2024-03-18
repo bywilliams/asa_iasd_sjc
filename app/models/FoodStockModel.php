@@ -34,7 +34,6 @@ class FoodStockModel extends Connect
         'Fuba' => ['id' => 11, 'minQtde' => 1],
         'Bolacha doce' => ['id' => 12, 'minQtde' => 1],
         'Bolacha Sal' => ['id' => 13, 'minQtde' => 1],
-        'Esponja' => ['id' => 17, 'minQtde' => 1],
     ];
 
     /**

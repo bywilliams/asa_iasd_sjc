@@ -115,7 +115,7 @@ class FoodStockController
         $foodStockExists = $this->model->findFoodById($formData);
 
         // Determina ação com base na existência do alimento no estoque
-        $action = $foodStockExists->qtde >= 0 ? 'atualizar' : 'cadastrar';
+        $action = $foodStockExists != null ? 'atualizar' : 'cadastrar';
         $modelMethod = $action === 'atualizar' ? 'updateFoodStock' : 'store';
 
         // executa a ação e define mensagem de acordo com resultado
