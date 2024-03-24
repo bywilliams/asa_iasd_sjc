@@ -19,3 +19,25 @@
 12-03-2024 22:15:51 - Erro ao trazer receitas:SQLSTATE[23000]: Integrity constraint violation: 1052 Column 'type' in where clause is ambiguous
 12-03-2024 22:16:33 - Erro ao trazer receitas:SQLSTATE[23000]: Integrity constraint violation: 1052 Column 'type' in where clause is ambiguous
 14-03-2024 14:44:08 - Erro ao buscar famílias SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'f.id <> 8' at line 1
+24-03-2024 15:34:06 - Erro ao efetuar conexão com banco de dados: could not find driver
+24-03-2024 15:34:35 - Erro ao efetuar conexão com banco de dados: could not find driver
+24-03-2024 15:34:50 - Erro ao efetuar conexão com banco de dados: could not find driver
+24-03-2024 15:42:39 - Erro ao efetuar conexão com banco de dados: could not find driver
+24-03-2024 15:43:55 - Erro ao efetuar conexão com banco de dados: could not find driver
+24-03-2024 15:45:14 - Erro ao efetuar conexão com banco de dados: could not find driver
+24-03-2024 15:45:27 - Erro ao efetuar conexão com banco de dados: could not find driver
+24-03-2024 15:47:34 - Erro ao efetuar conexão com banco de dados: could not find driver
+24-03-2024 15:50:43 - Erro ao efetuar conexão com banco de dados: could not find driver
+24-03-2024 15:51:24 - Erro ao efetuar conexão com banco de dados: could not find driver
+24-03-2024 16:06:19 - Erro ao efetuar conexão com banco de dados: SQLSTATE[HY000] [2002] No such file or directory
+24-03-2024 16:07:05 - Erro ao efetuar conexão com banco de dados: SQLSTATE[HY000] [2002] No such file or directory
+24-03-2024 16:10:11 - Erro ao efetuar conexão com banco de dados: SQLSTATE[HY000] [2002] No such file or directory
+24-03-2024 16:12:10 - Erro ao efetuar conexão com banco de dados: SQLSTATE[HY000] [2002] No such file or directory
+24-03-2024 16:12:37 - Erro ao efetuar conexão com banco de dados: SQLSTATE[HY000] [2002] No such file or directory
+24-03-2024 16:12:59 - Erro ao efetuar conexão com banco de dados: SQLSTATE[HY000] [2002] No such file or directory
+24-03-2024 16:18:51 - Erro ao efetuar conexão com banco de dados: SQLSTATE[HY000] [2002] No such file or directory
+24-03-2024 16:21:47 - Erro ao efetuar conexão com banco de dados: SQLSTATE[HY000] [2002] No such file or directory
+24-03-2024 16:23:11 - Erro ao efetuar conexão com banco de dados: SQLSTATE[HY000] [2002] Connection refused
+24-03-2024 16:23:51 - Erro ao efetuar conexão com banco de dados: SQLSTATE[HY000] [2002] Connection refused
+24-03-2024 16:24:34 - Erro ao efetuar conexão com banco de dados: SQLSTATE[HY000] [2002] Connection refused
+24-03-2024 16:59:01 - Erro ao efetuar conexão com banco de dados: SQLSTATE[HY000] [2002] Connection refused
